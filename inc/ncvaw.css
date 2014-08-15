@@ -283,7 +283,7 @@ table.votes
 	margin:10px;
 	
 }
-table.votes td
+table.votes td,th
 {
 	padding: 10px;	
 }

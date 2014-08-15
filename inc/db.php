@@ -68,6 +68,7 @@ class data_source
 		
 		$this->list=array();
 		$cn=get_class($this);
+		/*
 		$filename=$root."/data/$cn.json";
 		if(! file_exists ( $filename ))	
 			$refresh_data=1;
@@ -85,8 +86,18 @@ class data_source
 			fwrite ( $fp, $file );
 			fclose ( $fp );
 		}
-			
+				
 		$json = json_decode (  file_get_contents ( $filename ) );
+		*/
+		if(!$spreadsheetid)
+		{
+			$spreadsheetid = '0AonA9tFgf4zjdHhNd1FIeFJzVWRrdDlUangxWUlkTXc';
+		}
+		$url = "http://spreadsheets.google.com/feeds/list/$spreadsheetid/$tab/public/values?alt=json";
+		$json = json_decode (  file_get_contents ( $url ) );
+		
+		
+		
 		if($json)
 			$jdata = $json->{'feed' }->{'entry' };	
 		else 
@@ -818,7 +829,7 @@ class canidates extends data_source
 		foreach ( $set as $x )
 		{
 
-			$link_string.="<div><a href='/guide/canidate.php?key=$x->key'>$x->displayname</a></div>";
+			$link_string.="<div>$x->party_id: <a href='/guide/canidate.php?key=$x->key'>$x->displayname</a></div>";
 
 			
 		}
@@ -845,6 +856,9 @@ function file_get_contents_curl($url)
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 	curl_setopt($ch, CURLOPT_URL, $url);
 	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+	
+	
 
 	$data = curl_exec($ch);
 	curl_close($ch);
@@ -865,6 +879,18 @@ class exlink {
 		$this->canidate =getj($d,'canidate');
 		if($this->link)
 			$this->fetch();
+	}
+	
+	public function print_panel()	
+	{
+		echo("<div style='background-color:grey;padding:10px 10px 0 10px '><div style='background-color:white;margin: 10px 10px 0 10px ;padding:10px'>");
+		echo ("<a href='$this->link'><img  style='max-width:300px;max-height:200px;' src='$this->image'/></a>");
+		echo ("<a href='$this->link'><h4>$this->title</h4></a>");
+		echo ("<p>$this->description</p>");		
+		echo("</div></div>");
+		
+		
+		
 	}
 	public function fetch()
 	{
@@ -921,9 +947,7 @@ class exlinks extends data_source
 	{
 		foreach ( $this->list as $row )
 		{
-			echo ("<a href='$row->link'><img src='$row->image'/></a>");
-			echo ("<h4>$row->title</h4>");
-			echo ("<p>$row->description</p>");
+			$row->print_panel();
 		}
 	}	
 
@@ -961,7 +985,7 @@ class districts extends data_source
 		$canlist=getobj("canidates");
 		
 		
-		echo("<table class='votes' style='width:100%;'><tr><th>Chamber</th><th>District#</th><th>Election</th><th>Canidates</th>
+		echo("<table class='votes' style='width:100%;text-align:left'><tr><th>District#</th><th>Canidates</th><th>Election</th>
 				<th style=' max-width: 45px;'>Counties</th><th>Current Representative</th></tr>");
 		foreach ( $this->list as $d )
 		{
@@ -969,11 +993,10 @@ class districts extends data_source
 			$chamber=($d->ch=='H'?'House':'Senate');
 			$canidates=$canlist->get_candate_links($d->ch,$d->dist,"gen");
 		
-			echo ("<tr><td>$chamber</td>");
-			echo ("<td><a href='/district.php?ch=$d->ch&dist=$d->dist'>$d->dist</a></td>");
+			echo ("<tr><td style='width:90px; '><a href='/district.php?ch=$d->ch&dist=$d->dist'>$chamber #$d->dist</a></td>");
 			echo ("<td>$canidates</td>");
 			echo ("<td><a href='/district.php?ch=$d->ch&dist=$d->dist'>Election Coverage</a></td>");
-			echo ("<td ><div style='word-break:normal; '>$d->counties</div></td>");
+			echo ("<td width='20%'><div >$d->counties</div></td>");
 			echo ("<td><a  href='/guide/legpage.php?id=$leg->key'>$leg->name</a></td></tr>");
 		
 		}
