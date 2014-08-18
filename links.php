@@ -57,7 +57,7 @@ echo ("<p>$description</p>");
 
 $exlinks=getobj("exlinks");
 
-$exlinks->print_list ();
+$exlinks->print_list (null,null);
 ?>
 
 <?php include $footer; ?>

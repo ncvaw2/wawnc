@@ -16,6 +16,13 @@ $zs_foot_jsfile=["/inc/jquery.js","/inc/ncvaw.js","/inc/zs_menu.js"];
 $zs_head_jsfile=array();
 $zs_foot_script=array();
 $funcs_init=["ncvaw_init()"];
+
+function add_init_js($code)
+{
+	global $funcs_init;
+	array_push($funcs_init,$code);
+}
+
 function getCookie( $name)
 {
 	if(array_key_exists($name,$_COOKIE))
@@ -28,6 +35,28 @@ function getParam( $name)
 	if(array_key_exists($name,$_GET))
 		return $_GET[$name];
 	return null;
+}
+
+function setFlag( $name)
+{
+	$flag=getParam($name);
+	if($flag)
+	{
+		if($flag=='on')
+		{
+			setcookie($name,'on',time()+90000000,'/');
+		}	
+		if($flag=='off')
+		{
+			setcookie($name);
+			$flag=0;
+		}	
+	}
+	else
+	{
+		$flag=getCookie($name);
+	}
+	return $flag;
 }
 $meta_extra='';
 $page_title='';
@@ -65,42 +94,14 @@ if(getParam("delpdata"))
 {
 	array_map('unlink', glob("$root/data/*.pdata"));
 }
-/*
-$isPhone=getParam("m");
 
-$isPhone=0;
-if($isPhone)
-{
-    $header=$root.'/inc/mheader.p';
-    $footer=$root.'/inc/mfooter.p';
-}
-else
-{
-    $header=$root.'/inc/header.p';
-    $footer=$root.'/inc/footer.p';
-}
-*/
 $header=$root.'/inc/head.php';
 $footer=$root.'/inc/foot.php';
 
-$admin=getParam('admin');
-if($admin)
-{
-	if($admin=='on')
-	{
-		setcookie('admin','on',time()+90000000,'/');
-	}	
-	if($admin=='off')
-	{
-		setcookie('admin');
-		$admin=0;
-	}	
-}
-else
-{
-	$admin=getCookie('admin');
-}
 
+
+$g_admin=setFlag('admin');
+$g_debug=setFlag('debug');
 
 
 

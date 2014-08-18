@@ -105,6 +105,7 @@ class data_source
 			throw new Exception("Could not get JSON data for $obj");
 			return;
 		}
+		$index=2;
 		foreach ($jdata as $row )
 		{
 			
@@ -112,10 +113,12 @@ class data_source
 			if($keyname)
 			{
 				$key =getj($row,$keyname);
-				$this->list [$key] = new $obj ( $row );
+				$this->list [$key] = new $obj ( $row,$index );
 			}
 			else 
-				$this->list [] = new $obj ( $row );
+				$this->list [] = new $obj ( $row ,$index);
+			
+			$index++;
 				
 		}	
 	}
@@ -131,8 +134,9 @@ class bill {
 	public $desc;
 	public $year;
 	public $doc;
+	public $docname;	
 	public $picture;
-	public function __construct($d)
+	public function __construct($d,$index)
 	{
 		
 		$this->nickname =getj($d,'nickname');
@@ -152,7 +156,9 @@ class bill {
 		$this->hvid =getj($d,'hvid');		
 		$this->desc =getj($d,'desc');
 		$this->year =getj($d,'year');		
+		$this->link =getj($d,'link');		
 		$this->doc =getj($d,'doc');		
+		$this->docname =getj($d,'name');		
 	}
 	public function get_stance()
 	{
@@ -169,7 +175,7 @@ class bill {
 	{
         if($this->year == 'Year')
             return;
-		echo ("<div><h3><a href='/guide/billpage.php?doc=$this->doc'>$this->year - $this->doc - $this->nickname <img style='display:inline;width:40px' src='/img/$this->picture' /></a></h3>	
+		echo ("<div><h3><a href='/guide/billpage.php?doc=$this->doc'>$this->year - $this->docname - $this->nickname <img style='display:inline;width:40px' src='/img/$this->picture' /></a></h3>	
 			
 			<div>$this->official </div>
 		<div>$this->effect </div>
@@ -178,7 +184,7 @@ class bill {
 	}
 	public function print_page()	
 	{
-		echo "<H1>$this->year - $this->doc -  $this->nickname</H1>";
+		echo "<H1>$this->year - $this->docname -  $this->nickname</H1>";
 		echo "<H2>$this->official </H2>";
 		
 		
@@ -215,7 +221,7 @@ class vote {
 	public $vote;
 	public $score;
 	public $grade; /* -1 bad vote, 0 neutral, 1 good */
-	public function __construct($d)
+	public function __construct($d,$index)
 	{
 		$this->vid=getj($d,'vid');
 		$this->mkey=getj($d,'key');		
@@ -456,7 +462,7 @@ class legislator{
     public $url;
 	public $district;
 
-	public function __construct($d) {
+	public function __construct($d,$index) {
 
 		$this->party = getj($d,'party');
 		$this->first = getj($d,'first');
@@ -466,7 +472,8 @@ class legislator{
 		$this->comment=getj($d,"comment");
 		$this->email=getj($d,"email");
 		$this->grade=getj($d,"grade");
-
+		$this->note=getj($d,"note");
+		
 		$this->name = $this->first.' '.$this->last;
 		$this->uid =getj($d,'uid');
 		$this->id = getj($d,'id');
@@ -584,7 +591,10 @@ class legislator{
 		else
 			$this->print_table_row ( 'Reason For Grade', $this->comment );
 
-       
+		if($this->note)
+		{
+			$this->print_table_row ( 'Note', $this->note );
+		}       
 
 
 
@@ -685,7 +695,7 @@ class canidate {
 
 
 
-	public function __construct($d) {
+	public function __construct($d,$index) {
 		$this->photo =getj($d,'photo');
 		$this->election=getj($d,'election');
 		$this->displayname=getj($d,'nameonballot');
@@ -729,6 +739,16 @@ class canidate {
 			$running.=$this->party . ' primary election 5/6/2014';
 		}
 		return $running;
+	}
+	public function get_local_page_url() {	
+		$url="/guide/canidate.php?key=$this->key";
+		$leg=getobj("leg_list")->get_leg_by_key($this->key);
+		if($leg)
+		{
+			$url="/guide/legpage.php?id=$this->key";
+			
+		}
+		return $url;
 	}
 	public function print_list_row() {
 
@@ -867,27 +887,61 @@ function file_get_contents_curl($url)
 }
 class exlink {
 	public $link;
-	public $canidate;
-	public $year;
+	public $canidates;
+	public $date;
+	public $index;
 	public $bill;
 	public $image;
 	public $title;	
 	public $description;	
-	public function __construct($d) {
+	public function __construct($d,$index) {
+		$this->index =$index;
 		$this->link =getj($d,'link');
-		$this->bill =getj($d,'bill');
-		$this->canidate =getj($d,'canidate');
+		$this->doc =getj($d,'doc');
+		$this->title =getj($d,'title');
+		$this->date =getj($d,'date');
+		$this->image =getj($d,'image');
+		$this->text =getj($d,'text');
+		$canidates=array();
+		
+		$this->canidates =str_getcsv (getj($d,'canidates'));
 		if($this->link)
 			$this->fetch();
 	}
 	
 	public function print_panel()	
 	{
-		echo("<div style='background-color:grey;padding:10px 10px 0 10px '><div style='background-color:white;margin: 10px 10px 0 10px ;padding:10px'>");
-		echo ("<a href='$this->link'><img  style='max-width:300px;max-height:200px;' src='$this->image'/></a>");
-		echo ("<a href='$this->link'><h4>$this->title</h4></a>");
-		echo ("<p>$this->description</p>");		
-		echo("</div></div>");
+		global $g_debug;
+		echo("<div style='background-color:#eee;padding:10px 10px 0 10px '><div style='background-color:white;margin: 10px 10px 0 10px ;padding:10px'>");
+		
+		if($g_debug)
+		{
+			echo("<h4>$this->index</h4>");
+			
+			
+		}
+		echo ("<a target='_blank' href='$this->link'><img  style='max-width:300px;max-height:200px;' src='$this->image'/></a>");
+		echo ("<a  target='_blank' href='$this->link'><h4>$this->title</h4></a>");
+		echo ("<p>$this->text</p><div>Links: ");	
+		$canlist=	getobj("canidates");
+		$comma=false;
+		if($this->canidates)
+		foreach($this->canidates as $key )
+		{
+			
+			$canidate=$canlist->get_candiate($key);
+			if($canidate)
+			{
+				$url=$canidate->get_local_page_url();
+				if($comma)
+					echo(",");
+				echo("<a href='$url'>$canidate->displayname</a>");
+				
+				$comma=true;
+			}
+			
+		}
+		echo("</div></div></div>");
 		
 		
 		
@@ -896,34 +950,46 @@ class exlink {
 	{
 		try {
 		//parsing begins here:
-		$html = file_get_contents_curl($this->link);
-		
-		$doc = new DOMDocument();
-		@$doc->loadHTML($html);
-		$nodes = $doc->getElementsByTagName('title');
-		
-		//get and display what you need:
-		$title = $nodes->item(0)->nodeValue;
-		$keywords="";
-		$description="";
-		$image="";
-		
-		$metas = $doc->getElementsByTagName('meta');
-		
-		for ($i = 0; $i < $metas->length; $i++)
-		{
-			$meta = $metas->item($i);
-			if($description=="")
-				if($meta->getAttribute('name') == 'description')
-					$description = $meta->getAttribute('content');
-		
+			$html = file_get_contents_curl($this->link);
+			
+			$doc = new DOMDocument();
+			@$doc->loadHTML($html);
+			
+			//get and display what you need:
+			if(!$this->title)
+			{
+				$nodes = $doc->getElementsByTagName('title');
+				$this->title = $nodes->item(0)->nodeValue;
+			}
+			
+			$keywords="";
+			$description="";
+			$image="";
+			
+			$metas = $doc->getElementsByTagName('meta');
+			
+			for ($i = 0; $i < $metas->length; $i++)
+			{
+				$meta = $metas->item($i);
+				if($description=="")
+					if($meta->getAttribute('name') == 'description')
+						$description = $meta->getAttribute('content');
+				if($description=="")					
+					if($meta->getAttribute('property') == 'og:description')
+						$description = $meta->getAttribute('content');			
 				if($image=="")
 					if($meta->getAttribute('property') == 'og:image')
 						$image = $meta->getAttribute('content');
-		}
-		$this->image=$image;
-		$this->title=$title;
-		$this->description=$description;
+			}
+			if(!$this->image)
+			{
+				$this->image=$image;
+			}		
+			if(!$this->text)
+			{
+				$this->text=$description;
+			}
+	
 		}
 		catch (Exception $e) {
 			$this->title=$e->getMessage();
@@ -943,10 +1009,39 @@ class exlinks extends data_source
 	{
 		$this->get_json_data(6,'exlink');
 	}
-	public function print_list()
+	public function has_links($legid,$billid)
 	{
 		foreach ( $this->list as $row )
 		{
+			if($legid)
+			{
+				if(in_array($legid,$row->canidates))
+					return true;;
+			}
+			if($billid)
+			{
+				if($row->doc ==$billid)
+					return true;
+	
+			}
+			
+		}
+	}	
+	public function print_list($legid,$billid)
+	{
+		foreach ( $this->list as $row )
+		{
+			if($legid)
+			{
+				if(in_array($legid,$row->canidates)==false)
+					continue;
+			}
+			if($billid)
+			{
+				if($row->doc !=$billid)
+					continue;
+
+			}			
 			$row->print_panel();
 		}
 	}	
@@ -956,7 +1051,7 @@ class district {
     public $counties;
     public $ch;
     public $dist;
-	public function __construct($d) {
+	public function __construct($d,$index) {
     		$counties =getj($d,'counties');
     		$this->counties=str_replace(",",", ",$counties);
     		$this->ch =getj($d,'chamber');
@@ -1006,7 +1101,7 @@ class districts extends data_source
 class survey_question 
 {
 	public $q;
-    public function __construct($d) {
+    public function __construct($d,$index) {
         $this->q = getj($d,'question');
 	}
 }
@@ -1028,7 +1123,7 @@ class survey_resp
 	public $comments;
 	public $answers;
 	public $key;
-    public function __construct($d) {
+    public function __construct($d,$index) {
             $this->answers=array();
 		    $this->key = getj($d,'key');
 		    $this->firstname = getj($d,'firstname');
@@ -1083,9 +1178,9 @@ class survey_data extends data_source
 		if(!$row)
         {
             echo("<div>Did not respond to our survey.</div>");    
-			return;
         }
-        $row->printresp();
+        else
+       		$row->printresp();
         echo("</div>");  
 	}
 

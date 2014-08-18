@@ -33,6 +33,9 @@ if($bill->hvid)
 	$votes->print_bill_votes("House Votes Against", $bill->doc,'No',$bill->hvid);
 
 }
+
+getobj("exlinks")->print_list(null,$doc);
+
 ?>
 
 

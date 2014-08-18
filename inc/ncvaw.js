@@ -92,7 +92,11 @@ function call_zipo(request) {
 	$.get(url);
 	return;
 }
+function tabselect(tabselected) {
+	$('.tabbody').css('display','none');
+	$('#'+tabselected).css('display','block');
 
+}
 function togglehide(id) {
 	var e=$('#'+id);
 	if(e.css('display') =='none')

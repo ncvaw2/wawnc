@@ -61,7 +61,7 @@ else
 <?php
 $menu_admin = 0;
 
-if ($admin) {
+if ($g_admin) {
 	$menu_admin = z_menu ( "Admin", [ 
 			z_mi ( "Admin Off", "/home.html?admin=off", "" ) 
 	] );
@@ -100,9 +100,11 @@ make_menu ( [
 				z_mi ( "Canidates Survey", "/guide/survey.html", "" ),
 		]
 		 ),
-		($admin ? z_menu ( "Admin", [ 
-				z_mi ( "Debug", "/guide/debug.html" ),
+		($g_admin ? z_menu ( "Admin", [ 
+				z_mi ( "Debug objs", "/guide/debug.html" ),
 				z_mi ( "Admin Off", "/home.html?admin=off" ),
+				z_mi ( "Debug Off", "/home.html?debug=off" ),
+				z_mi ( "Debug ON", "/home.html?debug=on" ),
 				z_mi ( "Delete Pdata", "/home.html?delpdata=true" ),
 				z_mi ( "Delete all", "/home.html?deldata=true" ),
 				z_mi ( "PHP Info", "/phpinfo.php" ),
