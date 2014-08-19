@@ -274,7 +274,7 @@ function retrieveWPDocs($client, $html)
   if ($html) {echo "<h2>Your word processing documents</h2>\n";}
 
   $feed = $client->getDocumentListFeed(
-      'http://docs.google.com/feeds/documents/private/full/-/document');
+      'https://docs.google.com/feeds/documents/private/full/-/document');
 
   printDocumentsFeed($feed, $html);
 }
@@ -293,7 +293,7 @@ function retrieveSpreadsheets($client, $html)
   if ($html) {echo "<h2>Your spreadsheets</h2>\n";}
 
   $feed = $client->getDocumentListFeed(
-      'http://docs.google.com/feeds/documents/private/full/-/spreadsheet');
+      'https://docs.google.com/feeds/documents/private/full/-/spreadsheet');
 
   printDocumentsFeed($feed, $html);
 }
@@ -314,7 +314,7 @@ function fullTextSearch($client, $html, $query)
   if ($html) {echo "<h2>Documents containing $query</h2>\n";}
 
   $feed = $client->getDocumentListFeed(
-      'http://docs.google.com/feeds/documents/private/full?q=' . $query);
+      'https://docs.google.com/feeds/documents/private/full?q=' . $query);
 
   printDocumentsFeed($feed, $html);
 }
@@ -611,7 +611,7 @@ function requestUserLogin($linkText)
 function getAuthSubUrl()
 {
     $next = getCurrentUrl();
-    $scope = 'http://docs.google.com/feeds/documents';
+    $scope = 'https://docs.google.com/feeds/documents';
     $secure = false;
     $session = true;
     return Zend_Gdata_AuthSub::getAuthSubTokenUri($next, $scope, $secure,
@@ -910,7 +910,7 @@ function displayUploadMenu()
 
 <form method="post" enctype="multipart/form-data">
     <h3>Select a Document to Upload</h3>
-    <p>Upload a file from your computer to <a href="http://docs.google.com">Google Documents</a>.</p>
+    <p>Upload a file from your computer to <a href="https://docs.google.com">Google Documents</a>.</p>
     <p>
         <input type="hidden" name="command" value="uploadDocument" />
         <input name="uploadedFile" type="file" />
