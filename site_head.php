@@ -1,9 +1,7 @@
 <?php
+set_include_path(get_include_path() . PATH_SEPARATOR . 'lib');
 
-$options=[
-'grades'=>1,
-'legpages'=>0
-];
+
 function option( $name)
 {
 	global $options;
@@ -97,7 +95,6 @@ if(getParam("delpdata"))
 
 $header=$root.'/inc/head.php';
 $footer=$root.'/inc/foot.php';
-
 
 
 $g_admin=setFlag('admin');
