@@ -1,5 +1,4 @@
 <?php
-set_include_path(get_include_path() . PATH_SEPARATOR . 'lib');
 
 
 function option( $name)
@@ -95,6 +94,7 @@ if(getParam("delpdata"))
 
 $header=$root.'/inc/head.php';
 $footer=$root.'/inc/foot.php';
+set_include_path(get_include_path() . PATH_SEPARATOR. $root. '/lib');
 
 
 $g_admin=setFlag('admin');
