@@ -108,8 +108,6 @@ class data_source
 		$index=2;
 		foreach ($jdata as $row )
 		{
-			
-
 			if($keyname)
 			{
 				$key =getj($row,$keyname);
