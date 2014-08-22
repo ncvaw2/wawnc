@@ -51,7 +51,13 @@ function getj(&$row,$id)
 {
 	return $row->{	'gsx$'.$id }->{'$t' };
 }
-
+/*
+ to get the feed id's 
+ 
+ https://spreadsheets.google.com/feeds/worksheets/1B7d66Ggzayqzw2W2uu_n1Fa12uF9kwh4prhNvLUcxSc/public/basic
+ 
+  
+ */
 class table_base
 {
 
@@ -66,7 +72,7 @@ class table_base
 	SHEET_INDEX/
 	public/basic?alt=json-in-script&callback=JSON_CALLBACK*/
 	
-	function get_json_data2($tab,$spreadsheetid=null)
+	function get_json_data2($tab,$key=null,$spreadsheetid=null)
 	{
 		global $root;
 		global $refresh_data;
@@ -74,14 +80,14 @@ class table_base
 		$this->list=array();
 		$cn=get_class($this);
 		$filename=$root."/data2/$cn.json";
-		if(! file_exists ( $filename ))
-			$refresh_data=1;
-		if($refresh_data)
+		//if(! file_exists ( $filename )) 	$refresh_data=1;
+		//if($refresh_data)
 		{
 			if(!$spreadsheetid)
 			{
 				$spreadsheetid = '1B7d66Ggzayqzw2W2uu_n1Fa12uF9kwh4prhNvLUcxSc';
 			}
+		//https://spreadsheets.google.com/feeds/cells/1B7d66Ggzayqzw2W2uu_n1Fa12uF9kwh4prhNvLUcxSc/o3dfmt2/public/basic?alt=json-in-script&callback=JSON_CALLBACK
 		
 			$url = "https://spreadsheets.google.com/feeds/cells/$spreadsheetid/$tab/public/basic?alt=json-in-script&callback=JSON_CALLBACK";
 
@@ -97,7 +103,7 @@ class table_person  extends table_base
 {
 	function create_from_spreadsheet()
 	{
-		$this->get_json_data2('203963372','person','key');
+		$this->get_json_data2('o3dfmt2','key');
 	}	
 
 }
