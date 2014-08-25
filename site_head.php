@@ -76,12 +76,9 @@ $deviceType = ($detect->isMobile() ? ($detect->isTablet() ? 'tablet' : 'phone') 
 
 $current_url =$_SERVER['PHP_SELF'];
 
-$refresh_data=getParam("refresh");
+$g_refresh_data=getParam("refresh");
 
-if($refresh_data)
-{
-	array_map('unlink', glob("$root/data/*.json"));
-}
+
 if(getParam("deldata"))
 {
 	array_map('unlink', glob("$root/data/*.json"));

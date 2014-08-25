@@ -5,13 +5,13 @@ $legid=getParam( "id");
 
 if (!$legid)
 	echo '<h2>No id selected</h2>';
-$leg=getobj("leg_list")->get_leg_by_key($legid);
+$leg=get_table("leg_list")->get_leg_by_key($legid);
 
 if($leg)
 	$page_title=$leg->name;
 
 include $header;
-$has_links= getobj("exlinks")->has_links($legid,null); 
+$has_links= get_table("exlinks")->has_links($legid,null); 
 if($has_links)
 {
 	add_init_js("tabselect('tab_news');");
@@ -47,7 +47,7 @@ if($has_links)
 	</div>
 	<div class='tabbody' style="display: none" id='tab_survey'><?php $leg->print_survey();?></div>
 	<div class='tabbody' style="display: none" id='tab_news'><?php
-	getobj("exlinks")->print_list($legid,null);
+	get_table("exlinks")->print_list($legid,null);
 	
 		?></div>
 </div>

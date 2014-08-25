@@ -2,7 +2,7 @@
 
 include $root.'/inc/db.php';
  
-$leglist=getobj("leg_list");
+$leglist=get_table("leg_list");
 $leglist->sort();
 $chamber=getParam("ch");
 $page_title="Report Card";

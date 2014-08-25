@@ -104,16 +104,7 @@ function togglehide(id) {
 	else
 		e.css('display','none');
 }
-function canidate_page_init()''
-{
-	
 
-
-
-
-
-
-}
 /*
 var drag_startX = 0;
 function dragstart(ev) {

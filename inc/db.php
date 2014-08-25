@@ -10,117 +10,8 @@
  * 
  * 
  */
+include $root.'/obj/tables.php';
 
-$obj_array=array();
-
-function getobj($type) {
-	global $root;
-	global $obj_array;
-	$objlist=null;
-
-	if(!array_key_exists($type,$obj_array))
-	{
-		if (class_exists($type)) 
-		{
-			$filename=$root."/data/$type.pdata";
-			if( file_exists ( $filename ))
-			{
-				$data = file_get_contents($filename);
-				$objlist = unserialize($data);
-			}
-			else {
-				$objlist=new $type();
-				$objlist->create_from_spreadsheet();
-				$data=serialize($objlist);
-				file_put_contents($filename, $data);				
-			}
-			$obj_array[$type]=$objlist;
-            
-		}
-		else {
-			throw new Exception("Invalid product type given.");
-		}
-	}
-    
-	return $obj_array[$type];
-}
-
-
-
-function getj(&$row,$id)
-{
-	return $row->{	'gsx$'.$id }->{'$t' };
-}
-
-class data_source
-{
-
-	public $list;
-	function create_from_spreadsheet()	
-	{
-	
-	}
-
-	function get_json_data($tab,$obj,$keyname=null,$spreadsheetid=null) 
-	{
-		global $root;
-		global $refresh_data;
-		
-		$this->list=array();
-		$cn=get_class($this);
-		/*
-		$filename=$root."/data/$cn.json";
-		if(! file_exists ( $filename ))	
-			$refresh_data=1;
-		if($refresh_data)
-		{
-			if(!$spreadsheetid)
-			{
-				$spreadsheetid = '0AonA9tFgf4zjdHhNd1FIeFJzVWRrdDlUangxWUlkTXc';
-			}
-			//http://spreadsheets.google.com/feeds/list/xvzkey/1/public/values?alt=json
-			//https://spreadsheets.google.com/feeds/list/0AonA9tFgf4zjdHhNd1FIeFJzVWRrdDlUangxWUlkTXc/1/public/values?alt=json
-			$url = "http://spreadsheets.google.com/feeds/list/$spreadsheetid/$tab/public/values?alt=json";
-			$file = file_get_contents ( $url );
-			$fp = fopen ( $filename, 'w' );
-			fwrite ( $fp, $file );
-			fclose ( $fp );
-		}
-				
-		$json = json_decode (  file_get_contents ( $filename ) );
-		*/
-		if(!$spreadsheetid)
-		{
-			$spreadsheetid = '0AonA9tFgf4zjdHhNd1FIeFJzVWRrdDlUangxWUlkTXc';
-		}
-		$url = "http://spreadsheets.google.com/feeds/list/$spreadsheetid/$tab/public/values?alt=json";
-		$json = json_decode (  file_get_contents ( $url ) );
-		
-		
-		
-		if($json)
-			$jdata = $json->{'feed' }->{'entry' };	
-		else 
-		{
-			throw new Exception("Could not get JSON data for $obj");
-			return;
-		}
-		$index=2;
-		foreach ($jdata as $row )
-		{
-			if($keyname)
-			{
-				$key =getj($row,$keyname);
-				$this->list [$key] = new $obj ( $row,$index );
-			}
-			else 
-				$this->list [] = new $obj ( $row ,$index);
-			
-			$index++;
-				
-		}	
-	}
-}
 
 class bill {
 	public $nickname;
@@ -192,12 +83,12 @@ class bill {
 	}	
 }
 
-class bill_list extends data_source
+class bill_list extends table_base
 {
 	
 	function create_from_spreadsheet()
 	{
-		$this->get_json_data(1,'bill','doc');
+		$this->create('data_v1',1,'bill','doc');
 	}	
 	public function get_bill($doc)
 	{
@@ -229,7 +120,7 @@ class vote {
 	}
 	public function get_score()
 	{
-		$bill=getobj("bill_list")->get_bill($this->doc);
+		$bill=get_table("bill_list")->get_bill($this->doc);
 		
 		if($this->vid)
 		{
@@ -260,7 +151,7 @@ class vote {
 	{
 		$vote=$this->vote;
 		$doc=$this->doc;
-		$bill=getobj("bill_list")->get_bill($doc);
+		$bill=get_table("bill_list")->get_bill($doc);
 		if($this->vid)
 		{
 			if(!(($this->vid==$bill->svid)||($this->vid==$bill->hvid)))
@@ -322,12 +213,12 @@ class vote {
 	}
 }
 
-class vote_data extends data_source
+class vote_data extends table_base
 {
 
 	function create_from_spreadsheet()
 	{
-		$this->get_json_data(3,'vote');
+		$this->create('data_v1',3,'vote');
 	}	
 
 	public function print_bill_votes($title,$doc,$vote,$vid) {
@@ -348,7 +239,7 @@ class vote_data extends data_source
 			)
 			{
 				
-				$leg=getobj("leg_list")->get_leg_by_key($v->mkey);
+				$leg=get_table("leg_list")->get_leg_by_key($v->mkey);
 				if($leg)
 					$legs[]=$leg;
 			}
@@ -490,17 +381,17 @@ class legislator{
 		return ("http://www.ncleg.net/gascripts/members/viewMember.pl?sChamber=$this->chamber&nUserID=$this->uid");
 	}
 	public function print_survey() {
-		getobj("survey_data")->printresp($this->key);
+		get_table("survey_data")->printresp($this->key);
 	}
 	public function print_list_votes()
 	{
-		getobj("vote_data")->print_list_votes($this->key,0);
+		get_table("vote_data")->print_list_votes($this->key,0);
 
 	}
 	public function print_list_sponsorship()
 	{
 
-		getobj("vote_data")->print_list_votes($this->key,1);
+		get_table("vote_data")->print_list_votes($this->key,1);
 
 	}
 	public function create_grade()
@@ -508,7 +399,7 @@ class legislator{
 		$count=0;
 		$color="#000";
 
-		$score=getobj("vote_data")->get_votes($this->key,$count);
+		$score=get_table("vote_data")->get_votes($this->key,$count);
 
 		if( ($count==0) && (!$this->grade))
 		{
@@ -533,7 +424,7 @@ class legislator{
 	}
 	public function print_list_row() {
 		global $isPhone;
-		$canidate=getobj("canidates")->get_candiate($this->key);
+		$canidate=get_table("canidates")->get_candiate($this->key);
 		$data_key=$this->key;
 
 
@@ -567,7 +458,7 @@ class legislator{
 		$this->print_table_row ( 'Email', $email_link );
 		$this->print_table_row ( 'Phone', $this->phone );
         $responded="No";
-        if(getobj("survey_data")->check($this->key))
+        if(get_table("survey_data")->check($this->key))
             $responded="<a style='color:green;font-weight:bold;' href='/guide/legpage.php?id=$this->key'>Yes</a>";
         
      
@@ -618,10 +509,10 @@ function sort_func_dist($a, $b) {
 	return ($a->district < $b->district) ? -1 : 1;
 }
 
-class leg_list extends data_source{
+class leg_list extends table_base{
     function create_from_spreadsheet()
 	{
-		$this->get_json_data(2,'legislator','key');
+		$this->create('data_v1',2,'legislator','key');
 	}
 	public function print_list($chamber) {
 		echo "<div class='tbl_leglist' >";
@@ -740,7 +631,7 @@ class canidate {
 	}
 	public function get_local_page_url() {	
 		$url="/guide/canidate.php?key=$this->key";
-		$leg=getobj("leg_list")->get_leg_by_key($this->key);
+		$leg=get_table("leg_list")->get_leg_by_key($this->key);
 		if($leg)
 		{
 			$url="/guide/legpage.php?id=$this->key";
@@ -750,7 +641,7 @@ class canidate {
 	}
 	public function print_list_row() {
 
-		$leg=getobj("leg_list")->get_leg_by_key($this->key);
+		$leg=get_table("leg_list")->get_leg_by_key($this->key);
 		if($leg)
 		{
 			$leg->print_list_row();
@@ -810,11 +701,11 @@ class canidate {
 }
 
 
-class canidates extends data_source
+class canidates extends table_base
 {
 	function create_from_spreadsheet()
 	{
-		$this->get_json_data(5,'canidate','key');
+		$this->create('data_v1',5,'canidate','key');
 	}	
 
 	public function get_candiate($key) {
@@ -884,27 +775,27 @@ function file_get_contents_curl($url)
 	return $data;
 }
 class exlink {
-	public $link;
+	public $key;
 	public $canidates;
-	public $date;
-	public $index;
-	public $bill;
-	public $image;
+	public $doc;
+	public $date;	
 	public $title;	
-	public $description;	
+	public $note;
+	public $link;
+	public $image;
+	public $text;	
+	
 	public function __construct($d,$index) {
-		$this->index =$index;
+		$this->key =getj($d,'key');
 		$this->link =getj($d,'link');
 		$this->doc =getj($d,'doc');
 		$this->title =getj($d,'title');
 		$this->date =getj($d,'date');
 		$this->image =getj($d,'image');
 		$this->text =getj($d,'text');
-		$canidates=array();
+		$this->canidates =getj($d,'canidates');
 		
-		$this->canidates =str_getcsv (getj($d,'canidates'));
-		if($this->link)
-			$this->fetch();
+		//if($this->link)	$this->fetch();
 	}
 	
 	public function print_panel()	
@@ -921,23 +812,26 @@ class exlink {
 		echo ("<a target='_blank' href='$this->link'><img  style='max-width:300px;max-height:200px;' src='$this->image'/></a>");
 		echo ("<a  target='_blank' href='$this->link'><h4>$this->title</h4></a>");
 		echo ("<p>$this->text</p><div>Links: ");	
-		$canlist=	getobj("canidates");
+		$canlist=	get_table("canidates");
 		$comma=false;
 		if($this->canidates)
-		foreach($this->canidates as $key )
 		{
-			
-			$canidate=$canlist->get_candiate($key);
-			if($canidate)
+			$cans=str_getcsv($this->canidates);
+			foreach($cans as $key )
 			{
-				$url=$canidate->get_local_page_url();
-				if($comma)
-					echo(",");
-				echo("<a href='$url'>$canidate->displayname</a>");
 				
-				$comma=true;
+				$canidate=$canlist->get_candiate($key);
+				if($canidate)
+				{
+					$url=$canidate->get_local_page_url();
+					if($comma)
+						echo(",");
+					echo("<a href='$url'>$canidate->displayname</a>");
+					
+					$comma=true;
+				}
+				
 			}
-			
 		}
 		echo("</div></div></div>");
 		
@@ -1001,11 +895,11 @@ class exlink {
 	
 }
 
-class exlinks extends data_source
+class exlinks extends table_base
 {
 	function create_from_spreadsheet()
 	{
-		$this->get_json_data(6,'exlink');
+		$this->create('data_v1',6,'exlink');
 	}
 	public function has_links($legid,$billid)
 	{
@@ -1022,6 +916,27 @@ class exlinks extends data_source
 					return true;
 	
 			}
+			
+		}
+	}	
+	public function process()
+	{
+		global $root;
+		$filename=$root."/data2/links2.csv";
+		$vars=get_member_vars('exlink');
+		
+		$fp = fopen($filename, 'w');
+		fputcsv($fp,$vars);
+		fclose($fp);
+		
+		foreach ( $this->list as $row )
+		{
+			$row->fetch();
+			$array= (array)$row;
+			$fp = fopen($filename, 'a');
+			fputcsv($fp,$array);
+			fclose($fp);
+			
 			
 		}
 	}	
@@ -1057,11 +972,11 @@ class district {
 	}	
 }
 
-class districts extends data_source
+class districts extends table_base
 {
 	function create_from_spreadsheet()
 	{
-		$this->get_json_data(4,'district');
+		$this->create('data_v1',4,'district');
 	}	
 	public function get($ch,$dist)
 	{
@@ -1074,8 +989,8 @@ class districts extends data_source
 	}
 	public function print_list()
 	{
-		$leglist=getobj("leg_list");
-		$canlist=getobj("canidates");
+		$leglist=get_table("leg_list");
+		$canlist=get_table("canidates");
 		
 		
 		echo("<table class='votes' style='width:100%;text-align:left'><tr><th>District#</th><th>Canidates</th><th>Election</th>
@@ -1103,11 +1018,11 @@ class survey_question
         $this->q = getj($d,'question');
 	}
 }
-class survey_questions extends data_source
+class survey_questions extends table_base
 {
  	function create_from_spreadsheet()
 	{
-		$this->get_json_data(7,'survey_question');
+		$this->create('data_v1',7,'survey_question');
 	}     
 	public function getquestion($num)
 	{
@@ -1139,7 +1054,7 @@ class survey_resp
 		for ($x=0; $x<5; $x++)
 		{
 			$qnum=$x+1;
-			$q=getobj("survey_questions")->getquestion($x);
+			$q=get_table("survey_questions")->getquestion($x);
 			if(!$q)
 				$q="could not get question";
 			$a=$this->answers[$x];
@@ -1155,11 +1070,11 @@ class survey_resp
 	}	
 }
 
-class survey_data extends data_source
+class survey_data extends table_base
 {
  	function create_from_spreadsheet()
 	{
-		$this->get_json_data(1,'survey_resp','key',"0AonA9tFgf4zjdE45M0MyZTR0UUYxXzNzRjBuNWFnMGc");
+		$this->create('survey1',1,'survey_resp','key');
 	}   
 	public function check($key)
 	{
@@ -1188,7 +1103,7 @@ class survey_data extends data_source
 		{
 			$key=$row->key;
 				
-			$leg=getobj("leg_list")->get_leg_by_key($key);
+			$leg=get_table("leg_list")->get_leg_by_key($key);
 			if($leg)
 			{
 				

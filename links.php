@@ -55,7 +55,7 @@ echo ("<p>$description</p>");
 */
 
 
-$exlinks=getobj("exlinks");
+$exlinks=get_table("exlinks");
 
 $exlinks->print_list (null,null);
 ?>

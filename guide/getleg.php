@@ -2,7 +2,7 @@
 // called via AJAX!! Not standalone
 include $root.'/inc/db.php';
  
-$leglist=getobj("leg_list");
+$leglist=get_table("leg_list");
 
 $chamber=0;
 $district=0;

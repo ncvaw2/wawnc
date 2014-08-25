@@ -7,7 +7,7 @@ $key=getParam( "key");
 $canidate=null;
 if ($key)
 {
-	$canidate=getobj("canidates")->get_candiate($key);
+	$canidate=get_table("canidates")->get_candiate($key);
     $page_title=$canidate->displayname;
 }
 

@@ -18,7 +18,7 @@ array_push($funcs_init,
 include $header;
 include $root.'/inc/db.php';
 
-$distobj=getobj('districts')->get($chamber,$distnum);
+$distobj=get_table('districts')->get($chamber,$distnum);
 $next="";
 $counties="";
 if($distobj)
@@ -46,11 +46,11 @@ if($distobj)
 	<!--  
 	<h3>Primary Election 5/6/2014</h3>
 <?php 
-getobj('canidates')->printlist($chamber,$distnum,"primary");
+get_table('canidates')->printlist($chamber,$distnum,"primary");
 ?>		-->
 <h3>General Election 11/4/2014</h3>
 <?php	
-	getobj('canidates')->printlist($chamber,$distnum,"gen");
+	get_table('canidates')->printlist($chamber,$distnum,"gen");
 	?>
 	</div>
 
