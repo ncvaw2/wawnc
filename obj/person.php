@@ -62,7 +62,16 @@ class person
 
 	//lookup
 	public $canidate;
-
+	public function init()
+	{
+		
+		
+		$canidate=get_table("table_election")->get_row($this->key);
+		$canidate=get_table("table_election")->get_row($this->key);
+		
+		
+		
+	}
 	public function __construct($d,$index) {
 		//table data
 		$this->key = getj($d,'key');
@@ -76,7 +85,6 @@ class person
 		$this->email=getj($d,"email");
 
 
-		$canidate=get_table("table_election")->get_row($this->key);
 
 
 	}

@@ -784,6 +784,7 @@ class exlink {
 	public $link;
 	public $image;
 	public $text;	
+	public $canidate_list;
 	
 	public function __construct($d,$index) {
 		$this->key =getj($d,'key');
@@ -794,6 +795,9 @@ class exlink {
 		$this->image =getj($d,'image');
 		$this->text =getj($d,'text');
 		$this->canidates =getj($d,'canidates');
+		$this->canidate_list=array();
+		if($this->canidates)
+			$this->canidate_list=str_getcsv($this->canidates);
 		
 		//if($this->link)	$this->fetch();
 	}
@@ -805,33 +809,28 @@ class exlink {
 		
 		if($g_debug)
 		{
-			echo("<h4>$this->index</h4>");
-			
-			
+			echo("<h4>$this->key</h4>");
 		}
+		echo("<h4>$this->date</h4>");
 		echo ("<a target='_blank' href='$this->link'><img  style='max-width:300px;max-height:200px;' src='$this->image'/></a>");
 		echo ("<a  target='_blank' href='$this->link'><h4>$this->title</h4></a>");
 		echo ("<p>$this->text</p><div>Links: ");	
 		$canlist=	get_table("canidates");
 		$comma=false;
-		if($this->canidates)
+		foreach($this->canidate_list as $key )
 		{
-			$cans=str_getcsv($this->canidates);
-			foreach($cans as $key )
+			
+			$canidate=$canlist->get_candiate($key);
+			if($canidate)
 			{
+				$url=$canidate->get_local_page_url();
+				if($comma)
+					echo(",");
+				echo("<a href='$url'>$canidate->displayname</a>");
 				
-				$canidate=$canlist->get_candiate($key);
-				if($canidate)
-				{
-					$url=$canidate->get_local_page_url();
-					if($comma)
-						echo(",");
-					echo("<a href='$url'>$canidate->displayname</a>");
-					
-					$comma=true;
-				}
-				
+				$comma=true;
 			}
+			
 		}
 		echo("</div></div></div>");
 		
@@ -840,6 +839,7 @@ class exlink {
 	}
 	public function fetch()
 	{
+
 		try {
 		//parsing begins here:
 			$html = file_get_contents_curl($this->link);
@@ -907,7 +907,7 @@ class exlinks extends table_base
 		{
 			if($legid)
 			{
-				if(in_array($legid,$row->canidates))
+				if(in_array($legid,$row->canidate_list))
 					return true;;
 			}
 			if($billid)
@@ -931,6 +931,8 @@ class exlinks extends table_base
 		
 		foreach ( $this->list as $row )
 		{
+			if(($row->text)&&($row->image)&&($row->title))
+				continue;			
 			$row->fetch();
 			$array= (array)$row;
 			$fp = fopen($filename, 'a');
@@ -946,7 +948,7 @@ class exlinks extends table_base
 		{
 			if($legid)
 			{
-				if(in_array($legid,$row->canidates)==false)
+				if(in_array($legid,$row->canidate_list)==false)
 					continue;
 			}
 			if($billid)

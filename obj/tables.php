@@ -15,11 +15,7 @@
 function get_member_vars($classname)
 {
 	$rtn=array();
-	
-
 	$vars=get_class_vars ($classname);
-
-
 	foreach ($vars as $varname => $val )
 	{
 		$rtn[]=$varname;
