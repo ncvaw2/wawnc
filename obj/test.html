@@ -1,6 +1,6 @@
 <?php
 include $header;
-include $root.'/inc/db.php';
+include $root.'/obj/tables.php';
 
 ?>
 
@@ -10,8 +10,6 @@ include $root.'/inc/db.php';
 
 
 get_table("table_test")->printtable2();
-$exlinks=get_table("exlinks");
 
-$exlinks->process ();
 
 include $footer; ?>

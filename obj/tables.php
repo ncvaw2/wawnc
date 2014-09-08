@@ -65,6 +65,14 @@ function getj(&$row,$id)
 {
 	return $row->{	'gsx$'.$id }->{'$t' };
 }
+function create_obj_from_json($obj,$data,$vars)
+{
+	foreach ($vars as $var )
+	{
+		$obj->$var=getj($data,$var);
+	}
+
+}
 /*
  to get the feed id's 
  
@@ -112,15 +120,22 @@ class table_base
 		$index=2;
 		foreach ($jdata as $row )
 		{
-			
+			$obj=new $objname();
+			$obj->inited=false;
+			$columns=$this->get_columns();
+			create_obj_from_json($obj,$row,$columns);
+				
 			 
 			if($keyname)
 			{
 				$key =getj($row,$keyname);
-				$this->list [$key] = new $objname ( $row,$index );
+				
+				//$this->list [$key] = new $objname ( $row,$index );
+				$this->list [$key] = $obj;
+				
 			}
 			else
-				$this->list [] = new $objname ( $row ,$index);
+				$this->list [] = $obj;
 	
 			$index++;
 		}
@@ -168,7 +183,7 @@ class table_base
 		if(count($this->list)==0)
 			return;
 		
-		$obj=$this->list[0];
+		$obj=reset($this->list);
 		$vars=get_object_vars($obj);
 
 		
@@ -214,12 +229,7 @@ class table_base
 }
 
 class testobj {
-	public $key;
-	public $legs;
-	public function __construct($d,$index) {
-		$this->key = getj($d,'key');
-		$this->legs=getj($d,"legs");
-	}
+	
 	function printrow()
 	{
 		echo "<tr><td>$this->key</td><td>$this->legs</td>";

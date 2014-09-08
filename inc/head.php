@@ -101,7 +101,8 @@ make_menu ( [
 				z_mi ( "Canidates Survey", "/guide/survey.html", "" ),
 		]
 		 ),
-		($g_admin ? z_menu ( "Admin", [ 
+		($g_admin ? 
+			z_menu ( "Admin", [ 
 				z_mi ( "Debug objs", "/guide/debug.html" ),
 				z_mi ( "Admin Off", "/home.html?admin=off" ),
 				z_mi ( "Debug Off", "/home.html?debug=off" ),
@@ -110,7 +111,16 @@ make_menu ( [
 				z_mi ( "Delete all", "/home.html?deldata=true" ),
 				z_mi ( "PHP Info", "/phpinfo.php" ),
 				z_mi ( "Refresh", "$current_url?refresh=true" ) 
-		] ) : 0) 
+		] ): 0), 
+		($g_admin ?
+		
+			z_menu ( "Tables", [
+			z_mi ( "Person", "/v2/table.html?table=table_person" ),
+			z_mi ( "Election", "/v2/table.html?table=table_election" ),
+			z_mi ( "Office", "/v2/table.html?table=table_office" ),
+				
+		]): 0), 
+				
 ]
  );
 

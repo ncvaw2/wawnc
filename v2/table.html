@@ -1,0 +1,9 @@
+<?php
+include $header;
+include $root.'/obj/person.php';
+
+$table=getParam('table');
+get_table($table)->printtable2();
+
+
+include $footer; ?>

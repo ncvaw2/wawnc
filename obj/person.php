@@ -13,23 +13,16 @@ class canidate
 	public $nameonballot;
 	public $endorsements;
 
-	public function __construct($d,$index) {
-		//table data
-		$this->key = getj($d,'key');
-		$this->year=getj($d,"year");
-		$this->type=getj($d,"type");
-		$this->district = getj($d,'district');
-		$this->chamber = getj($d,'chamber');
-		$this->party = getj($d,'party');
-		$this->nameonballot = getj($d,'nameonballot');
-		$this->endorsements = getj($d,'endorsements');
-	}
 }
 class table_election  extends table_base
 {
+	function get_columns()
+	{
+		return ['key','year','type','district','chamber','party','party','nameonballot','endorsements'];
+	}	
 	function create_from_spreadsheet()
 	{
-		$this->get_json_data('oi0q51k','canidate','key','1B7d66Ggzayqzw2W2uu_n1Fa12uF9kwh4prhNvLUcxSc');
+		$this->create('data_v2','oi0q51k','canidate','key');
 	}
 	function printtable()
 	{
@@ -50,6 +43,7 @@ class person
 	public $gradecomment;
 	public $party;
 	public $fullname;
+	public $photo;
 	public $first;
 	public $middle;
 	public $last;
@@ -61,12 +55,19 @@ class person
 	public $zip;
 
 	//lookup
+	public $init;
 	public $canidate;
+	public $office;
 	public function init()
 	{
+		if($this->inited)
+			return;
+		$this->init=true;
+		$this->office=get_table("table_election")->get_row($this->key);
+		$this->canidate=get_table("table_office")->get_row($this->key);
 		
+		//if($this->office)
 		
-		$canidate=get_table("table_election")->get_row($this->key);
 		//$canidate=get_table("table_election")->get_row($this->key);
 		
 		
@@ -74,12 +75,9 @@ class person
 	}
 	public function print_list_row() {
 	
-		$leg=get_table("leg_list")->get_leg_by_key($this->key);
-		if($leg)
-		{
-			$leg->print_list_row();
-			return;
-		}
+		$this->init();
+		
+
 		$data_key=$this->key;
 	
 		echo ("<div class='leg_bio' data-name='$data_key'><hr>");
@@ -130,7 +128,7 @@ class person
 			
 		echo ("</div></div><div style='clear:both'></div>");
 	}	
-	
+	/*
 	public function __construct($d,$index) {
 		//table data
 		$this->key = getj($d,'key');
@@ -142,33 +140,57 @@ class person
 		$this->last = getj($d,'last');
 		$this->phone = getj($d,'phone');
 		$this->email=getj($d,"email");
+		$this->init=false;
 
-
-
-
-	}
+	}*/
 }
 class table_person  extends table_base
 {
+	function get_columns()
+	{
+		return ['key','grade','gradecomment','fullname','first','middle','last','phone','email'];
+	}	
 	function create_from_spreadsheet()
 	{
-		$this->get_json_data('oc8fqax','person','key','1B7d66Ggzayqzw2W2uu_n1Fa12uF9kwh4prhNvLUcxSc');
+		$this->create('data_v2','oc8fqax','person','key');
 	}
 	function printtable()
 	{
 		$column="key";
 		foreach ($this->list as $row )
 		{
-			$val=$row->$column;
-			echo($val);
+			$row->print_list_row();
 		}
 	}
+	
 }
+class office
+{
+	//columns
+	public $key;
+	public $chamber;
+	public $uid;
+	public $party;
+	public $district;		
+	public $email;
+	function get_photo_url()
+	{
+		
+		
+		
+	}
+		
+};
 class table_office  extends table_base
 {
+	
+	function get_columns()
+	{
+		return ['key','chamber','uid','party','district','email'];
+	}	
 	function create_from_spreadsheet()
 	{
-		$this->get_json_data('owx3nyv','office','key','1B7d66Ggzayqzw2W2uu_n1Fa12uF9kwh4prhNvLUcxSc');
+		$this->create('data_v2','owx3nyv','office','key');
 	}
 
 }
