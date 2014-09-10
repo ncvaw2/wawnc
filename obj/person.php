@@ -63,12 +63,12 @@ class person
 		if($this->inited)
 			return;
 		$this->init=true;
-		$this->office=get_table("table_election")->get_row($this->key);
-		$this->canidate=get_table("table_office")->get_row($this->key);
+		$this->office=get_table("table_election")->getobj($this->key);
+		$this->canidate=get_table("table_office")->getobj($this->key);
 		
 		//if($this->office)
 		
-		//$canidate=get_table("table_election")->get_row($this->key);
+		//$canidate=get_table("table_election")->getobj($this->key);
 		
 		
 		

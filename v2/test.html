@@ -1,0 +1,16 @@
+<?php
+include $header;
+include $root.'/obj/person.php';
+
+$debugon=getUrlWithParam('debug','on');
+$debugoff=getUrlWithParam('debug','off');
+$adminon=getUrlWithParam('admin','on');
+$adminoff=getUrlWithParam('admin','off');
+
+
+echo("<div><a href='$debugon'>$debugon</a></div>");
+echo("<div><a href='$debugoff'>$debugoff</a></div>");
+echo("<div><a href='$adminon'>$adminon</a></div>");
+echo("<div><a href='$adminoff'>$adminoff</a></div>");
+
+include $footer; ?>

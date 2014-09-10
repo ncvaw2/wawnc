@@ -33,7 +33,23 @@ function getParam( $name)
 		return $_GET[$name];
 	return null;
 }
-
+function getUrlWithParam($newkey,$newvalue)
+{
+	$params=$_GET;
+	$params[$newkey]=$newvalue;	
+	$url=$_SERVER["SCRIPT_NAME"].'?';
+	$addAnd=false;
+	foreach($params as $key => $val)
+	{
+		if($addAnd) $url .='&';
+		$url .=$key . '=' . $val;
+		$addAnd=true;
+	}
+	return $url;
+	
+	
+	
+}
 function setFlag( $name)
 {
 	$flag=getParam($name);
