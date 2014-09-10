@@ -107,14 +107,37 @@ class table_base
 		return null;
 		
 	}
-	function create($sheet_name,$tab,$objname,$keyname=null)
+	function create1($sheet_name,$tab,$objname,$keyname=null)
 	{
 		
 		$jdata=$this->get_json_data($sheet_name,$tab);
 		$this->create_from_json($jdata,$objname,$keyname);
-		
 	}
+	function create($sheet_name,$tab,$objname,$keyname=null)
+	{
+	
+		$jdata=$this->get_json_data($sheet_name,$tab);
+		$this->create_from_json2($jdata,$objname,$keyname);
+	}	
 	function create_from_json($jdata,$objname,$keyname)
+	{
+	
+		$index=2;
+		foreach ($jdata as $row )
+		{
+			if($keyname)
+			{
+				$key =getj($row,$keyname);
+				$this->list [$key] = new $objname ( $row,$index );
+			}
+			else
+				$this->list [] = new $objname ( $row ,$index);
+	
+			$index++;
+		}
+	}
+		
+	function create_from_json2($jdata,$objname,$keyname)
 	{
 
 		$index=2;

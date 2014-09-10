@@ -88,7 +88,7 @@ class bill_list extends table_base
 	
 	function create_from_spreadsheet()
 	{
-		$this->create('data_v1',1,'bill','doc');
+		$this->create1('data_v1',1,'bill','doc');
 	}	
 	public function get_bill($doc)
 	{
@@ -218,7 +218,7 @@ class vote_data extends table_base
 
 	function create_from_spreadsheet()
 	{
-		$this->create('data_v1',3,'vote');
+		$this->create1('data_v1',3,'vote');
 	}	
 
 	public function print_bill_votes($title,$doc,$vote,$vid) {
@@ -350,7 +350,12 @@ class legislator{
 	public $county;
     public $url;
 	public $district;
-
+	
+	public function init() {
+		
+		
+	
+	}
 	public function __construct($d,$index) {
 
 		$this->party = getj($d,'party');
@@ -512,7 +517,7 @@ function sort_func_dist($a, $b) {
 class leg_list extends table_base{
     function create_from_spreadsheet()
 	{
-		$this->create('data_v1',2,'legislator','key');
+		$this->create1('data_v1',2,'legislator','key');
 	}
 	public function print_list($chamber) {
 		echo "<div class='tbl_leglist' >";
@@ -705,7 +710,7 @@ class canidates extends table_base
 {
 	function create_from_spreadsheet()
 	{
-		$this->create('data_v1',5,'canidate','key');
+		$this->create1('data_v1',5,'canidate','key');
 	}	
 
 	public function get_candiate($key) {
@@ -899,7 +904,7 @@ class exlinks extends table_base
 {
 	function create_from_spreadsheet()
 	{
-		$this->create('data_v1',6,'exlink');
+		$this->create1('data_v1',6,'exlink');
 	}
 	public function has_links($legid,$billid)
 	{
@@ -978,7 +983,7 @@ class districts extends table_base
 {
 	function create_from_spreadsheet()
 	{
-		$this->create('data_v1',4,'district');
+		$this->create1('data_v1',4,'district');
 	}	
 	public function get($ch,$dist)
 	{
@@ -1024,7 +1029,7 @@ class survey_questions extends table_base
 {
  	function create_from_spreadsheet()
 	{
-		$this->create('data_v1',7,'survey_question');
+		$this->create1('data_v1',7,'survey_question');
 	}     
 	public function getquestion($num)
 	{
@@ -1076,7 +1081,7 @@ class survey_data extends table_base
 {
  	function create_from_spreadsheet()
 	{
-		$this->create('survey1',1,'survey_resp','key');
+		$this->create1('survey1',1,'survey_resp','key');
 	}   
 	public function check($key)
 	{
