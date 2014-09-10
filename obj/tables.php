@@ -100,7 +100,7 @@ class table_base
 	{
 	
 	}	
-	function get_row($key)
+	function getobj($key)
 	{
 		if(array_key_exists ($key,$this->list))
 			return  $this->list[$key];

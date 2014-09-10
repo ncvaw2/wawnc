@@ -1106,6 +1106,7 @@ class survey_data extends table_base
 
 	public function printlist()
 	{
+		global $g_debug;
 		foreach ( $this->list as $row )
 		{
 			$key=$row->key;
@@ -1117,7 +1118,10 @@ class survey_data extends table_base
 				$leg->print_list_row();
 			}
 			else {
-				echo("<div>$key </div>");
+				if($g_debug)
+				{
+					echo("<H1>$key NOT FOUND</H1>");
+				}
 				
 			}
 		}
