@@ -99,10 +99,13 @@ if(getParam("deldata"))
 {
 	array_map('unlink', glob("$root/data/*.json"));
 	array_map('unlink', glob("$root/data/*.pdata"));
+	array_map('unlink', glob("$root/data2/*.json"));
+	array_map('unlink', glob("$root/data2/*.pdata"));	
 }
 if(getParam("delpdata"))
 {
 	array_map('unlink', glob("$root/data/*.pdata"));
+	array_map('unlink', glob("$root/data2/*.pdata"));
 }
 
 $header=$root.'/inc/head.php';

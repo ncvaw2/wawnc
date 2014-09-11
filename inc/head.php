@@ -104,11 +104,11 @@ make_menu ( [
 		($g_admin ? 
 			z_menu ( "Admin", [ 
 				z_mi ( "Debug objs", "/guide/debug.html" ),
-				z_mi ( "Admin Off", "/home.html?admin=off" ),
-				z_mi ( "Debug Off", "/home.html?debug=off" ),
-				z_mi ( "Debug ON", "/home.html?debug=on" ),
-				z_mi ( "Delete Pdata", "/home.html?delpdata=true" ),
-				z_mi ( "Delete all", "/home.html?deldata=true" ),
+				z_mi_param ( "Admin Off", "admin","off" ),
+				z_mi_param ( "Debug Off", "debug","off" ),
+				z_mi_param ( "Debug ON", "debug","on" ),
+				z_mi_param ( "Delete Pdata", "delpdata","true" ),
+				z_mi_param ( "Delete all", "deldata","true" ),
 				z_mi ( "PHP Info", "/phpinfo.php" ),
 				z_mi ( "Refresh", "$current_url?refresh=true" ) 
 		] ): 0), 

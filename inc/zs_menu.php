@@ -8,6 +8,12 @@ function z_out_ch(&$str,$items) {
 		
 	}
 }
+function z_mi_param($text,$var,$val)
+{
+	$link=getUrlWithParam($var,$val);
+	return "<li  class='zs_menu_item' ><a class='zs_menu_item' href='$link' >$text</a></li>";
+}
+
 function z_mi($text,$link,$help=null,$id=null) 
 { 
 	
