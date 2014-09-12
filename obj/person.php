@@ -55,14 +55,14 @@ class person
 	public $zip;
 
 	//lookup
-	public $init;
+	public $inited;
 	public $canidate;
 	public $office;
 	public function init()
 	{
 		if($this->inited)
 			return;
-		$this->init=true;
+		$this->inited=true;
 		$this->office=get_table("table_election")->getobj($this->key);
 		$this->canidate=get_table("table_office")->getobj($this->key);
 		
@@ -94,9 +94,9 @@ class person
 	
 		}
 	
-		echo ("<div class='leg_info' ><a href='/guide/canidate.php?key=$this->key'><h2>$this->displayname</h2></a><table><tr><td/><td/></tr>");
-		$district_url="'/district.php?dist=". $this->district . "&ch=" . $this->chamberId . "'";
-		$this->print_table_row ( 'District', "<a href=$district_url>$this->district</a>" );
+		echo ("<div class='leg_info' ><a href='/guide/canidate.php?key=$this->key'><h2>$this->fullname</h2></a><table><tr><td/><td/></tr>");
+		//$district_url="'/district.php?dist=". $this->district . "&ch=" . $this->chamberId . "'";
+		//$this->print_table_row ( 'District', "<a href=$district_url>$this->district</a>" );
 	
 		$this->print_table_row ( 'Party', $this->party );
 		$running="Challenger in the ";
