@@ -28,6 +28,7 @@ $g_table_array=array();
 
 function get_table($type) {
 	global $root;
+	global $g_offline;
 	global $g_table_array;
 	global $g_refresh_data;
 	$table=null;
@@ -44,7 +45,11 @@ function get_table($type) {
 			}
 			else {
 				$table=new $type();
-				$table->create_from_spreadsheet();
+				if($g_offline)
+					$table->create_offline();
+				else
+					$table->create_from_spreadsheet();
+				
 				$data=serialize($table);
 				file_put_contents($filename, $data);				
 			}
@@ -92,14 +97,9 @@ class table_base
 {
 
 	public $list;
-	function create_from_spreadsheet()	
-	{
-	
-	}
-	function get_columns()
-	{
-	
-	}	
+	function create_from_spreadsheet()	{	}
+	function create_offline(){}
+	function get_columns(){	}	
 	function getobj($key)
 	{
 		if(array_key_exists ($key,$this->list))

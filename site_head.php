@@ -115,6 +115,7 @@ set_include_path(get_include_path() . PATH_SEPARATOR. $root. '/lib');
 
 $g_admin=setFlag('admin');
 $g_debug=setFlag('debug');
+$g_offline=setFlag('offline');
 
 
 

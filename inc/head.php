@@ -90,7 +90,8 @@ make_menu ( [
 			z_mi ( "Recent Legislation", "/bills.php", "" ),
 			z_mi ( "Senate List", "/guide/leglist.html?ch=S", "HOME" ),
 			z_mi ( "House List", "/guide/leglist.html?ch=H", "" ),
-			z_mi ( "Complete List", "/guide/leglist.html", "" )
+			z_mi ( "Complete List", "/guide/leglist.html", "" ),
+			z_mi ( "People List", "/v2/bio.php", "" )
 			]
 		),
 		
@@ -106,7 +107,11 @@ make_menu ( [
 				z_mi ( "Debug objs", "/guide/debug.html" ),
 				z_mi_param ( "Admin Off", "admin","off" ),
 				z_mi_param ( "Debug Off", "debug","off" ),
+				
 				z_mi_param ( "Debug ON", "debug","on" ),
+				
+				z_mi_param ( "offline", "offline","on" ),
+				z_mi_param ( "online", "offline","off" ),				
 				z_mi_param ( "Delete Pdata", "delpdata","true" ),
 				z_mi_param ( "Delete all", "deldata","true" ),
 				z_mi ( "PHP Info", "/phpinfo.php" ),

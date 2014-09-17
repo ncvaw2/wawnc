@@ -54,24 +54,45 @@ class person
 	public $state;
 	public $zip;
 
+	public $website;
+	public $facebook;
 	//lookup
 	public $inited;
 	public $canidate;
 	public $office;
+
 	public function init()
 	{
 		if($this->inited)
 			return;
 		$this->inited=true;
-		$this->office=get_table("table_election")->getobj($this->key);
-		$this->canidate=get_table("table_office")->getobj($this->key);
+		$this->canidate=get_table("table_election")->getobj($this->key);
+		$this->office=get_table("table_office")->getobj($this->key);
 		
-		//if($this->office)
-		
+		if($this->office)
+		{
+			$chamber='Senate';
+			if($this->office->chamber=='H')
+				$chamber='House';
+			$uid=$this->office->uid;
+			
+			if(!$this->photo)
+					$this->photo="http://www.ncleg.net/$chamber/pictures/$uid.jpg";
+			
+		}
 		//$canidate=get_table("table_election")->getobj($this->key);
 		
 		
-		
+	}
+	public function print_table_row($label, $val,$color=null) {
+		$style="";
+		if($color)
+			$style="style='color:$color;font-weight:bold'";
+			
+		echo "<tr><td class='leg_label'>$label: </td><td class='leg_val' $style>$val</td></tr>";
+	}	
+	public function printPage() {
+		$this->print_list_row();
 	}
 	public function print_list_row() {
 	
@@ -94,24 +115,24 @@ class person
 	
 		}
 	
-		echo ("<div class='leg_info' ><a href='/guide/canidate.php?key=$this->key'><h2>$this->fullname</h2></a><table><tr><td/><td/></tr>");
+		echo ("<div class='leg_info' ><a href='/v2/bio.php?key=$this->key'><h2>$this->fullname</h2></a><table><tr><td/><td/></tr>");
 		//$district_url="'/district.php?dist=". $this->district . "&ch=" . $this->chamberId . "'";
 		//$this->print_table_row ( 'District', "<a href=$district_url>$this->district</a>" );
 	
 		$this->print_table_row ( 'Party', $this->party );
-		$running="Challenger in the ";
+		
 	
-		if($this->election=='gen')
+		if($this->canidate)
 		{
+			$running=$this->canidate->party;
+	
 			$running.='general election 11/4/2014';
 	
-		}
-		else
-		{
-			$running.=$this->party . ' primary election 5/6/2014';
+	
+			//$running.=$this->party . ' primary election 5/6/2014';
+			$this->print_table_row ( '2014 Election', $running );
 		}
 	
-		$this->print_table_row ( '2014 Election', $running );
 	
 		if($this->website)
 		{
@@ -128,6 +149,7 @@ class person
 			
 		echo ("</div></div><div style='clear:both'></div>");
 	}	
+	
 	/*
 	public function __construct($d,$index) {
 		//table data
@@ -148,12 +170,19 @@ class table_person  extends table_base
 {
 	function get_columns()
 	{
-		return ['key','grade','gradecomment','fullname','first','middle','last','phone','email'];
+		return ['key','grade','gradecomment','fullname','first','middle','last','phone','email','facebook','website'];
 	}	
 	function create_from_spreadsheet()
 	{
 		$this->create('data_v2','oc8fqax','person','key');
 	}
+	function create_offline()
+	{
+		$me=new person();
+		$me->key='anthony.corriveau';
+		$this->list [] = new $objname ( $row ,$index);
+		
+	}	
 	function printtable()
 	{
 		$column="key";
