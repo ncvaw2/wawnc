@@ -1,6 +1,14 @@
 <?php
 include $root.'/obj/tables.php';
 
+$g_parties=array(
+
+		'DEM'=>'Democratic',
+		'REP'=>'Republican',
+		'IND' => 'Independant'
+
+);
+
 class canidate
 {
 	//columns
@@ -60,7 +68,8 @@ class person
 	public $inited;
 	public $canidate;
 	public $office;
-
+	public $election;
+	
 	public function init()
 	{
 		if($this->inited)
@@ -68,18 +77,34 @@ class person
 		$this->inited=true;
 		$this->canidate=get_table("table_election")->getobj($this->key);
 		$this->office=get_table("table_office")->getobj($this->key);
-		
+		$this->fullname=$this->first . " " . $this->last;
 		if($this->office)
 		{
-			$chamber='Senate';
+			
 			if($this->office->chamber=='H')
+			{
+				$this->fullname="Representative ".$this->fullname;
 				$chamber='House';
+			}
+			else 
+			{
+				$chamber='Senate';
+				
+				$this->fullname="Senator ".$this->fullname;
+				
+			}
 			$uid=$this->office->uid;
 			
 			if(!$this->photo)
 					$this->photo="http://www.ncleg.net/$chamber/pictures/$uid.jpg";
 			
 		}
+		if($this->canidate)
+		{
+			
+		}
+		else
+			$this->election="Not running";
 		//$canidate=get_table("table_election")->getobj($this->key);
 		
 		
@@ -98,7 +123,14 @@ class person
 	
 		$this->init();
 		
-
+		if($this->office)
+		{
+			//$running=$this->canidate->party;
+		
+				
+			//$this->print_table_row ( '2014 Election', $running );
+		}
+		
 		$data_key=$this->key;
 	
 		echo ("<div class='leg_bio' data-name='$data_key'><hr>");
@@ -107,7 +139,7 @@ class person
 		if($this->photo)
 		{
 	
-			echo ("<div class='leg_thumb' ><a href='/guide/canidate.php?key=$this->key'>");
+			echo ("<div class='leg_thumb' ><a href='/v2/bio.php?key=$this->key'>");
 			echo ("<img src='$this->photo'/></a></div>");
 		}
 		else {
@@ -121,18 +153,18 @@ class person
 	
 		$this->print_table_row ( 'Party', $this->party );
 		
-	
 		if($this->canidate)
 		{
 			$running=$this->canidate->party;
-	
+		
 			$running.='general election 11/4/2014';
-	
-	
+		
+		
 			//$running.=$this->party . ' primary election 5/6/2014';
 			$this->print_table_row ( '2014 Election', $running );
 		}
-	
+			
+
 	
 		if($this->website)
 		{
