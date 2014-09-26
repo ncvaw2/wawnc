@@ -1,6 +1,6 @@
 <?php
 include_once  $root.'/obj/person.php';
-include_once  $root.'/inc/db.php';
+
 $key=getParam( "key");
 $person=null;
 include $header;
