@@ -10,7 +10,7 @@
  * 
  * 
  */
-include $root.'/obj/tables.php';
+include_once  $root.'/obj/tables.php';
 
 
 class bill {

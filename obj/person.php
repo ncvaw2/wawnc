@@ -1,5 +1,5 @@
 <?php
-include $root.'/obj/tables.php';
+include_once  $root.'/inc/db.php';
 
 $g_parties=array(
 
@@ -9,7 +9,7 @@ $g_parties=array(
 
 );
 
-class canidate
+class election
 {
 	//columns
 	public $key;
@@ -30,7 +30,7 @@ class table_election  extends table_base
 	}	
 	function create_from_spreadsheet()
 	{
-		$this->create('data_v2','oi0q51k','canidate','key');
+		$this->create('data_v2','oi0q51k','election','key');
 	}
 	function printtable()
 	{
