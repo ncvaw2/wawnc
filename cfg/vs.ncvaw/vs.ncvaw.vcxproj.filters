@@ -13,134 +13,162 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="inc">
-      <UniqueIdentifier>{6febb308-d79e-46b3-a8ea-920a676d2227}</UniqueIdentifier>
-    </Filter>
     <Filter Include="guide">
       <UniqueIdentifier>{a729f484-b3de-468d-9eb8-a377e9640f0e}</UniqueIdentifier>
     </Filter>
     <Filter Include="about">
       <UniqueIdentifier>{5a14b531-8a68-437a-bb95-3339de83cff4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="v2">
+      <UniqueIdentifier>{9b81c694-ce44-42eb-b4db-df5e09ea7254}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="js">
+      <UniqueIdentifier>{6febb308-d79e-46b3-a8ea-920a676d2227}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="inc">
+      <UniqueIdentifier>{c04897e8-ec62-443a-8f58-0ebcf92294bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="v1">
+      <UniqueIdentifier>{d50dde4d-7b66-4781-acf9-5ba69b43ba86}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\bills.php" />
-    <None Include="..\..\district.php" />
-    <None Include="..\..\districts.php" />
-    <None Include="..\..\global.php" />
-    <None Include="..\..\home.html" />
-    <None Include="..\..\news.html" />
-    <None Include="..\..\phpinfo.php" />
-    <None Include="..\..\site_head.php" />
-    <None Include="..\..\inc\maps_lib2.js">
+    <None Include="..\..\..\..\..\ncvaw\about\aboutus.html">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\guide\canidate.php">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\about\contact.html">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\about\donate.html">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\facebook.html">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\inc\fb_script.p">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\inc\fblike.p">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\guide\find.html">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\about\getinvolved.html">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\home.html">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\guide\leglist.html">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\linux.htaccess">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\about\lobbying101.html">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\inc\Mobile_Detect.php">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\inc\ncvaw.css">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\inc\ncvaw.js">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\news.html">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\phpinfo.php">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\guide\survey.html">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\about\who.html">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\inc\zs_menu.css">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\inc\zs_menu.php">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\inc\jquery.js">
+      <Filter>js</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\inc\maps_lib2.js">
+      <Filter>js</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\inc\unused.js">
+      <Filter>js</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\inc\zs_menu.js">
+      <Filter>js</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\inc\foot.php">
       <Filter>inc</Filter>
     </None>
-    <None Include="..\..\inc\mfooter.p">
+    <None Include="..\..\..\..\..\ncvaw\global.php">
       <Filter>inc</Filter>
     </None>
-    <None Include="..\..\inc\mgallery.p">
+    <None Include="..\..\..\..\..\ncvaw\inc\head.php">
       <Filter>inc</Filter>
     </None>
-    <None Include="..\..\inc\mheader.p">
+    <None Include="..\..\..\..\..\ncvaw\inc\headscripts.p">
       <Filter>inc</Filter>
     </None>
-    <None Include="..\..\inc\mlfd.css">
+    <None Include="..\..\..\..\..\ncvaw\site_head.php">
       <Filter>inc</Filter>
     </None>
-    <None Include="..\..\inc\Mobile_Detect.php">
-      <Filter>inc</Filter>
+    <None Include="..\..\..\..\..\ncvaw\district.php">
+      <Filter>v1</Filter>
     </None>
-    <None Include="..\..\inc\ncleg.php">
-      <Filter>inc</Filter>
+    <None Include="..\..\..\..\..\ncvaw\districts.php">
+      <Filter>v1</Filter>
     </None>
-    <None Include="..\..\inc\ncvaw.css">
-      <Filter>inc</Filter>
+    <None Include="..\..\..\..\..\ncvaw\inc\db.php">
+      <Filter>v1</Filter>
     </None>
-    <None Include="..\..\inc\ncvaw.js">
-      <Filter>inc</Filter>
+    <None Include="..\..\..\..\..\ncvaw\bills.php">
+      <Filter>v1</Filter>
     </None>
-    <None Include="..\..\inc\unused.js">
-      <Filter>inc</Filter>
+    <None Include="..\..\..\..\..\ncvaw\guide\billpage.php">
+      <Filter>v1</Filter>
     </None>
-    <None Include="..\..\inc\zs_menu.css">
-      <Filter>inc</Filter>
+    <None Include="..\..\..\..\..\ncvaw\guide\legpage.php">
+      <Filter>v1</Filter>
     </None>
-    <None Include="..\..\inc\zs_menu.js">
-      <Filter>inc</Filter>
+    <None Include="..\..\..\..\..\ncvaw\guide\getleg.php">
+      <Filter>v1</Filter>
     </None>
-    <None Include="..\..\inc\zs_menu.php">
-      <Filter>inc</Filter>
+    <None Include="..\..\v2\table.html">
+      <Filter>v2</Filter>
     </None>
-    <None Include="..\..\inc\fb_script.p">
-      <Filter>inc</Filter>
+    <None Include="..\..\v2\test.html">
+      <Filter>v2</Filter>
     </None>
-    <None Include="..\..\inc\fblike.p">
-      <Filter>inc</Filter>
+    <None Include="..\..\v2\bio.php">
+      <Filter>v2</Filter>
     </None>
-    <None Include="..\..\inc\foot.php">
-      <Filter>inc</Filter>
+    <None Include="..\..\obj\tables.php">
+      <Filter>v2</Filter>
     </None>
-    <None Include="..\..\inc\head.php">
-      <Filter>inc</Filter>
+    <None Include="..\..\obj\test.html">
+      <Filter>v2</Filter>
     </None>
-    <None Include="..\..\inc\headscripts.p">
-      <Filter>inc</Filter>
-    </None>
-    <None Include="..\..\inc\jquery.js">
-      <Filter>inc</Filter>
-    </None>
-    <None Include="..\..\guide\house.html">
-      <Filter>guide</Filter>
-    </None>
-    <None Include="..\..\guide\leglist.html">
-      <Filter>guide</Filter>
-    </None>
-    <None Include="..\..\guide\legpage.php">
-      <Filter>guide</Filter>
-    </None>
-    <None Include="..\..\guide\senate.html">
-      <Filter>guide</Filter>
-    </None>
-    <None Include="..\..\guide\survey.html">
-      <Filter>guide</Filter>
-    </None>
-    <None Include="..\..\guide\bill.html">
-      <Filter>guide</Filter>
-    </None>
-    <None Include="..\..\guide\billpage.html">
-      <Filter>guide</Filter>
-    </None>
-    <None Include="..\..\guide\billpage.php">
-      <Filter>guide</Filter>
-    </None>
-    <None Include="..\..\guide\find.html">
-      <Filter>guide</Filter>
-    </None>
-    <None Include="..\..\guide\getleg.php">
-      <Filter>guide</Filter>
-    </None>
-    <None Include="..\..\about\donate.html">
-      <Filter>about</Filter>
-    </None>
-    <None Include="..\..\about\getinvolved.html">
-      <Filter>about</Filter>
-    </None>
-    <None Include="..\..\about\lobbying101.html">
-      <Filter>about</Filter>
-    </None>
-    <None Include="..\..\about\who.html">
-      <Filter>about</Filter>
-    </None>
-    <None Include="..\..\about\aboutus.html">
-      <Filter>about</Filter>
-    </None>
-    <None Include="..\..\about\contact.html">
-      <Filter>about</Filter>
+    <None Include="..\..\obj\person.php">
+      <Filter>v2</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\..\guide\blue-pushpin.png">
-      <Filter>guide</Filter>
+    <Image Include="..\..\..\..\..\ncvaw\favicon.ico">
+      <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
 </Project>
