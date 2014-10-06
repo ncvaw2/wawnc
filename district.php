@@ -46,11 +46,11 @@ if($distobj)
 	<!--  
 	<h3>Primary Election 5/6/2014</h3>
 <?php 
-get_table('canidates')->printlist($chamber,$distnum,"primary");
+get_table('candidates')->printlist($chamber,$distnum,"primary");
 ?>		-->
 <h3>General Election 11/4/2014</h3>
 <?php	
-	get_table('canidates')->printlist($chamber,$distnum,"gen");
+	get_table('candidates')->printlist($chamber,$distnum,"gen");
 	?>
 	</div>
 

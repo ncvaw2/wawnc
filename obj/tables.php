@@ -1,7 +1,7 @@
 <?php
 /*
  * bill_list - tab 1- 
- * canidates - tab 2-
+ * candidates - tab 2-
  * leg_list  - tab 3-
  * districts - tab 4
  * vote_data - tab 5-
@@ -284,19 +284,19 @@ class table_test extends table_base
 	public function print_list()
 	{
 		$leglist=get_table("leg_list");
-		$canlist=get_table("canidates");
+		$canlist=get_table("candidates");
 
 
-		echo("<table class='votes' style='width:100%;text-align:left'><tr><th>District#</th><th>Canidates</th><th>Election</th>
+		echo("<table class='votes' style='width:100%;text-align:left'><tr><th>District#</th><th>Candidates</th><th>Election</th>
 				<th style=' max-width: 45px;'>Counties</th><th>Current Representative</th></tr>");
 		foreach ( $this->list as $d )
 		{
 			$leg=$leglist->get_leg_by_district($d->ch,$d->dist);
 			$chamber=($d->ch=='H'?'House':'Senate');
-			$canidates=$canlist->get_candate_links($d->ch,$d->dist,"gen");
+			$candidates=$canlist->get_candate_links($d->ch,$d->dist,"gen");
 
 			echo ("<tr><td style='width:90px; '><a href='/district.php?ch=$d->ch&dist=$d->dist'>$chamber #$d->dist</a></td>");
-			echo ("<td>$canidates</td>");
+			echo ("<td>$candidates</td>");
 			echo ("<td><a href='/district.php?ch=$d->ch&dist=$d->dist'>Election Coverage</a></td>");
 			echo ("<td width='20%'><div >$d->counties</div></td>");
 			echo ("<td><a  href='/guide/legpage.php?id=$leg->key'>$leg->name</a></td></tr>");

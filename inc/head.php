@@ -99,7 +99,7 @@ make_menu ( [
 				z_mi ( "Find Who Represents You", "/guide/find.html", "" ),
 				z_mi ( "In The News", "/links.php", "" ),
 				z_mi ( "Recent Legislation", "/bills.php", "" ),
-				z_mi ( "Canidates Survey", "/guide/survey.html", "" ),
+				z_mi ( "Candidates Survey", "/guide/survey.html", "" ),
 		]
 		 ),
 		($g_admin ? 

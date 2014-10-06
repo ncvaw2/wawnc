@@ -1,14 +1,14 @@
 <?php
-$page_title="Canidate";
+$page_title="Candidate";
 
 
 include $root.'/inc/db.php';
 $key=getParam( "key");
-$canidate=null;
+$candidate=null;
 if ($key)
 {
-	$canidate=get_table("canidates")->get_candiate($key);
-    $page_title=$canidate->displayname;
+	$candidate=get_table("candidates")->get_candiate($key);
+    $page_title=$candidate->displayname;
 }
 
 
@@ -16,14 +16,14 @@ include $header;
 echo("<div class='text_wrap'>");
 
 
-if($canidate)
+if($candidate)
 {
-	$canidate->print_list_row();
-	//$canidate->print_survey();	
+	$candidate->print_list_row();
+	//$candidate->print_survey();	
 	
 }
 else
-	echo ("<h2>Canidate $key not found</h2>");
+	echo ("<h2>Candidate $key not found</h2>");
 echo("</div>");
 
  include $footer; ?>

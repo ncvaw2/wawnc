@@ -1,7 +1,7 @@
 <?php
 /*
  * bill_list - tab 1- 
- * canidates - tab 2-
+ * candidates - tab 2-
  * leg_list  - tab 3-
  * districts - tab 4
  * vote_data - tab 5-
@@ -429,7 +429,7 @@ class legislator{
 	}
 	public function print_list_row() {
 		global $isPhone;
-		$canidate=get_table("canidates")->get_candiate($this->key);
+		$candidate=get_table("candidates")->get_candiate($this->key);
 		$data_key=$this->key;
 
 
@@ -448,9 +448,9 @@ class legislator{
 		$district_url="'/district.php?dist=". $this->district . "&ch=" . $this->chamberId . "'";
 		$this->print_table_row ( 'District', "<a title='Show district race'  href=$district_url>$this->district</a>" );
 		$running="Not running for re-election.";
-		if($canidate)
+		if($candidate)
 		{
-			$running=$canidate->get_running();
+			$running=$candidate->get_running();
 
 				
 		}
@@ -564,7 +564,7 @@ class leg_list extends table_base{
 	
 }
 
-class canidate {
+class candidate {
 	public $displayname;
 	public $key;
 	public $party;
@@ -635,7 +635,7 @@ class canidate {
 		return $running;
 	}
 	public function get_local_page_url() {	
-		$url="/guide/canidate.php?key=$this->key";
+		$url="/guide/candidate.php?key=$this->key";
 		$leg=get_table("leg_list")->get_leg_by_key($this->key);
 		if($leg)
 		{
@@ -660,7 +660,7 @@ class canidate {
 		if($this->photo)
 		{
 
-			echo ("<div class='leg_thumb' ><a href='/guide/canidate.php?key=$this->key'>");
+			echo ("<div class='leg_thumb' ><a href='/guide/candidate.php?key=$this->key'>");
 			echo ("<img src='$this->photo'/></a></div>");
 		}
 		else {
@@ -668,7 +668,7 @@ class canidate {
 				
 		}
 
-		echo ("<div class='leg_info' ><a href='/guide/canidate.php?key=$this->key'><h2>$this->displayname</h2></a><table><tr><td/><td/></tr>");
+		echo ("<div class='leg_info' ><a href='/guide/candidate.php?key=$this->key'><h2>$this->displayname</h2></a><table><tr><td/><td/></tr>");
 		$district_url="'/district.php?dist=". $this->district . "&ch=" . $this->chamberId . "'";
 		$this->print_table_row ( 'District', "<a href=$district_url>$this->district</a>" );
 
@@ -706,11 +706,11 @@ class canidate {
 }
 
 
-class canidates extends table_base
+class candidates extends table_base
 {
 	function create_from_spreadsheet()
 	{
-		$this->create1('data_v1',5,'canidate','key');
+		$this->create1('data_v1',5,'candidate','key');
 	}	
 
 	public function get_candiate($key) {
@@ -743,7 +743,7 @@ class canidates extends table_base
 		foreach ( $set as $x )
 		{
 
-			$link_string.="<div>$x->party_id: <a href='/guide/canidate.php?key=$x->key'>$x->displayname</a></div>";
+			$link_string.="<div>$x->party_id: <a href='/guide/candidate.php?key=$x->key'>$x->displayname</a></div>";
 
 			
 		}
@@ -781,7 +781,7 @@ function file_get_contents_curl($url)
 }
 class exlink {
 	public $key;
-	public $canidates;
+	public $candidates;
 	public $doc;
 	public $date;	
 	public $title;	
@@ -789,7 +789,7 @@ class exlink {
 	public $link;
 	public $image;
 	public $text;	
-	public $canidate_list;
+	public $candidate_list;
 	
 	public function __construct($d,$index) {
 		$this->key =getj($d,'key');
@@ -799,10 +799,10 @@ class exlink {
 		$this->date =getj($d,'date');
 		$this->image =getj($d,'image');
 		$this->text =getj($d,'text');
-		$this->canidates =getj($d,'canidates');
-		$this->canidate_list=array();
-		if($this->canidates)
-			$this->canidate_list=str_getcsv($this->canidates);
+		$this->candidates =getj($d,'candidates');
+		$this->candidate_list=array();
+		if($this->candidates)
+			$this->candidate_list=str_getcsv($this->candidates);
 		
 		//if($this->link)	$this->fetch();
 	}
@@ -820,18 +820,18 @@ class exlink {
 		echo ("<a target='_blank' href='$this->link'><img  style='max-width:300px;max-height:200px;' src='$this->image'/></a>");
 		echo ("<a  target='_blank' href='$this->link'><h4>$this->title</h4></a>");
 		echo ("<p>$this->text</p><div>Links: ");	
-		$canlist=	get_table("canidates");
+		$canlist=	get_table("candidates");
 		$comma=false;
-		foreach($this->canidate_list as $key )
+		foreach($this->candidate_list as $key )
 		{
 			
-			$canidate=$canlist->get_candiate($key);
-			if($canidate)
+			$candidate=$canlist->get_candiate($key);
+			if($candidate)
 			{
-				$url=$canidate->get_local_page_url();
+				$url=$candidate->get_local_page_url();
 				if($comma)
 					echo(",");
-				echo("<a href='$url'>$canidate->displayname</a>");
+				echo("<a href='$url'>$candidate->displayname</a>");
 				
 				$comma=true;
 			}
@@ -912,7 +912,7 @@ class exlinks extends table_base
 		{
 			if($legid)
 			{
-				if(in_array($legid,$row->canidate_list))
+				if(in_array($legid,$row->candidate_list))
 					return true;;
 			}
 			if($billid)
@@ -953,7 +953,7 @@ class exlinks extends table_base
 		{
 			if($legid)
 			{
-				if(in_array($legid,$row->canidate_list)==false)
+				if(in_array($legid,$row->candidate_list)==false)
 					continue;
 			}
 			if($billid)
@@ -997,19 +997,19 @@ class districts extends table_base
 	public function print_list()
 	{
 		$leglist=get_table("leg_list");
-		$canlist=get_table("canidates");
+		$canlist=get_table("candidates");
 		
 		
-		echo("<table class='votes' style='width:100%;text-align:left'><tr><th>District#</th><th>Canidates</th><th>Election</th>
+		echo("<table class='votes' style='width:100%;text-align:left'><tr><th>District#</th><th>Candidates</th><th>Election</th>
 				<th style=' max-width: 45px;'>Counties</th><th>Current Representative</th></tr>");
 		foreach ( $this->list as $d )
 		{
 			$leg=$leglist->get_leg_by_district($d->ch,$d->dist);
 			$chamber=($d->ch=='H'?'House':'Senate');
-			$canidates=$canlist->get_candate_links($d->ch,$d->dist,"gen");
+			$candidates=$canlist->get_candate_links($d->ch,$d->dist,"gen");
 		
 			echo ("<tr><td style='width:90px; '><a href='/district.php?ch=$d->ch&dist=$d->dist'>$chamber #$d->dist</a></td>");
-			echo ("<td>$canidates</td>");
+			echo ("<td>$candidates</td>");
 			echo ("<td><a href='/district.php?ch=$d->ch&dist=$d->dist'>Election Coverage</a></td>");
 			echo ("<td width='20%'><div >$d->counties</div></td>");
 			echo ("<td><a  href='/guide/legpage.php?id=$leg->key'>$leg->name</a></td></tr>");

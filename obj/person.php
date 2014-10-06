@@ -66,7 +66,7 @@ class person
 	public $facebook;
 	//lookup
 	public $inited;
-	public $canidate;
+	public $candidate;
 	public $office;
 	public $election;
 	
@@ -75,7 +75,7 @@ class person
 		if($this->inited)
 			return;
 		$this->inited=true;
-		$this->canidate=get_table("table_election")->getobj($this->key);
+		$this->candidate=get_table("table_election")->getobj($this->key);
 		$this->office=get_table("table_office")->getobj($this->key);
 		$this->fullname=$this->first . " " . $this->last;
 		if($this->office)
@@ -99,13 +99,13 @@ class person
 					$this->photo="http://www.ncleg.net/$chamber/pictures/$uid.jpg";
 			
 		}
-		if($this->canidate)
+		if($this->candidate)
 		{
 			
 		}
 		else
 			$this->election="Not running";
-		//$canidate=get_table("table_election")->getobj($this->key);
+		//$candidate=get_table("table_election")->getobj($this->key);
 		
 		
 	}
@@ -125,7 +125,7 @@ class person
 		
 		if($this->office)
 		{
-			//$running=$this->canidate->party;
+			//$running=$this->candidate->party;
 		
 				
 			//$this->print_table_row ( '2014 Election', $running );
@@ -153,9 +153,9 @@ class person
 	
 		$this->print_table_row ( 'Party', $this->party );
 		
-		if($this->canidate)
+		if($this->candidate)
 		{
-			$running=$this->canidate->party;
+			$running=$this->candidate->party;
 		
 			$running.='general election 11/4/2014';
 		
