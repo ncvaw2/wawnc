@@ -3,7 +3,6 @@
 <head>
 
 <meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=yes" />
-<!--  <meta http-equiv="content-type" content="text/html;charset=iso-8859-1" /> -->
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="author" content="www.ncvaw.org" />
 
@@ -91,7 +90,7 @@ make_menu ( [
 			z_mi ( "Senate List", "/guide/leglist.html?ch=S", "HOME" ),
 			z_mi ( "House List", "/guide/leglist.html?ch=H", "" ),
 			z_mi ( "Complete List", "/guide/leglist.html", "" ),
-			z_mi ( "People List", "/v2/bio.php", "" )
+			
 			]
 		),
 		
@@ -99,7 +98,7 @@ make_menu ( [
 				z_mi ( "Find Who Represents You", "/guide/find.html", "" ),
 				z_mi ( "In The News", "/links.php", "" ),
 				z_mi ( "Recent Legislation", "/bills.php", "" ),
-				z_mi ( "Candidates Survey", "/guide/survey.html", "" ),
+				z_mi ( "Candidates Survey", "/guide/survey.html", "" )
 		]
 		 ),
 		($g_admin ? 
@@ -123,6 +122,7 @@ make_menu ( [
 			z_mi ( "Person", "/v2/table.html?table=table_person" ),
 			z_mi ( "Election", "/v2/table.html?table=table_election" ),
 			z_mi ( "Office", "/v2/table.html?table=table_office" ),
+			z_mi ( "People List", "/v2/bio.php", "" )
 				
 		]): 0), 
 				
