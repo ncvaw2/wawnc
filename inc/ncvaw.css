@@ -75,12 +75,7 @@ body {
 	padding: 0px;
 	
 }
-div.main
-{
 	
- Ê
-	
-}
 
 /* MAP */
 
@@ -103,13 +98,17 @@ div.main
 
 #main {
 	display: block;
-/*
+
+/* for full page scrolling */
 	height: auto !important;
 	height: 100%;
-	*/
+
+
+/* for scrolling div with fixed header */
+/*
 	height:1000px;
 	overflow-y:auto;
-	
+*/	
 }
 
 

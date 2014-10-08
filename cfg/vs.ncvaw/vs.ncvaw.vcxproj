@@ -30,7 +30,9 @@
     <None Include="..\..\..\..\..\ncvaw\guide\legpage.php" />
     <None Include="..\..\..\..\..\ncvaw\guide\survey.html" />
     <None Include="..\..\..\..\..\ncvaw\home.html" />
-    <None Include="..\..\..\..\..\ncvaw\inc\db.php" />
+    <None Include="..\..\..\..\..\ncvaw\inc\db.php">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="..\..\..\..\..\ncvaw\inc\fblike.p" />
     <None Include="..\..\..\..\..\ncvaw\inc\fb_script.p" />
     <None Include="..\..\..\..\..\ncvaw\inc\foot.php" />

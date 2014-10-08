@@ -493,8 +493,11 @@ class legislator{
 
 
 		echo '</table>';
-        $url=$this->get_url();
+        /*
+		$url=$this->get_url();
+		
 		echo ("<a target='_blank' href='$url'>Link to page on NCGA website</a>&nbsp;&nbsp;&nbsp;&nbsp;<a  href='/guide/legpage.php?id=$this->key'>Link to voting record</a>");
+		*/
 		echo "</div></div><div style='clear:both'></div>";
 	}
 }
@@ -1091,7 +1094,7 @@ class survey_data extends table_base
 	
 	public function printresp($key)
 	{
- 		echo("<div  style='max-width:800px'><h3>Resposes to animal welfare survey:</h3>");    
+ 		echo("<div  style='max-width:800px'><h3>Responses to animal welfare survey:</h3>");    
        $row=null;
         if(array_key_exists ($key,$this->list))
             $row= $this->list[$key];

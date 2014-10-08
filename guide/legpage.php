@@ -16,7 +16,7 @@ if($has_links)
 {
 	add_init_js("tabselect('tab_news');");
 }
-
+ $ncleg_url=$leg->get_url();
 ?>
 <div class="text_wrap"><?php $leg->print_list_row();?>
 
@@ -29,7 +29,14 @@ if($has_links)
     ?>
 	<a class='tab' onclick="tabselect('tab_votes')">Voting Record</a>
 	
-	<a class='tab' onclick="tabselect('tab_survey')">Survey Responses</a>
+	<a class='tab' onclick="tabselect('tab_survey')">Survey Responses</a> 
+
+
+
+	<?php
+	echo ("<a class='tab'  target='_blank' href='$ncleg_url'>Link to page on NCGA website</a>");
+
+?>
 
 	</span>
 	<div class='tabbody' id='tab_votes'>
