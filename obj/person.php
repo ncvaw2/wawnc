@@ -5,7 +5,7 @@ $g_parties=array(
 
 		'DEM'=>'Democratic',
 		'REP'=>'Republican',
-		'IND' => 'Independant'
+		'IND' => 'Independent'
 
 );
 
@@ -169,7 +169,7 @@ class person
 		if($this->website)
 		{
 			$link="<a href='".$this->website."' target='_blank'>".$this->website."</a>";
-			$this->print_table_row ( 'Webiste', $link );
+			$this->print_table_row ( 'Website', $link );
 	
 		}
 	

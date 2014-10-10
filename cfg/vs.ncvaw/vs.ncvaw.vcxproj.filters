@@ -63,9 +63,6 @@
     <None Include="..\..\..\..\..\ncvaw\home.html">
       <Filter>Source Files</Filter>
     </None>
-    <None Include="..\..\..\..\..\ncvaw\guide\leglist.html">
-      <Filter>Source Files</Filter>
-    </None>
     <None Include="..\..\..\..\..\ncvaw\linux.htaccess">
       <Filter>Source Files</Filter>
     </None>
@@ -164,6 +161,9 @@
     </None>
     <None Include="..\..\obj\person.php">
       <Filter>v2</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\guide\leglist.html">
+      <Filter>v1</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
