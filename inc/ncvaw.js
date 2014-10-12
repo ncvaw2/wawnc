@@ -94,9 +94,10 @@ function call_zipo(request) {
 	return;
 }
 function tabselect(tabselected) {
+	$('.tab').removeClass('tab_slected');
 	$('.tabbody').css('display','none');
 	$('#'+tabselected).css('display','block');
-
+	$('#'+tabselected+'_top').addClass('tab_slected');
 }
 function togglehide(id) {
 	var e=$('#'+id);

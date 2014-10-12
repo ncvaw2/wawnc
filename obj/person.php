@@ -75,8 +75,10 @@ class person
 		if($this->inited)
 			return;
 		$this->inited=true;
+		$this->office	=get_table("table_office")->getobj($this->key);
 		$this->candidate=get_table("table_election")->getobj($this->key);
-		$this->office=get_table("table_office")->getobj($this->key);
+		
+		
 		$this->fullname=$this->first . " " . $this->last;
 		if($this->office)
 		{
@@ -198,6 +200,7 @@ class person
 
 	}*/
 }
+
 class table_person  extends table_base
 {
 	function get_columns()
@@ -215,6 +218,7 @@ class table_person  extends table_base
 		$this->list [] = new $objname ( $row ,$index);
 		
 	}	
+
 	function printtable()
 	{
 		$column="key";
@@ -223,7 +227,32 @@ class table_person  extends table_base
 			$row->print_list_row();
 		}
 	}
+	public function print_list() {
+		echo "<div class='tbl_leglist' >";
+		foreach ( $this->list as $d )
+		{
+			$d->print_list_row ();
+		}
+		echo '</div>';
+	}	
+	public function sort() {
 	
+		$sort=getParam("sort");
+		if($sort=='grade')
+		{
+			uasort($this->list, 'sort_func_grade');
+		}
+		/*
+		else
+		if($sort=='dist')
+		{
+			uasort($this->list, 'sort_func_dist');
+		}
+		*/
+		else
+			ksort ( $this->list );
+	
+	}	
 }
 class office
 {

@@ -155,8 +155,7 @@ h2 {
 h3 {
 	font-size: 22px;
     text-decoration: underline;
-    /*
-	text-transform: uppercase;*/
+
 	color: #68c;	
 }
 
@@ -168,10 +167,6 @@ h4 {
 
 h5 {
 	font-size: 20px;
-
-	/* text-decoration: underline;;
-	
-	*/
 	text-transform: uppercase;	
 	color: #68c;
 	padding: 10px 0 0 0;
@@ -205,10 +200,39 @@ div.section_head {
 }
 .tab {
 	font-size: 18px;
-	margin: 5px;
+	margin: 0px;
+	padding: 8px 8px 0px 8px;
+	border: 0px  solid;
+	border-top-left-radius: 25px;	
+	border-top-right-radius: 25px;	
+
+	background-color: #eee;	
+	/*
+	-webkit-border-radius: 25px;
+	
+	 -moz-border-radius: 25px;
+	 */
+}
+.tab_slected {
+	border: 1px white solid;	
+	background-color: white;		
+
+	}
+.tabbody
+{
+	border: 0px white none;
+	background-color: white;
+	padding:10px;
+	margin:0px;
+	min-height: 500px;
 	
 }
-
+#tablist
+{
+	background-color: #aaa;		
+	padding:15px;
+	
+}
 div.leg_thumb 
 {
 	
