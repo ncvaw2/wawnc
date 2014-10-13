@@ -8,7 +8,13 @@ $g_parties=array(
 		'IND' => 'Independent'
 
 );
-
+function print_table_row($label, $val,$color=null) {
+	$style="";
+	if($color)
+		$style="style='color:$color;font-weight:bold'";
+			
+	echo "<tr><td class='leg_label'>$label: </td><td class='leg_val' $style>$val</td></tr>";
+}	
 class election
 {
 	//columns
