@@ -6,6 +6,9 @@ if ($has_links) {
 }
 else 
 	add_init_js ( "tabselect('tab_votes');" );
+    
+add_init_js ( "tabinit();" );
+   
 	
 ?>
 
@@ -48,7 +51,7 @@ else
 		</div>
 		<div class='tabbody' style="display: none" id='tab_survey'>
 			<?php 
-				//$leg->print_survey();
+				get_table("survey_data")->printresp($key);
 				?>
 		</div>
 		<div class='tabbody' style="display: none" id='tab_news'>

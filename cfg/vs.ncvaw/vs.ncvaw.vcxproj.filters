@@ -75,9 +75,6 @@
     <None Include="..\..\..\..\..\ncvaw\inc\ncvaw.css">
       <Filter>Source Files</Filter>
     </None>
-    <None Include="..\..\..\..\..\ncvaw\inc\ncvaw.js">
-      <Filter>Source Files</Filter>
-    </None>
     <None Include="..\..\..\..\..\ncvaw\news.html">
       <Filter>Source Files</Filter>
     </None>
@@ -170,6 +167,9 @@
     </None>
     <None Include="..\..\v2\bio_page.php">
       <Filter>v2</Filter>
+    </None>
+    <None Include="..\..\..\..\..\ncvaw\inc\ncvaw.js">
+      <Filter>js</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

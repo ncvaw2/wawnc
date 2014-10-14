@@ -138,12 +138,7 @@ class person
 				
 			//$this->print_table_row ( '2014 Election', $running );
 		}
-        $responded="No";
-        if(get_table("survey_data")->check($this->key))
-            $responded="<a style='color:green;font-weight:bold;' href='/guide/legpage.php?id=$this->key'>Yes</a>";
-        
-     
-        $this->print_table_row ( 'Responded to survey', $responded );		
+	
 		$data_key=$this->key;
 	
 		echo ("<div class='leg_bio' data-name='$data_key'><hr>");
@@ -164,8 +159,13 @@ class person
 		//$district_url="'/district.php?dist=". $this->district . "&ch=" . $this->chamberId . "'";
 		//$this->print_table_row ( 'District', "<a href=$district_url>$this->district</a>" );
 	
-		$this->print_table_row ( 'Party', $this->party );
-		
+		print_table_row ( 'Party', $this->party );
+        $responded="No";
+        if(get_table("survey_data")->check($this->key))
+            $responded="<a style='color:green;font-weight:bold;' href='/guide/legpage.php?id=$this->key'>Yes</a>";
+        
+     
+        print_table_row ( 'Responded to survey', $responded );			
 		if($this->candidate)
 		{
 			$running=$this->candidate->party;

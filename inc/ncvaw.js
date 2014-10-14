@@ -93,7 +93,14 @@ function call_zipo(request) {
 	$.get(url);
 	return;
 }
+function tabinit() {
+    var hash = location.hash;
+    if (hash)
+        tabselect(hash);
+
+}
 function tabselect(tabselected) {
+
 	$('.tab').removeClass('tab_slected');
 	$('.tabbody').css('display','none');
 	$('#'+tabselected).css('display','block');
