@@ -138,7 +138,12 @@ class person
 				
 			//$this->print_table_row ( '2014 Election', $running );
 		}
-		
+        $responded="No";
+        if(get_table("survey_data")->check($this->key))
+            $responded="<a style='color:green;font-weight:bold;' href='/guide/legpage.php?id=$this->key'>Yes</a>";
+        
+     
+        $this->print_table_row ( 'Responded to survey', $responded );		
 		$data_key=$this->key;
 	
 		echo ("<div class='leg_bio' data-name='$data_key'><hr>");
