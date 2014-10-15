@@ -133,8 +133,10 @@ class person
 		
 		if($this->office)
 		{
+			$leglist=get_table("leg_list");
+			
 			//$running=$this->candidate->party;
-		
+			
 				
 			//$this->print_table_row ( '2014 Election', $running );
 		}
