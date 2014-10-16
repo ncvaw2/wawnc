@@ -1,12 +1,18 @@
 
 <?php 
-
-$url = "/v2/bio.php?";
+include_once $root . '/obj/person.php';
+include $header;
+$url = "/v2/candidates.php?";
 ?>
-<h2>List of Canidates</h2>
+<h2>List of Canidates for 2014 General Election</h2>
 <a style="margin: 20px" href='<?php echo("$url"); ?>&sort=dist'><button>Sort by District</button></a>
 <a style="margin: 20px" href='<?php echo("$url"); ?>'><button>Sort by Name</button></a>
+
+<?php 
+/*
 <a style="margin: 20px" href='<?php echo("$url"); ?>&sort=grade'><button>Sort by Grade</button></a>
+*/
+?>
 
 
 <form style="display: inline" action="javascript:void(0);"
@@ -27,12 +33,13 @@ $url = "/v2/bio.php?";
 
 
 
-$biolist = get_table ( "table_person" );
+$biolist = get_table ( "table_election" );
+$biolist->sort ( );
 $biolist->print_list ( );
 ?>
 </div>
 
-
+<?php 
 /*
 
 $biolist->sort ();
@@ -84,9 +91,7 @@ include $header;
 $leglist->print_list ( $chamber );
 ?>
 </div>
+*/
 
-<?php
 include $footer;
 ?>
-
-*/

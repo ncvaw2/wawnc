@@ -10,7 +10,21 @@
  * 
  * 
  */
+ $g_table_list=array(
 
+		'survey_data',
+		'candidates',
+		'bill_list',
+		'exlinks',
+		'districts',
+		'leg_list',
+		'bill_list',
+		'survey_questions',
+		'table_election',
+		'table_office',
+		'table_person',
+		'vote_data',
+);
 
 function get_member_vars($classname)
 {

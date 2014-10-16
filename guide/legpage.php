@@ -12,28 +12,28 @@ if($leg)
 
 include $header;
 $has_links= get_table("exlinks")->has_links($legid,null); 
-if($has_links)
-{
-	add_init_js("tabselect('tab_news');");
-}
+
+
+add_init_js ( "tabinit();" );
  $ncleg_url=$leg->get_url();
 ?>
 <div class="text_wrap"><?php $leg->print_list_row();?>
 
-
+</div>
 
 <div id='tablist'>
 	<span>
 	<?php if($has_links) 
-		echo("<a class='tab' onclick=\"tabselect('tab_news')\">In the News</a>");	
+		echo("<a class='tab' id='tab_news_top' onclick=\"tabselect('tab_news')\">In the News</a>");	
     ?>
-	<a class='tab' onclick="tabselect('tab_votes')">Voting Record</a>
-	
-	<a class='tab' onclick="tabselect('tab_survey')">Survey Responses</a> 
+    
+    
+    
+	<a class='tab' id='tab_votes_top' onclick="tabselect('tab_votes')">Voting Record</a>
+	<?php 
+	if(get_table("survey_data")->check($legid)) 
+		echo("<a class='tab'  id='tab_survey_top' onclick=\"tabselect('tab_survey')\">Survey Responses</a>");	
 
-
-
-	<?php
 	echo ("<a class='tab'  target='_blank' href='$ncleg_url'>Link to page on NCGA website</a>");
 
 ?>
@@ -58,7 +58,7 @@ if($has_links)
 	
 		?></div>
 </div>
-</div>
+
 
 
 <?php include $footer; ?>

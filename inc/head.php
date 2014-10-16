@@ -95,6 +95,8 @@ make_menu ( [
 		),
 		
 		z_menu ( "Voters Guide", [ 
+				z_mi ( "Candidates List", "/v2/candidates.php", "" ),
+	
 				z_mi ( "Find Who Represents You", "/guide/find.html", "" ),
 				z_mi ( "In The News", "/links.php", "" ),
 				z_mi ( "Recent Legislation", "/bills.php", "" ),

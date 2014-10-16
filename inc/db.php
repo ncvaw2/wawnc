@@ -446,7 +446,7 @@ class legislator{
 		*/
 		
 		$district_url="'/district.php?dist=". $this->district . "&ch=" . $this->chamberId . "'";
-		$this->print_table_row ( 'District', "<a title='Show district race'  href=$district_url>$this->district</a>" );
+		$this->print_table_row ( 'District', "<a title='Show district race'  href=$district_url>$this->chamber #$this->district</a>" );
 		$running="Not running for re-election.";
 		if($candidate)
 		{
@@ -655,6 +655,9 @@ class candidate {
 			$leg->print_list_row();
 			return;
 		}
+		$person = get_table ( "table_person" )->getobj ( $key );
+		$person->print_list_row();
+		return;
 		$data_key=$this->key;
 		
 		echo ("<div class='leg_bio' data-name='$data_key'><hr>");
@@ -673,7 +676,7 @@ class candidate {
 
 		echo ("<div class='leg_info' ><a href='/guide/candidate.php?key=$this->key'><h2>$this->displayname</h2></a><table><tr><td/><td/></tr>");
 		$district_url="'/district.php?dist=". $this->district . "&ch=" . $this->chamberId . "'";
-		$this->print_table_row ( 'District', "<a href=$district_url>$this->district</a>" );
+		$this->print_table_row ( 'District', "<a href=$district_url>$this->chamber # $this->district</a>" );
 
 		$this->print_table_row ( 'Party', $this->party );
 		$running="Challenger in the ";
@@ -1069,7 +1072,7 @@ class survey_resp
 				$q="could not get question";
 			$a=$this->answers[$x];
 			if(!$a)
-				$a="could not get answer";			
+				$a="[blank]";			
 			echo("<div style='margin-top:30px' class='section_head'>Question #$qnum</div>");
 			echo("<div>$q</div>");
 			echo("<div style='margin-top:10px' class='section_head'>Answer:</div>");
@@ -1109,18 +1112,20 @@ class survey_data extends table_base
 
 	public function printlist()
 	{
+		ksort ( $this->list );
 		global $g_debug;
 		foreach ( $this->list as $row )
 		{
 			$key=$row->key;
 				
-			$leg=get_table("leg_list")->get_leg_by_key($key);
-			if($leg)
+			$bio=get_table ( "table_person" )->getobj ( $key );
+			if($bio)
 			{
 				
-				$leg->print_list_row();
+				$bio->print_list_row();
 			}
 			else {
+				
 				if($g_debug)
 				{
 					echo("<H1>$key NOT FOUND</H1>");

@@ -102,7 +102,8 @@ body {
 /* for full page scrolling */
 	height: auto !important;
 	height: 100%;
-
+    margin:0;
+    padding:0;
 
 /* for scrolling div with fixed header */
 /*
