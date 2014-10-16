@@ -261,7 +261,7 @@ class person
 	
 		}
 	
-		echo ("<div class='leg_info' ><a href='/v2/bio.php?key=$this->key'><h2>$this->fullname</h2></a>");
+		echo ("<div class='leg_info' ><a href='/v2/bio.php?key=$this->key'><h2>Candidate $this->fullname</h2></a>");
 
 
 
