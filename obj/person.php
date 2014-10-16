@@ -304,7 +304,12 @@ class person
 			$this->print_table_row ( 'Website', $link );
 	
 		}
-	
+		if($this->facebook)
+		{
+			$link="<a href='".$this->facebook."' target='_blank'>Facebook Page</a>";
+			$this->print_table_row ( 'Facebook', $link );
+		
+		}	
 		if($this->email)
 		$this->print_table_row ( 'Email', $this->email );
 		if($this->phone)
