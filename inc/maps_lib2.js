@@ -367,7 +367,7 @@ function map_setbounds(searchStr) {
 			
 		}
 
-
+		gMap.setZoom(24);
 		gMap.fitBounds(bounds);
 
 	

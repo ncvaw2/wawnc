@@ -81,8 +81,7 @@ body {
 
 #map_canvas
 {
-	float:right;height: 300px; width:500px;
-		max-width:100%;
+
 	/*
 	padding:0;
 	margin:0;
@@ -90,6 +89,20 @@ body {
 	*/
 	
 }
+.map 
+{	
+	float:right;height: 300px; width:500px;
+		max-width:100%;
+}
+.map_small 
+{	
+    height: 250px; width:500px;
+		max-width:100%;
+	
+	padding:0;
+	margin:0;
+}
+
 #page
 {
 

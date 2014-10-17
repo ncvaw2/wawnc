@@ -292,6 +292,7 @@ class vote_data extends table_base
 function get_grade(&$score,&$grade,&$color)
 {
 	$grades = [
+	 [ -6,"F-","#F00"],
 	 [ -3,"F","#F00"],
 	 [ -2,"D-","#C04"],	 
 	 [ -1,"D","#808"],
@@ -447,10 +448,10 @@ class legislator{
 		
 		$district_url="'/district.php?dist=". $this->district . "&ch=" . $this->chamberId . "'";
 		$this->print_table_row ( 'District', "<a title='Show district race'  href=$district_url>$this->chamber #$this->district</a>" );
-		$running="Not running for re-election.";
-		if($candidate)
+		$running="";
+		if(!$candidate)
 		{
-			$running=$candidate->get_running();
+			"Not running for re-election.";
 
 				
 		}
@@ -745,11 +746,20 @@ class candidates extends table_base
 	{
 		$link_string="";
 		$set=$this->getlist($ch,$num,$elect);
-
+		$legs=get_table("leg_list");
 		foreach ( $set as $x )
 		{
-
-			$link_string.="<div>$x->party_id: <a href='/guide/candidate.php?key=$x->key'>$x->displayname</a></div>";
+			$grade="";
+			$leg=$legs->get_leg_by_key($x->key);
+			if($leg)
+			{
+				$grade="<span style='font-weight:bold;color:" .$leg->grade_color . "'>" . $leg->grade . "</span>";
+				
+				$link_string.="<div>$x->party_id: <a href='/guide/legpage.php?id=$x->key'>$x->displayname $grade</a></div>";
+				
+			}
+			else
+				$link_string.="<div>$x->party_id: <a href='/guide/candidate.php?key=$x->key'>$x->displayname $grade</a></div>";
 
 			
 		}

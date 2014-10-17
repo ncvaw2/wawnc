@@ -29,26 +29,20 @@ if($distobj)
 	$next="/district.php?ch=$chamber&dist=$nextdist";
 }
 ?>
-
-
 	<div id="page" >
-	<a href='<?php print $next; ?>'>Next District</a>
-	<div id="map_canvas"   ></div>
-	<h1><?php 
+	<h1>2014 Election - <?php 
 	echo($page_title);
-	
-
 		?>
 	</h1>
+	<div id="map_canvas"   class="map_small" ></div>
 	<H4>Counties: <?php echo($counties);?>
 	</h4>
 	<div style='clear:both'></div>
-<h3>General Election 11/4/2014</h3>
+
 <?php	
 	get_table('table_election')->print_people($chamber,$distnum);
 	?>
 	</div>
-
 
 <?php include $footer; ?>
 				
