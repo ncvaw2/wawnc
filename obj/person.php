@@ -150,7 +150,14 @@ class person
 	
 		echo ("<div class='leg_info' ><a href='/v2/bio.php?key=$this->key'><h2>Candidate $this->fullname</h2></a>");
 
+		if($this->candidate)
+		{
+			if($this->candidate->endorsements=='Y')
+			{
+				echo("<img class='endorsesmall' src='img/endorse_small.png'><h5>NCVAW Endorsed</h5>");
 
+			}
+		}
 
 
 		echo("<table><tr><td/><td/></tr>");
@@ -191,7 +198,7 @@ class person
 	}	
 	
 	public function print_list_row($class='leg_bio') {
-	
+		global $root;
 		$this->init();
 		
 		if($this->office)
@@ -224,6 +231,14 @@ class person
 	
 		echo ("<div class='leg_info' ><a href='/v2/bio.php?key=$this->key'><h2>Candidate $this->fullname</h2></a>");
 
+		if($this->candidate)
+		{
+			if($this->candidate->endorsements=='Y')
+			{
+				echo("<img class='endorse' src='/img/endorse.png'><span style='color:blue'>NCVAW Endorsed</h4>");
+
+			}
+		}
 
 
 

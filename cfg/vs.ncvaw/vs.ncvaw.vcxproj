@@ -60,6 +60,7 @@
     <None Include="..\..\v2\bio_list.php" />
     <None Include="..\..\v2\bio_page.php" />
     <None Include="..\..\v2\election.php" />
+    <None Include="..\..\v2\endorse.php" />
     <None Include="..\..\v2\table.html" />
     <None Include="..\..\v2\test.html" />
   </ItemGroup>

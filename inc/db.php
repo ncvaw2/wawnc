@@ -692,7 +692,16 @@ class legislator{
 
 		echo "<img src='http://www.ncleg.net/$this->chamber/pictures/$this->uid.jpg'/></a>";
 		
-		echo "</div><div class='leg_info' ><a title='Click for voting record' href='/guide/legpage.php?id=$this->key'><h2>$this->title $this->name</h2></a><table>";
+		echo "</div><div class='leg_info' ><a title='Click for voting record' href='/guide/legpage.php?id=$this->key'><h2>$this->title $this->name</h2></a>";
+		if($candidate)
+		{
+			if($candidate->endorsements=='Y')
+			{
+				echo("<img class='endorse' src='/img/endorse.png'><span style='color:blue'>NCVAW Endorsed</h4>");
+			}
+		}
+
+		echo "<table>";
 
 		/*
 		 $district=
@@ -701,12 +710,7 @@ class legislator{
 		$district_url="'/district.php?dist=". $this->district . "&ch=" . $this->chamberId . "'";
 		$this->print_table_row ( 'District', "<a title='Show district race'  href=$district_url>$this->chamber #$this->district</a>" );
 		$running="";
-		if(!$candidate)
-		{
-			"Not running for re-election.";
 
-				
-		}
 		$running.="<div><a href=$district_url>Click here for 2014 district race</a></div>";
 		$this->print_table_row ( '2014 Election', $running );
 		$this->print_table_row ( 'Party', $this->party );

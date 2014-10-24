@@ -180,6 +180,9 @@
     <None Include="..\..\old\old_election.php">
       <Filter>v1</Filter>
     </None>
+    <None Include="..\..\v2\endorse.php">
+      <Filter>v2</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\..\..\ncvaw\favicon.ico">
