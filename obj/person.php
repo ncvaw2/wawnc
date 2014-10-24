@@ -243,7 +243,7 @@ class person
 		{
 			if($this->candidate->endorsements=='Y')
 			{
-				echo("<img class='endorse' style='width:40px' src='/img/endorse.png'><span style='color:blue'>NCVAW Endorsed</h4>");
+				echo("<img class='endorse' style='width:40px' src='/img/endorse_small.png'><span style='color:blue'>NCVAW Endorsed</h4>");
 
 			}
 		}
