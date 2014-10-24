@@ -197,7 +197,12 @@ h5 {
 {
 	
 }
+span.short_bio 
+{
 
+	vertical-align: top;
+
+}
 div.leg_bio 
 {
 	clear:both;
@@ -324,7 +329,16 @@ tr.leglist {
 {
 	color: green;
 }
-
+.endorsesmall
+{
+	display:inline;
+	width:25px;
+}
+.endorse
+{
+	display:inline;
+	width:25px;
+}
 .votebad
 {
 	color: red;

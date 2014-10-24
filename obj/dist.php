@@ -51,7 +51,25 @@ class districts extends table_base
 		}
 		echo("</table>");
 	}
-	
+	public function print_endorse()
+	{
+		$leglist=get_table("leg_list");
+		$canlist=get_table('table_election');
+		
+		
+		
+		foreach ( $this->list as $d )
+		{
+			$leg=$leglist->get_leg_by_district($d->ch,$d->dist);
+			$chamber=($d->ch=='H'?'House':'Senate');
+		
+			echo ("<h3><a href='/district.php?ch=$d->ch&dist=$d->dist'>$chamber District #$d->dist</a></h3>");
+			echo ("<div>");
+			$canlist->print_endorse($d->ch,$d->dist,"gen");
+			echo ("</div>");
+		
+		}
+	}	
 }
 
 

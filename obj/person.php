@@ -116,7 +116,7 @@ class person
 	public function printPage() {
 		$this->print_list_row();
 	}
-	public function print_list_row() {
+	public function print_short_bio() {
 	
 		$this->init();
 		
@@ -134,7 +134,81 @@ class person
 	
 		$data_key=$this->key;
 	
-		echo ("<div class='leg_bio' data-name='$data_key'><hr>");
+		echo ("<span class='short_bio' data-name='$data_key'>");
+		//thumbnail
+	
+		if($this->photo)
+		{
+	
+			echo ("<div class='leg_thumb' ><a href='/v2/bio.php?key=$this->key'>");
+			echo ("<img src='$this->photo'/></a></div>");
+		}
+		else {
+			echo ("<div class='leg_thumb' ><img src='/img/unknown.png'/></div>");
+	
+		}
+	
+		echo ("<div class='leg_info' ><a href='/v2/bio.php?key=$this->key'><h2>Candidate $this->fullname</h2></a>");
+
+
+
+
+		echo("<table><tr><td/><td/></tr>");
+		//$district_url="'/district.php?dist=". $this->district . "&ch=" . $this->chamberId . "'";
+		//$this->print_table_row ( 'District', "<a href=$district_url>$this->district</a>" );
+		
+		$chamberId=$this->candidate->chamber;
+		$chamber=get_chamber($chamberId);
+		$district_url="'/district.php?dist=". $this->district . "&ch=" . $chamberId . "'";
+		print_table_row ( 'Party', $this->party );
+        $responded="No";
+        if(get_table("survey_data")->check($this->key))
+            $responded="<a style='color:green;font-weight:bold;' href='/v2/bio.php?key=$this->key'>Yes</a>";
+        
+     
+        print_table_row ( 'Survey', $responded );	
+
+			
+
+	
+		if($this->website)
+		{
+			$link="<a href='".$this->website."' target='_blank'>".$this->website."</a>";
+			$this->print_table_row ( 'Website', $link );
+	
+		}
+		if($this->facebook)
+		{
+			$link="<a href='".$this->facebook."' target='_blank'>Facebook Page</a>";
+			$this->print_table_row ( 'Facebook', $link );
+		
+		}	
+
+	
+		echo ('</table>');
+			
+		echo ("</div></span>");
+	}	
+	
+	public function print_list_row($class='leg_bio') {
+	
+		$this->init();
+		
+		if($this->office)
+		{
+			$leglist=get_table("leg_list");
+			/* temporary patch */
+			$leg=get_table("leg_list")->get_leg_by_key($this->key);
+			if($leg)
+			{
+				$leg->print_list_row();
+				return;
+			}
+		}
+	
+		$data_key=$this->key;
+	
+		echo ("<div class='$class' data-name='$data_key'><hr>");
 		//thumbnail
 	
 		if($this->photo)

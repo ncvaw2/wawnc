@@ -411,6 +411,55 @@ class table_election  extends table_base
 			
 			
 		}
+	}
+	public function print_endorse($ch,$num)
+	{
+	
+		$set=$this->getlist($ch,$num);
+		foreach ( $set as $x )
+		{
+			$leg=get_table("leg_list")->get_leg_by_key($x->key);
+			if($leg)
+			{
+				$leg->print_short_bio();
+				
+			}
+			else
+			{
+				$person = get_table ( "table_person" )->getobj ( $x->key );
+				$person->print_short_bio();	
+			}		
+			
+			
+		}
+	}	
+	public function get_endorcements($ch,$num,$elect)
+	{
+		$link_string="";
+		$set=$this->getlist($ch,$num,$elect);
+		$legs=get_table("leg_list");
+		foreach ( $set as $x )
+		{
+			$grade="";
+			$leg=$legs->get_leg_by_key($x->key);
+			if($leg)
+			{
+				$grade="<span style='font-weight:bold;color:" .$leg->grade_color . "'>" . $leg->grade . "</span>";
+	
+				$link_string.="<div>$x->party: <a href='/guide/legpage.php?id=$x->key'>$x->nameonballot $grade</a></div>";
+	
+			}
+			else
+				$link_string.="<div>$x->party: <a href='/v2/bio.php?key=$x->key'>$x->nameonballot $grade</a></div>";
+	
+				
+		}
+		if(count($set)==1)
+		{
+			$link_string.="<div>(uncontested)</div>";
+				
+		}
+		return $link_string;
 	}	
 	public function get_candate_links($ch,$num,$elect)
 		{
@@ -420,16 +469,22 @@ class table_election  extends table_base
 			foreach ( $set as $x )
 			{
 				$grade="";
+				$endorse="";
 				$leg=$legs->get_leg_by_key($x->key);
+				if($x->endorsements=='Y')
+				{
+					$endorse="<img class='endorsesmall' src='img/endorse_small.png'>";
+					
+				}
 				if($leg)
 				{
-					$grade="<span style='font-weight:bold;color:" .$leg->grade_color . "'>" . $leg->grade . "</span>";
+					$grade="<span style='font-weight:bold;color:" .$leg->grade_color . "'>" . $leg->grade . $endorse . "</span>";
 				
 					$link_string.="<div>$x->party: <a href='/guide/legpage.php?id=$x->key'>$x->nameonballot $grade</a></div>";
 				
 				}
 				else
-					$link_string.="<div>$x->party: <a href='/v2/bio.php?key=$x->key'>$x->nameonballot $grade</a></div>";
+					$link_string.="<div>$x->party: <a href='/v2/bio.php?key=$x->key'>$x->nameonballot $grade </a>$endorse</div>";
 
 			
 			}
@@ -581,7 +636,51 @@ class legislator{
 			
 		echo "<tr><td class='leg_label'>$label: </td><td class='leg_val' $style>$val</td></tr>";
 	}
-	public function print_list_row() {
+	public function print_short_bio() {
+		global $isPhone;
+		$candidate=get_table('table_election')->getobj($this->key);
+		$data_key=$this->key;
+
+
+		echo "<span class='short_bio' data-name='$data_key'><div class='leg_thumb' >";
+		echo "<a title='Click for voting record'  href='/guide/legpage.php?id=$this->key'>";
+
+
+		echo "<img src='http://www.ncleg.net/$this->chamber/pictures/$this->uid.jpg'/></a>
+		<h4>$this->title $this->name</h4>
+		<h5>$this->party</h5>
+		";
+		
+		/*
+		 $district=
+		*/
+		
+
+        if(get_table("survey_data")->check($this->key))
+		{
+            echo("<h5><a style='color:green;font-weight:bold;' href='/guide/legpage.php?id=$this->key'>Survey Responses</a></h5>");
+        }
+     
+
+
+			$grade_link="<a title='Click for voting record'  style='font-weight:bold;color:" .$this->grade_color
+			."' href='/guide/legpage.php?id=$this->key'>$this->grade</a>";
+			echo ( "Grade: $grade_link" );
+				
+	
+
+
+
+
+        /*
+		$url=$this->get_url();
+		
+		echo ("<a target='_blank' href='$url'>Link to page on NCGA website</a>&nbsp;&nbsp;&nbsp;&nbsp;<a  href='/guide/legpage.php?id=$this->key'>Link to voting record</a>");
+		*/
+		echo "</div></span>";
+	}
+
+	public function print_list_row($class='leg_bio') {
 		global $isPhone;
 		$candidate=get_table('table_election')->getobj($this->key);
 		$data_key=$this->key;
