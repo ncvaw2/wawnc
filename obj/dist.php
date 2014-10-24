@@ -1,5 +1,5 @@
 <?php
-include_once  $root.'/inc/db.php';
+include_once  $root.'/obj/person.php';
 
 class district {
     public $counties;
@@ -31,7 +31,7 @@ class districts extends table_base
 	public function print_list()
 	{
 		$leglist=get_table("leg_list");
-		$canlist=get_table("candidates");
+		$canlist=get_table('table_election');
 		
 		
 		echo("<table class='votes' style='width:100%;text-align:left'><tr><th>District#</th><th>Candidates</th><th>Election</th>
@@ -50,7 +50,8 @@ class districts extends table_base
 		
 		}
 		echo("</table>");
-	}	
+	}
+	
 }
 
 

@@ -36,9 +36,6 @@
     <None Include="..\..\..\..\..\ncvaw\about\aboutus.html">
       <Filter>Source Files</Filter>
     </None>
-    <None Include="..\..\..\..\..\ncvaw\guide\canidate.php">
-      <Filter>Source Files</Filter>
-    </None>
     <None Include="..\..\..\..\..\ncvaw\about\contact.html">
       <Filter>Source Files</Filter>
     </None>
@@ -176,6 +173,12 @@
     </None>
     <None Include="..\..\obj\dist.php">
       <Filter>v2</Filter>
+    </None>
+    <None Include="..\..\guide\candidate.php">
+      <Filter>v1</Filter>
+    </None>
+    <None Include="..\..\old\old_election.php">
+      <Filter>v1</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

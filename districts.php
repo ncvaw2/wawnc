@@ -6,7 +6,7 @@ $chamber=getParam("ch");
 
 
 include $header;
-include $root.'/obj/districts.php';
+include $root.'/obj/dist.php';
 
 $distobj=get_table('districts')->print_list();
 

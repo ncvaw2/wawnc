@@ -16,7 +16,7 @@ array_push($funcs_init,
 
 
 include $header;
-include $root.'/obj/person.php';
+include $root.'/obj/dist.php';
 
 $distobj=get_table('districts')->get($chamber,$distnum);
 $next="";
@@ -30,6 +30,13 @@ if($distobj)
 }
 ?>
 	<div id="page" >
+
+
+<?php 
+if($g_debug)
+	echo("<a href='$next'>Next District</a>"); ?>
+
+
 	<h1>2014 Election - <?php 
 	echo($page_title);
 		?>

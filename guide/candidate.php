@@ -2,13 +2,13 @@
 $page_title="Candidate";
 
 
-include $root.'/inc/db.php';
+include $root.'/obj/dist.php';
 $key=getParam( "key");
 $candidate=null;
 if ($key)
 {
-	$candidate=get_table("candidates")->get_candiate($key);
-    $page_title=$candidate->displayname;
+	$candidate=get_table('table_election')->get_candiate($key);
+    $page_title=$candidate->nameonballot;
 }
 
 

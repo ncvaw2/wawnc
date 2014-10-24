@@ -23,7 +23,6 @@
     <None Include="..\..\..\..\..\ncvaw\facebook.html" />
     <None Include="..\..\..\..\..\ncvaw\global.php" />
     <None Include="..\..\..\..\..\ncvaw\guide\billpage.php" />
-    <None Include="..\..\..\..\..\ncvaw\guide\canidate.php" />
     <None Include="..\..\..\..\..\ncvaw\guide\find.html" />
     <None Include="..\..\..\..\..\ncvaw\guide\getleg.php" />
     <None Include="..\..\..\..\..\ncvaw\guide\leglist.html" />
@@ -51,10 +50,12 @@
     <None Include="..\..\..\..\..\ncvaw\news.html" />
     <None Include="..\..\..\..\..\ncvaw\phpinfo.php" />
     <None Include="..\..\..\..\..\ncvaw\site_head.php" />
+    <None Include="..\..\guide\candidate.php" />
     <None Include="..\..\obj\dist.php" />
     <None Include="..\..\obj\person.php" />
     <None Include="..\..\obj\tables.php" />
     <None Include="..\..\obj\test.html" />
+    <None Include="..\..\old\old_election.php" />
     <None Include="..\..\v2\bio.php" />
     <None Include="..\..\v2\bio_list.php" />
     <None Include="..\..\v2\bio_page.php" />

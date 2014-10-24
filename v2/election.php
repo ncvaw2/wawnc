@@ -1,5 +1,5 @@
 <?php
-include_once $root . '/obj/districts.php';
+include_once $root . '/obj/dist.php';
 
 include $header;
 

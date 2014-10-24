@@ -33,120 +33,7 @@ function print_table_row($label, $val,$color=null) {
 			
 	echo "<tr><td class='leg_label'>$label: </td><td class='leg_val' $style>$val</td></tr>";
 }	
-class election
-{
-	//columns
-	public $key;
-	public $year;
-	public $type;
-	public $district;
-	public $chamber;
-	public $party;
-	public $nameonballot;
-	public $endorsements;
-	function printbio()
-	{
-		echo("<table><tr><td/><td/></tr>");
 
-
-		echo ('</table>');
-	}
-}
-class table_election  extends table_base
-{
-	function get_columns()
-	{
-		return ['key','year','type','district','chamber','party','party','nameonballot','endorsements'];
-	}	
-	function create_from_spreadsheet()
-	{
-		$this->create('data_v2','oi0q51k','election','key');
-	}
-	
-	public function print_list() {
-		global $g_debug;
-		$biolist = get_table ( "table_person" );
-		
-		echo "<div class='tbl_leglist' >";
-		foreach ( $this->list as $d )
-		{
-			$key=$d->key;
-			$bio=	$biolist->getobj ( $key );
-			if($bio)
-				$bio->print_list_row ();
-			else
-			{
-				if($g_debug)
-					echo "<H1>Could not find $key</H1>";
-			}
-				
-		}
-		echo '</div>';
-	}	
-	
-	function printtable()
-	{
-		$column="key";
-		foreach ($this->list as $row )
-		{
-			$val=$row->$column;
-			echo($val);
-		}
-	}
-	public function sort() {
-	
-		$sort=getParam("sort");
-		if($sort=='grade')
-		{
-			uasort($this->list, 'sort_func_grade');
-		}
-		
-			else
-		if($sort=='dist')
-		{
-		uasort($this->list, 'sort_func_dist');
-		}
-		
-		else
-			ksort ( $this->list );
-	
-	}
-	public function getlist($ch,$num)
-	{
-		$set=array();
-		foreach ( $this->list as $c )
-		{
-			if(
-			($c->district==$num)&&
-			($c->chamber==$ch))
-			{
-				$set [] =$c;
-			}
-		}
-		return $set;
-	}	
-	public function print_people($ch,$num)
-	{
-	
-		$set=$this->getlist($ch,$num);
-		foreach ( $set as $x )
-		{
-			$leg=get_table("leg_list")->get_leg_by_key($x->key);
-			if($leg)
-			{
-				$leg->print_list_row();
-				
-			}
-			else
-			{
-				$person = get_table ( "table_person" )->getobj ( $x->key );
-				$person->print_list_row();	
-			}		
-			
-			
-		}
-	}	
-}
 
 class person
 {
@@ -186,7 +73,7 @@ class person
 		$this->candidate=get_table("table_election")->getobj($this->key);
 		
 		
-		$this->fullname=$this->first . " " . $this->last;
+		$this->fullname=$this->candidate->nameonballot;
 		if($this->office)
 		{
 			

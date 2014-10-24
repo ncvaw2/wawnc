@@ -298,7 +298,7 @@ class table_test extends table_base
 	public function print_list()
 	{
 		$leglist=get_table("leg_list");
-		$canlist=get_table("candidates");
+		$canlist=get_table("table_election");
 
 
 		echo("<table class='votes' style='width:100%;text-align:left'><tr><th>District#</th><th>Candidates</th><th>Election</th>
