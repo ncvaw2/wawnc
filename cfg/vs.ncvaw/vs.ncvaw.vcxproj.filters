@@ -171,6 +171,12 @@
     <None Include="..\..\..\..\..\ncvaw\inc\ncvaw.js">
       <Filter>js</Filter>
     </None>
+    <None Include="..\..\v2\election.php">
+      <Filter>v2</Filter>
+    </None>
+    <None Include="..\..\obj\dist.php">
+      <Filter>v2</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\..\..\ncvaw\favicon.ico">

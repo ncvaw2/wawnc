@@ -51,12 +51,14 @@
     <None Include="..\..\..\..\..\ncvaw\news.html" />
     <None Include="..\..\..\..\..\ncvaw\phpinfo.php" />
     <None Include="..\..\..\..\..\ncvaw\site_head.php" />
+    <None Include="..\..\obj\dist.php" />
     <None Include="..\..\obj\person.php" />
     <None Include="..\..\obj\tables.php" />
     <None Include="..\..\obj\test.html" />
     <None Include="..\..\v2\bio.php" />
     <None Include="..\..\v2\bio_list.php" />
     <None Include="..\..\v2\bio_page.php" />
+    <None Include="..\..\v2\election.php" />
     <None Include="..\..\v2\table.html" />
     <None Include="..\..\v2\test.html" />
   </ItemGroup>
