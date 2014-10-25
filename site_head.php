@@ -93,7 +93,10 @@ $deviceType = ($detect->isMobile() ? ($detect->isTablet() ? 'tablet' : 'phone') 
 $current_url =$_SERVER['PHP_SELF'];
 
 $g_refresh_data=getParam("refresh");
-
+if(getParam("refresh_elect"))
+{
+	array_map('unlink', ["$root/data2/table_election.json","$root/data2/table_election.pdata"]);
+}
 
 if(getParam("deldata"))
 {
