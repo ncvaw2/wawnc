@@ -1073,6 +1073,12 @@ class survey_resp
             }
 	public function printresp()
 	{
+		if($this->comments)
+		{
+			echo("<div style='margin-top:30px' class='section_head'>Comments</div>");
+			echo("<div>$this->comments</div>");;
+		}
+
 		for ($x=0; $x<5; $x++)
 		{
 			$qnum=$x+1;
