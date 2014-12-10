@@ -103,8 +103,8 @@ make_menu ( [
 				z_mi ( "Candidates Survey", "/guide/survey.html", "" )
 		]
 		 ),
-		($g_admin ? 
-			z_menu ( "Admin", [ 
+		($g_debug ? 
+			z_menu ( "Debug", [ 
 				z_mi ( "Debug objs", "/guide/debug.html" ),
 				z_mi_param ( "Admin Off", "admin","off" ),
 				z_mi_param ( "Debug Off", "debug","off" ),
@@ -115,10 +115,16 @@ make_menu ( [
 				z_mi_param ( "online", "offline","off" ),				
 				z_mi_param ( "Delete Pdata", "delpdata","true" ),
 				z_mi_param ( "Delete all", "deldata","true" ),
-				z_mi ( "PHP Info", "/phpinfo.php" ),
-				z_mi ( "Refresh", "$current_url?refresh=true" ) 
+				
 		] ): 0), 
-		($g_admin ?
+		($g_admin ? 
+			z_menu ( "Admin", [ 
+				z_mi_param ( "Reload from spreadsheets", "deldata","true" ),
+				z_mi_param ( "Admin Off", "admin","off" ),
+				z_mi_param ( "Debug ON", "debug","on" ),
+
+		] ): 0), 
+		($g_debug ?
 		
 			z_menu ( "Tables", [
 			z_mi ( "Person", "/v2/table.html?table=table_person" ),
