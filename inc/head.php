@@ -68,8 +68,8 @@ if ($g_admin) {
 }
 make_menu ( [ 
 		z_menu ( "About", [ 
-				z_mi ( "About Us", "http://www.ncvaw.org/about/our-board/", "HOME" ),
-				z_mi ( "Who We Are", "/about/who.html", "MAP" ),
+				z_mi ( "About Us", "http://www.ncvaw.org/about/", "HOME" ),
+				z_mi ( "Who We Are", "http://www.ncvaw.org/about/our-board/", "MAP" ),
 				z_mi ( "Contact", "http://www.ncvaw.org/about/contact-us/", "MAP" ),
 				z_mi ( "Lobbying 101", "/about/lobbying101.html", "" ),
 				z_mi ( "How You Can Help", "/about/getinvolved.html", "" ) 
