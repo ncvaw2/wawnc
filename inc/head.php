@@ -68,13 +68,13 @@ if ($g_admin) {
 }
 make_menu ( [ 
 		z_menu ( "About", [ 
-				z_mi ( "About Us", "/about/aboutus.html", "HOME" ),
+				z_mi ( "About Us", "http://www.ncvaw.org/about/our-board/", "HOME" ),
 				z_mi ( "Who We Are", "/about/who.html", "MAP" ),
-				z_mi ( "Contact", "/about/contact.html", "MAP" ),
+				z_mi ( "Contact", "http://www.ncvaw.org/about/contact-us/", "MAP" ),
 				z_mi ( "Lobbying 101", "/about/lobbying101.html", "" ),
 				z_mi ( "How You Can Help", "/about/getinvolved.html", "" ) 
 		] ),
-		z_mbi ( "News", "/news.html", "Support Animal Welfare in NC", 0 ),
+		z_mbi ( "News", "http://www.ncvaw.org/news/", "Support Animal Welfare in NC", 0 ),
 		z_mbi ( "Facebook Feed", "/facebook.html", "Support Animal Welfare in NC", 0 ),
 		z_mbi ( "Donate", "http://www.ncvaw.org/donate/", "Support Animal Welfare in NC", 0 ),
 		
