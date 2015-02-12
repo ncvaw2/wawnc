@@ -68,7 +68,7 @@ class bill {
 			
 			<div>$this->official </div>
 		<div>$this->effect </div>
-		<div><a target='_blank' href='http://www.ncleg.net/gascripts/BillLookUp/BillLookUp.pl?Session=$this->year&BillID=$this->doc&submitButton=Go' >Link to $this->doc on NCLEG.NET</a> </div>
+		<div><a target='_blank' href='http://www.ncga.state.nc.us/gascripts/BillLookUp/BillLookUp.pl?Session=$this->year&BillID=$this->doc&submitButton=Go' >Link to $this->doc on ncga.state.nc.us</a> </div>
 		<div>$this->desc </div></div>");
 	}
 	public function print_page()	
@@ -78,7 +78,7 @@ class bill {
 		
 		
 		echo "<p><img style='display:inline;width:60px' src='/img/$this->picture' /> $this->effect </p>";		
-		echo "<p><a target='_blank' href='http://www.ncleg.net/gascripts/BillLookUp/BillLookUp.pl?Session=$this->year&BillID=$this->doc&submitButton=Go' >Link to $this->doc on NCLEG.NET</a> </p>";
+		echo "<p><a target='_blank' href='http://www.ncga.state.nc.us/gascripts/BillLookUp/BillLookUp.pl?Session=$this->year&BillID=$this->doc&submitButton=Go' >Link to $this->doc on ncga.state.nc.us</a> </p>";
 		echo "<p>$this->desc </p>";
 	}	
 }
@@ -592,7 +592,7 @@ class legislator{
 		$this->create_grade();
 	}
 	public function get_url() {
-		return ("http://www.ncleg.net/gascripts/members/viewMember.pl?sChamber=$this->chamber&nUserID=$this->uid");
+		return ("http://www.ncga.state.nc.us/gascripts/members/viewMember.pl?sChamber=$this->chamber&nUserID=$this->uid");
 	}
 	public function print_survey() {
 		get_table("survey_data")->printresp($this->key);
@@ -646,7 +646,7 @@ class legislator{
 		echo "<a title='Click for voting record'  href='/guide/legpage.php?id=$this->key'>";
 
 
-		echo "<img src='http://www.ncleg.net/$this->chamber/pictures/$this->uid.jpg'/></a>
+		echo "<img src='http://www.ncga.state.nc.us/$this->chamber/pictures/$this->uid.jpg'/></a>
 		<h4>$this->title $this->name</h4>
 		<h5>$this->party</h5>
 		";
@@ -682,6 +682,7 @@ class legislator{
 
 	public function print_list_row($class='leg_bio') {
 		global $isPhone;
+		global $g_electionMode;
 		$candidate=get_table('table_election')->getobj($this->key);
 		$data_key=$this->key;
 
@@ -690,7 +691,7 @@ class legislator{
 		echo "<a title='Click for voting record'  href='/guide/legpage.php?id=$this->key'>";
 
 
-		echo "<img src='http://www.ncleg.net/$this->chamber/pictures/$this->uid.jpg'/></a>";
+		echo "<img src='http://www.ncga.state.nc.us/$this->chamber/pictures/$this->uid.jpg'/></a>";
 		
 		echo "</div><div class='leg_info' ><a title='Click for voting record' href='/guide/legpage.php?id=$this->key'><h2>$this->title $this->name</h2></a>";
 		if($candidate)
@@ -712,7 +713,8 @@ class legislator{
 		$running="";
 
 		$running.="<div><a href=$district_url>Click here for 2014 district race</a></div>";
-		$this->print_table_row ( '2014 Election', $running );
+		if(	$g_electionMode	)
+			$this->print_table_row ( '2016 Election', $running );
 		$this->print_table_row ( 'Party', $this->party );
 		$this->print_table_row ( 'Counties', $this->county );
 

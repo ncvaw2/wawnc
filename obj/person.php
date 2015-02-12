@@ -100,7 +100,7 @@ class person
 			$uid=$this->office->uid;
 			
 			if(!$this->photo)
-					$this->photo="http://www.ncleg.net/$chamber/pictures/$uid.jpg";
+					$this->photo="http://www.ncga.state.nc.us/$chamber/pictures/$uid.jpg";
 			
 		}
 		if($this->candidate)
