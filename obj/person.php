@@ -11,6 +11,7 @@ function get_party($id)
 			'REP'=>'Republican',
 			'IND' => 'Independent',
 			'LIB' => 'Libertarian',
+			'UNA' => 'Unaffiliated',
 	);
 	
 	$p=$parties[$id];
@@ -74,14 +75,7 @@ class person
 		$this->candidate=get_table("table_election")->getobj($this->key);
 		$this->fullname=$this->first . " " . $this->last;
 		
-		if($this->candidate)
-			$this->fullname=$this->candidate->nameonballot;
-		else {
-			if($g_debug)
-				$this->fullname .="NOT FOUND?";
-				
-			
-		}
+
 		if($this->office)
 		{
 			

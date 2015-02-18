@@ -777,9 +777,15 @@ function sort_func_dist($a, $b) {
 }
 
 class leg_list extends table_base{
+	
+	function get_columns()
+	{
+		return ['key','chamber','uid','district','party','email','offaddr','offaddr2','offzip','offphone','name'];
+	}	
+	
     function create_from_spreadsheet()
 	{
-		$this->create1('data_v1',2,'legislator','key');
+		$this->create('data_v2',2,'legislator','key');
 	}
 	public function print_list($chamber) {
 		echo "<div class='tbl_leglist' >";
