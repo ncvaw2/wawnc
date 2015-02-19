@@ -82,7 +82,7 @@ $fb_meta_images="";
 $fb_description="Find your districts and representatives, browse the report cards, and make sure your NC legislators are fighting for animal welfare.";
 
 date_default_timezone_set('US/Eastern');
-
+ini_set('max_execution_time', 300); //300 seconds = 5 minutes
 /*
 include $root.'/inc/Mobile_Detect.php';
 $detect = new Mobile_Detect;

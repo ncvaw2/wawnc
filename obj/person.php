@@ -60,7 +60,30 @@ class person
 	public $office;
 	public $election;
 
-
+	public function get_photo_url()
+	{
+		global $root;
+		
+		$dir='/img/people/';
+		if (!file_exists($root .$dir)) {
+			mkdir($root .$dir, 0777, true);
+		}
+		$path=$dir.$this->key . '.jpg';
+		$filename=$root . $path;
+		
+		if( file_exists ( $filename ))
+			return $path;
+		if($this->photo)
+		{
+			$result=file_put_contents($filename, file_get_contents($this->photo));
+			
+			if($result==='FALSE')
+				return null;
+		}
+		return $path;
+		
+	
+	}
 			
 	public function init()
 	{
@@ -100,6 +123,8 @@ class person
 		else
 			$this->election="Not running";
 		//$candidate=get_table("table_election")->getobj($this->key);
+		
+		$this->photo=$this->get_photo_url();
 		
 		
 	}
