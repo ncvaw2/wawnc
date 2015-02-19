@@ -1,8 +1,8 @@
 <?php
 
-include $root.'/inc/db.php';
+include $root.'/obj/person.php';
  
-$leglist=get_table("leg_list");
+$leglist=get_table("table_office");
 $leglist->sort();
 $chamber=getParam("ch");
 $page_title="Report Card";

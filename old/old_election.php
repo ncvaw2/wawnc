@@ -72,7 +72,7 @@ class candidate {
 	}
 	public function get_local_page_url() {	
 		$url="/guide/candidate.php?key=$this->key";
-		$leg=get_table("leg_list")->get_leg_by_key($this->key);
+		$leg=get_table("table_office")->get_leg_by_key($this->key);
 		if($leg)
 		{
 			$url="/guide/legpage.php?id=$this->key";
@@ -82,7 +82,7 @@ class candidate {
 	}
 	public function print_list_row() {
 
-		$leg=get_table("leg_list")->get_leg_by_key($this->key);
+		$leg=get_table("table_office")->get_leg_by_key($this->key);
 		if($leg)
 		{
 			$leg->print_list_row();
@@ -178,7 +178,7 @@ class candidates extends table_base
 	{
 		$link_string="";
 		$set=$this->getlist($ch,$num,$elect);
-		$legs=get_table("leg_list");
+		$legs=get_table("table_office");
 		foreach ( $set as $x )
 		{
 			$grade="";

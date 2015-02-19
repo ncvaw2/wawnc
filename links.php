@@ -1,7 +1,7 @@
 <?php
 $page_title='In The News';
 include $header;
-include $root.'/inc/db.php';
+include $root.'/obj/person.php';
 
 
 

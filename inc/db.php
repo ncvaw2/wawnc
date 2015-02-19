@@ -2,7 +2,7 @@
 /*
  * bill_list - tab 1- 
  * candidates - tab 2-
- * leg_list  - tab 3-
+ * table_office  - tab 3-
  * districts - tab 4
  * vote_data - tab 5-
  * links 	 - tab 6-
@@ -239,7 +239,7 @@ class vote_data extends table_base
 			)
 			{
 				
-				$leg=get_table("leg_list")->get_leg_by_key($v->mkey);
+				$leg=get_table("table_office")->get_leg_by_key($v->mkey);
 				if($leg)
 					$legs[]=$leg;
 			}
@@ -309,7 +309,7 @@ class election
 
 	public function get_local_page_url() {	
 		$url="/v2/bio.php?key=$this->key";
-		$leg=get_table("leg_list")->get_leg_by_key($this->key);
+		$leg=get_table("table_office")->get_leg_by_key($this->key);
 		if($leg)
 		{
 			$url="/guide/legpage.php?id=$this->key";
@@ -397,7 +397,7 @@ class table_election  extends table_base
 		$set=$this->getlist($ch,$num);
 		foreach ( $set as $x )
 		{
-			$leg=get_table("leg_list")->get_leg_by_key($x->key);
+			$leg=get_table("table_office")->get_leg_by_key($x->key);
 			if($leg)
 			{
 				$leg->print_list_row();
@@ -418,7 +418,7 @@ class table_election  extends table_base
 		$set=$this->getlist($ch,$num);
 		foreach ( $set as $x )
 		{
-			$leg=get_table("leg_list")->get_leg_by_key($x->key);
+			$leg=get_table("table_office")->get_leg_by_key($x->key);
 			if($leg)
 			{
 				$leg->print_short_bio();
@@ -437,7 +437,7 @@ class table_election  extends table_base
 	{
 		$link_string="";
 		$set=$this->getlist($ch,$num,$elect);
-		$legs=get_table("leg_list");
+		$legs=get_table("table_office");
 		foreach ( $set as $x )
 		{
 			$grade="";
@@ -465,7 +465,7 @@ class table_election  extends table_base
 		{
 			$link_string="";
 			$set=$this->getlist($ch,$num,$elect);
-			$legs=get_table("leg_list");
+			$legs=get_table("table_office");
 			foreach ( $set as $x )
 			{
 				$grade="";
@@ -539,7 +539,7 @@ function get_grade(&$score,&$grade,&$color)
 }
 
 
-class legislator{
+class legislator_OBSOLETE{
 
 	public $name;
 	public $first;
@@ -776,7 +776,7 @@ function sort_func_dist($a, $b) {
 	return ($a->district < $b->district) ? -1 : 1;
 }
 
-class leg_list extends table_base{
+class leg_list_OBSOLETE extends table_base{
 	
 	function get_columns()
 	{

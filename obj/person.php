@@ -45,9 +45,6 @@ class person
 	public $party;
 	public $fullname;
 	public $photo;
-	public $first;
-	public $middle;
-	public $last;
 	public $phone;
 	public $email;
 	public $addr;
@@ -62,7 +59,7 @@ class person
 	public $candidate;
 	public $office;
 	public $election;
-	public $district;
+
 
 			
 	public function init()
@@ -72,9 +69,7 @@ class person
 			return;
 		$this->inited=true;
 		$this->office	=get_table("table_office")->getobj($this->key);
-		$this->candidate=get_table("table_election")->getobj($this->key);
-		$this->fullname=$this->first . " " . $this->last;
-		
+		$this->candidate= null; //get_table("table_election")->getobj($this->key);
 
 		if($this->office)
 		{
@@ -118,102 +113,13 @@ class person
 	public function printPage() {
 		$this->print_list_row();
 	}
-	public function print_short_bio() {
-	
-		$this->init();
-		
-		if($this->office)
-		{
-			$leglist=get_table("leg_list");
-			/* temporary patch */
-			$leg=get_table("leg_list")->get_leg_by_key($this->key);
-			if($leg)
-			{
-				$leg->print_list_row();
-				return;
-			}
-		}
-	
-		$data_key=$this->key;
-	
-		echo ("<span class='short_bio' data-name='$data_key'>");
-		//thumbnail
-	
-		if($this->photo)
-		{
-	
-			echo ("<div class='leg_thumb' ><a href='/v2/bio.php?key=$this->key'>");
-			echo ("<img src='$this->photo'/></a></div>");
-		}
-		else {
-			echo ("<div class='leg_thumb' ><img src='/img/unknown.png'/></div>");
-	
-		}
-	
-		echo ("<div class='leg_info' ><a href='/v2/bio.php?key=$this->key'><h2>Candidate $this->fullname</h2></a>");
 
-		if($this->candidate)
-		{
-			if($this->candidate->endorsements=='Y')
-			{
-				echo("<img class='endorsesmall' src='img/endorse_small.png'><h5>NCVAW Endorsed</h5>");
-
-			}
-		}
-
-
-		echo("<table><tr><td/><td/></tr>");
-		//$district_url="'/district.php?dist=". $this->district . "&ch=" . $this->chamberId . "'";
-		//$this->print_table_row ( 'District', "<a href=$district_url>$this->district</a>" );
-		
-		$chamberId=$this->candidate->chamber;
-		$chamber=get_chamber($chamberId);
-		$district_url="'/district.php?dist=". $this->district . "&ch=" . $chamberId . "'";
-		print_table_row ( 'Party', $this->party );
-        $responded="No";
-        if(get_table("survey_data")->check($this->key))
-            $responded="<a style='color:green;font-weight:bold;' href='/v2/bio.php?key=$this->key'>Yes</a>";
-        
-     
-        print_table_row ( 'Survey', $responded );	
-
-			
-
-	
-		if($this->website)
-		{
-			$link="<a href='".$this->website."' target='_blank'>".$this->website."</a>";
-			$this->print_table_row ( 'Website', $link );
-	
-		}
-		if($this->facebook)
-		{
-			$link="<a href='".$this->facebook."' target='_blank'>Facebook Page</a>";
-			$this->print_table_row ( 'Facebook', $link );
-		
-		}	
-
-	
-		echo ('</table>');
-			
-		echo ("</div></span>");
-	}	
 	
 	public function print_list_row($class='leg_bio') {
 		global $root;
 		$this->init();
 		
-		if($this->office)
-		{
-			$leglist=get_table("leg_list");
-			/* temporary patch */
-			$leg=get_table("leg_list")->get_leg_by_key($this->key);
-			if($leg)
-			{
-				$leg->print_list_row();
-				return;
-			}
-		}
+
 	
 		$data_key=$this->key;
 	
@@ -231,7 +137,7 @@ class person
 	
 		}
 	
-		echo ("<div class='leg_info' ><a href='/v2/bio.php?key=$this->key'><h2>Candidate $this->fullname</h2></a>");
+		echo ("<div class='leg_info' ><a href='/v2/bio.php?key=$this->key'><h2>$this->fullname</h2></a>");
 
 		if($this->candidate)
 		{
@@ -247,14 +153,20 @@ class person
 		echo("<table><tr><td/><td/></tr>");
 		//$district_url="'/district.php?dist=". $this->district . "&ch=" . $this->chamberId . "'";
 		//$this->print_table_row ( 'District', "<a href=$district_url>$this->district</a>" );
+		if($this->office)
+		{
+			$dist=$this->office->district;
+			$ncleg_url=$this->office->get_ncleg_link();
+			$chamberId=$this->office->chamber;
+			$chamber=get_chamber($chamberId);
+			$district_url="'/district.php?dist=". $dist . "&ch=" . $chamberId . "'";
+			print_table_row ( 'District', "<a href=$district_url>$chamber # $dist</a>" );
+			
+			print_table_row ( 'Party', $this->party );
+			print_table_row ( 'NCGA website', "<a  target='_blank' href='" . $ncleg_url . "'>Click here for NCGA page</a>" );
+				
 		
-		$chamberId=$this->candidate->chamber;
-		$chamber=get_chamber($chamberId);
-		$district_url="'/district.php?dist=". $this->district . "&ch=" . $chamberId . "'";
-		print_table_row ( '2014 Election', "Candidate" );
-		print_table_row ( 'District', "<a href=$district_url>$chamber # $this->district</a>" );
-		
-		print_table_row ( 'Party', $this->party );
+		}		
         $responded="No";
         if(get_table("survey_data")->check($this->key))
             $responded="<a style='color:green;font-weight:bold;' href='/v2/bio.php?key=$this->key'>Yes</a>";
@@ -305,7 +217,7 @@ class table_person  extends table_base
 {
 	function get_columns()
 	{
-		return ['key','grade','gradecomment','fullname','first','middle','last','phone','email','photo','facebook','website'];
+		return ['key','grade','gradecomment','fullname','phone','email','photo','facebook','website'];
 	}	
 	function create_from_spreadsheet()
 	{
@@ -367,15 +279,37 @@ class office
 	public $offaddr;
 	public $offaddr2;
 	public $offzip;
+	public $name;
+	
+	public function get_ncleg_link() {
+		return ("http://www.ncga.state.nc.us/gascripts/members/viewMember.pl?sChamber=$this->chamber&nUserID=$this->uid");
+	}	
+	public function print_list_votes()
+	{
+		get_table("vote_data")->print_list_votes($this->key,0);
+	}
+	public function print_list_sponsorship()
+	{
+		get_table("vote_data")->print_list_votes($this->key,1);
+	}
+	public function print_survey() {
+		get_table("survey_data")->printresp($this->key);
+	}		
 	function get_photo_url()
 	{
 		
 		
 		
 	}
-
-	function printbio()
-	{
+	public function print_list_row() {
+		$person=get_table("table_person")->getobj($this->key);
+		if($person)
+		{
+			 $person->print_list_row();
+			 return;
+		}
+		echo("<div>". $this->name . " NOT FOUND</div>");
+		
 		echo("<table>");
 		//echo("<tr><td colspan='2'/><h4>Office<h4><td/></tr>");
 		$office=get_chamber($this->chamber) . ' district #' . $this->district;
@@ -394,13 +328,53 @@ class table_office  extends table_base
 	
 	function get_columns()
 	{
-		return ['key','chamber','uid','party','district','email','offphone','offaddr','offaddr2','offzip'];
+		return ['key','chamber','uid','party','district','email','offphone','offaddr','offaddr2','offzip','name'];
 	}	
 	function create_from_spreadsheet()
 	{
 		$this->create('data_v2','owx3nyv','office','key');
 	}
-
+	public function print_list($chamber) {
+		echo "<div class='tbl_leglist' >";
+		foreach ( $this->list as $d )
+		{
+			if($chamber)
+				if($chamber != $d->chamber)
+					continue;
+				$d->print_list_row ();
+		}
+		echo '</div>';
+	}
+	public function get_leg_by_key($key) {
+        if(array_key_exists ($key,$this->list))
+            return $this->list[$key];
+        return null;
+	}
+	
+	public function get_leg_by_district($chamber,$district) {
+		foreach ( $this->list as $leg ) {
+			if (($district == $leg->district)
+                &&($chamber==$leg->chamber))
+				return $leg;
+		}
+		return 0;
+	}
+	public function sort() {
+	
+		$sort=getParam("sort");
+		if($sort=='grade')
+		{
+			uasort($this->list, 'sort_func_grade');
+		}
+		else
+			if($sort=='dist')
+			{
+				uasort($this->list, 'sort_func_dist');
+			}
+		else
+			ksort ( $this->list );
+	
+	}	
 }
 
 

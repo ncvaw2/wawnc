@@ -36,7 +36,7 @@ add_init_js ( "tabinit();" );
 						</tr>
 					</thead>");
 				
-					// $leg->print_list_sponsorship();
+					$person->office->print_list_sponsorship();
 				echo("	
 				</table>
 
@@ -48,7 +48,7 @@ add_init_js ( "tabinit();" );
 							<th>Bill</th>
 						</tr>
 					</thead>");
-						// $leg->print_list_votes();
+						$person->office->print_list_votes();
 				echo("
 				</table>
 			</div>");

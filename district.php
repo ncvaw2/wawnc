@@ -37,9 +37,7 @@ if($g_debug)
 	echo("<a href='$next'>Next District</a>"); ?>
 
 
-	<h1>2014 Election - <?php 
-	echo($page_title);
-		?>
+	<h1><?php echo($page_title);	?>
 	</h1>
 	<div id="map_canvas"   class="map_small" ></div>
 	<H4>Counties: <?php echo($counties);?>
@@ -47,7 +45,7 @@ if($g_debug)
 	<div style='clear:both'></div>
 
 <?php	
-	get_table('table_election')->print_people($chamber,$distnum);
+	get_table('table_office')->get_leg_by_district($chamber,$distnum)->print_list_row();
 	?>
 	</div>
 

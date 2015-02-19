@@ -17,7 +17,11 @@ class districts extends table_base
 {
 	function create_from_spreadsheet()
 	{
-		$this->create1('data_v1',4,'district');
+		$this->create1('data_v2','oknijni','district');
+	}	
+	function get_columns()
+	{
+		return ['chamber','district','counties'];
 	}	
 	public function get($ch,$dist)
 	{
@@ -31,13 +35,10 @@ class districts extends table_base
 	public function print_list()
 	{
 		global $g_electionMode;
-		$leglist=get_table("leg_list");
-		$canlist=get_table('table_election');
+		$leglist=get_table("table_office");
 		
 		
 		echo("<table class='votes' style='width:100%;text-align:left'><tr><th>District#</th>");
-		if($g_electionMode)
-			echo("<th>Candidates</th><th>Election</th>");
 		echo("<th style=' max-width: 45px;'>Counties</th><th>Current Representative</th></tr>");
 		
 		
@@ -45,14 +46,8 @@ class districts extends table_base
 		{
 			$leg=$leglist->get_leg_by_district($d->ch,$d->dist);
 			$chamber=($d->ch=='H'?'House':'Senate');
-			$candidates=$canlist->get_candate_links($d->ch,$d->dist,"gen");
-		
+
 			echo ("<tr><td style='width:90px; '><a href='/district.php?ch=$d->ch&dist=$d->dist'>$chamber #$d->dist</a></td>");
-			if($g_electionMode)
-			{
-				echo ("<td>$candidates</td>");
-				echo ("<td><a href='/district.php?ch=$d->ch&dist=$d->dist'>Election Coverage</a></td>");
-			}
 			echo ("<td width='20%'><div >$d->counties</div></td>");
 			echo ("<td><a  href='/guide/legpage.php?id=$leg->key'>$leg->name</a></td></tr>");
 		
@@ -61,8 +56,8 @@ class districts extends table_base
 	}
 	public function print_endorse()
 	{
-		$leglist=get_table("leg_list");
-		$canlist=get_table('table_election');
+		$leglist=get_table("table_office");
+		//$canlist=get_table('table_election');
 		
 		
 		

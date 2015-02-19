@@ -2,7 +2,7 @@
 /*
  * bill_list - tab 1- 
  * candidates - tab 2-
- * leg_list  - tab 3-
+ * table_office  - tab 3-
  * districts - tab 4
  * vote_data - tab 5-
  * links 	 - tab 6-
@@ -17,7 +17,7 @@
 		'bill_list',
 		'exlinks',
 		'districts',
-		'leg_list',
+		'table_office',
 		'bill_list',
 		'survey_questions',
 		'table_election',
@@ -297,7 +297,7 @@ class table_test extends table_base
 	}
 	public function print_list()
 	{
-		$leglist=get_table("leg_list");
+		$leglist=get_table("table_office");
 		$canlist=get_table("table_election");
 
 
