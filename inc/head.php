@@ -72,7 +72,7 @@ make_menu ( [
 				z_mi ( "Lobbying 101", "/about/lobbying101.html", "" ),
 				z_mi ( "How You Can Help", "/about/getinvolved.html", "" ) 
 		] ),
-		z_mbi ( "News", "http://www.ncvaw.org/news/", "Support Animal Welfare in NC", 0 ),
+		z_mbi ( "News", "http://www.ncvaw.org", "Support Animal Welfare in NC", 0 ),
 		z_mbi ( "Facebook Feed", "/facebook.html", "Support Animal Welfare in NC", 0 ),
 		z_mbi ( "Donate", "http://www.ncvaw.org/donate/", "Support Animal Welfare in NC", 0 ),
 		
