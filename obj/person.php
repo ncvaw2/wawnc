@@ -72,6 +72,19 @@ function get_grade($score)
 	}
 	return "Ungraded";
 }
+function get_score_from_grade($grade)
+{
+	global $grade_chart;
+	
+	foreach ( $grade_chart as $g )
+	{
+		if($grade == $g[1])
+		{
+			return $g[0];
+		}
+	}	
+	return 0;
+}
 
 
 
@@ -80,6 +93,7 @@ class person
 	//columns
 	public $key;
 	public $grade;
+	public $score;
 	public $gradecomment;
 	public $party;
 	public $fullname;
@@ -122,7 +136,10 @@ class person
 		
 	
 	}
-	
+	public function get_local_page_url() {
+		$url="/v2/bio.php?key=$this->key";
+		return $url;
+	}	
 	public function pdata_init()
 	{
 		global $g_debug;
@@ -165,17 +182,21 @@ class person
 		
 		$this->photo=$this->get_photo_url();
 		// *** GRADE ****
-		if(!$this->grade)
+		if($this->grade)
+		{
+			$this->score=get_score_from_grade($this->grade);
+		}
+		else
 		{
 			$count=0;
-			$score=get_table("vote_data")->get_votes($this->key,$count);
+			$this->score=get_table("vote_data")->get_votes($this->key,$count);
 			if( $count==0)
 			{
 				$this->grade='Not Yet Graded';
 				$this->gradecomment='Has not been in office long enough to assign grade';
 			}
 			else
-				$this->grade=get_grade($score);
+				$this->grade=get_grade($this->score);
 		}		
 
 
@@ -272,19 +293,7 @@ class person
         
      
         print_table_row ( 'Responded to survey', $responded );	
-        /*		
-		if($this->candidate)
-		{
-			$running=$this->candidate->party;
-		
-			$running.='general election 11/4/2014';
-		
-		
-			//$running.=$this->party . ' primary election 5/6/2014';
-			$this->print_table_row ( '2014 Election', $running );
-		}
-		*/
-			
+
 
 	
 		if($this->website)
@@ -424,9 +433,24 @@ class office
 	}
 		
 };
+function sort_func_grade($a, $b) {
+	if ($a->score == $b->score) {
+		return 0;
+	}
+	return ($a->score < $b->score) ? 1 : -1;
+}
+function sort_func_dist($a, $b) {
+	if ($a->office->district == $b->office->district) {
+		return 0;
+	}
+	return ($a->office->district < $b->office->district) ? -1 : 1;
+}
+
+
+
 class table_office  extends table_base
 {
-	
+	public $people;
 	function get_columns()
 	{
 		return ['key','chamber','uid','party','district','email','offphone','offaddr','offaddr2','offzip','name'];
@@ -436,11 +460,12 @@ class table_office  extends table_base
 		$this->create('data_v2','owx3nyv','office','key');
 	}
 	public function print_list($chamber) {
+		$this->get_people_list();
 		echo "<div class='tbl_leglist' >";
-		foreach ( $this->list as $d )
+		foreach ( $this->people as $d )
 		{
 			if($chamber)
-				if($chamber != $d->chamber)
+				if($chamber != $d->office->chamber)
 					continue;
 				$d->print_list_row ();
 		}
@@ -460,20 +485,33 @@ class table_office  extends table_base
 		}
 		return 0;
 	}
+	public function get_people_list() {
+		if($this->people)
+			return $this->people;
+		$this->people=array();
+		foreach ( $this->list as $d )
+		{
+			$person=get_table("table_person")->getobj($d->key);
+			$this->people[$d->key]=$person;
+		}	
+	}
+		
 	public function sort() {
 	
+		$this->get_people_list();
+		
 		$sort=getParam("sort");
 		if($sort=='grade')
 		{
-			uasort($this->list, 'sort_func_grade');
+			uasort($this->people, 'sort_func_grade');
 		}
 		else
 			if($sort=='dist')
 			{
-				uasort($this->list, 'sort_func_dist');
+				uasort($this->people, 'sort_func_dist');
 			}
 		else
-			ksort ( $this->list );
+			ksort ( $this->people );
 	
 	}	
 }

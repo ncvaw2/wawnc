@@ -293,19 +293,6 @@ class vote_data extends table_base
 
 
 
-function sort_func_grade($a, $b) {
-	if ($a->score == $b->score) {
-		return 0;
-	}
-	return ($a->score < $b->score) ? 1 : -1;
-}
-function sort_func_dist($a, $b) {
-	if ($a->district == $b->district) {
-		return 0;
-	}
-	return ($a->district < $b->district) ? -1 : 1;
-}
-
 
 
 function file_get_contents_curl($url)
@@ -366,7 +353,7 @@ class exlink {
 		echo ("<a target='_blank' href='$this->link'><img  style='max-width:300px;max-height:200px;' src='$this->image'/></a>");
 		echo ("<a  target='_blank' href='$this->link'><h4>$this->title</h4></a>");
 		echo ("<p>$this->text</p><div>Links: ");	
-		$canlist=	get_table('table_election');
+		$canlist=	get_table('table_person');
 		$comma=false;
 		foreach($this->candidate_list as $key )
 		{
@@ -377,7 +364,7 @@ class exlink {
 				$url=$candidate->get_local_page_url();
 				if($comma)
 					echo(",");
-				echo("<a href='$url'>$candidate->nameonballot</a>");
+				echo("<a href='$url'>$candidate->fullname</a>");
 				
 				$comma=true;
 			}
