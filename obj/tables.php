@@ -82,13 +82,18 @@ function get_table($type) {
 
 function getj(&$row,$id)
 {
-	return $row->{	'gsx$'.$id }->{'$t' };
+	return trim($row->{	'gsx$'.$id }->{'$t' });
 }
 function create_obj_from_json($obj,$data,$vars)
 {
 	foreach ($vars as $var )
 	{
 		$obj->$var=getj($data,$var);
+	}
+	if(method_exists ($obj,'pdata_init'))
+	{
+		$obj->pdata_init();
+		
 	}
 
 }
@@ -158,18 +163,12 @@ class table_base
 		foreach ($jdata as $row )
 		{
 			$obj=new $objname();
-			$obj->inited=false;
 			$columns=$this->get_columns();
 			create_obj_from_json($obj,$row,$columns);
-				
-			 
 			if($keyname)
 			{
 				$key =getj($row,$keyname);
-				
-				//$this->list [$key] = new $objname ( $row,$index );
 				$this->list [$key] = $obj;
-				
 			}
 			else
 				$this->list [] = $obj;
@@ -265,60 +264,6 @@ class table_base
 	}
 }
 
-class testobj {
-	
-	function printrow()
-	{
-		echo "<tr><td>$this->key</td><td>$this->legs</td>";
-		
-	}
-}
-
-class table_test extends table_base
-{
-	function get_columns()
-	{
-		return ['key','legs'];
-	}	
-	function create_from_spreadsheet()
-	{
-		$this->create('data_v1',10,'testobj');
-	}
-	function printtable4()
-	{
-		echo "<table>";
-		
-		foreach ($this->list as $row )
-		{
-			$row->printrow();
-			
-		}
-		echo "</table>";
-	}
-	public function print_list()
-	{
-		$leglist=get_table("table_office");
-		$canlist=get_table("table_election");
-
-
-		echo("<table class='votes' style='width:100%;text-align:left'><tr><th>District#</th><th>Candidates</th><th>Election</th>
-				<th style=' max-width: 45px;'>Counties</th><th>Current Representative</th></tr>");
-		foreach ( $this->list as $d )
-		{
-			$leg=$leglist->get_leg_by_district($d->ch,$d->dist);
-			$chamber=($d->ch=='H'?'House':'Senate');
-			$candidates=$canlist->get_candate_links($d->ch,$d->dist,"gen");
-
-			echo ("<tr><td style='width:90px; '><a href='/district.php?ch=$d->ch&dist=$d->dist'>$chamber #$d->dist</a></td>");
-			echo ("<td>$candidates</td>");
-			echo ("<td><a href='/district.php?ch=$d->ch&dist=$d->dist'>Election Coverage</a></td>");
-			echo ("<td width='20%'><div >$d->counties</div></td>");
-			echo ("<td><a  href='/guide/legpage.php?id=$leg->key'>$leg->name</a></td></tr>");
-
-		}
-		echo("</table>");
-	}
-}
 
 
 

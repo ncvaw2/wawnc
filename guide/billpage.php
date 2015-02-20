@@ -8,7 +8,7 @@ include $header;
 
 
 
-include $root.'/inc/db.php';
+include $root.'/obj/person.php';
  
 $list=get_table("bill_list");
 

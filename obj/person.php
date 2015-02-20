@@ -34,6 +34,45 @@ function print_table_row($label, $val,$color=null) {
 			
 	echo "<tr><td class='leg_label'>$label: </td><td class='leg_val' $style>$val</td></tr>";
 }	
+$grade_chart = [
+	 [ -6,"F-","#F00"],
+	 [ -3,"F","#F00"],
+	 [ -2,"D-","#C04"],
+	 [ -1,"D","#808"],
+	 [ 0,"C","#00F"],
+	 [ 1,"C+","#02E"],
+	 [ 2,"B","#088"],
+	 [ 3,"B+","#0c8"],
+	 [ 4,"A-","#0c0"],
+	 [ 5,"A","#0c0"],
+	 [ 9999,"A+","#0c0"],
+];
+function get_grade_color($grade,&$font)
+{
+	global $grade_chart;
+	
+	foreach ( $grade_chart as $g )
+	{
+		if($grade == $g[1])
+		{
+			$font='bold';
+			return $g[2];
+		}
+	}	
+	return "#000";
+}
+function get_grade($score)
+{
+	global $grade_chart;
+	$grade="A+";
+	foreach ( $grade_chart as $g )
+	{
+		if($score <= $g[0])
+			return $g[1];
+	}
+	return "Ungraded";
+}
+
 
 
 class person
@@ -55,7 +94,6 @@ class person
 	public $website;
 	public $facebook;
 	//lookup
-	public $inited;
 	public $candidate;
 	public $office;
 	public $election;
@@ -84,13 +122,10 @@ class person
 		
 	
 	}
-			
-	public function init()
+	
+	public function pdata_init()
 	{
 		global $g_debug;
-		if($this->inited)
-			return;
-		$this->inited=true;
 		$this->office	=get_table("table_office")->getobj($this->key);
 		$this->candidate= null; //get_table("table_election")->getobj($this->key);
 
@@ -114,6 +149,8 @@ class person
 			if(!$this->photo)
 					$this->photo="http://www.ncga.state.nc.us/$chamber/pictures/$uid.jpg";
 			
+			
+			$this->email=$this->office->email;
 		}
 		if($this->candidate)
 		{
@@ -122,10 +159,24 @@ class person
 		}
 		else
 			$this->election="Not running";
-		//$candidate=get_table("table_election")->getobj($this->key);
+		
 		
 		$this->photo=$this->get_photo_url();
-		
+		// *** GRADE ****
+		if(!$this->grade)
+		{
+			$count=0;
+			$score=get_table("vote_data")->get_votes($this->key,$count);
+			if( $count==0)
+			{
+				$this->grade='Not Yet Graded';
+				$this->gradecomment='Has not been in office long enough to assign grade';
+			}
+			else
+				$this->grade=get_grade($score);
+		}		
+
+
 		
 	}
 	public function print_table_row($label, $val,$color=null) {
@@ -142,7 +193,6 @@ class person
 	
 	public function print_list_row($class='leg_bio') {
 		global $root;
-		$this->init();
 		
 
 	
@@ -176,8 +226,26 @@ class person
 
 
 		echo("<table><tr><td/><td/></tr>");
-		//$district_url="'/district.php?dist=". $this->district . "&ch=" . $this->chamberId . "'";
-		//$this->print_table_row ( 'District', "<a href=$district_url>$this->district</a>" );
+//GRADES
+		
+		if($this->grade)
+		{
+			$f='normal';
+			$c=get_grade_color($this->grade,$f);
+			$grade_link="<a title='Click for profile'  style='font-weight:$f;color:$c' href='/guide/legpage.php?id=$this->key'>$this->grade</a>";
+			$this->print_table_row ( 'Grade',$grade_link );
+			if($this->gradecomment)
+				$this->print_table_row ( 'Reason For Grade', $this->gradecomment );
+			else
+			{
+			
+				$this->gradecomment="Voting record, responsiveness to inquiries, and feedback from constituents";
+				$this->print_table_row ( 'Ranking Created By', $this->gradecomment );
+			}
+				
+		}		
+		
+//OFFICE		
 		if($this->office)
 		{
 			$dist=$this->office->district;
@@ -187,11 +255,15 @@ class person
 			$district_url="'/district.php?dist=". $dist . "&ch=" . $chamberId . "'";
 			print_table_row ( 'District', "<a href=$district_url>$chamber # $dist</a>" );
 			
-			print_table_row ( 'Party', $this->party );
-			print_table_row ( 'NCGA website', "<a  target='_blank' href='" . $ncleg_url . "'>Click here for NCGA page</a>" );
+			
 				
 		
-		}		
+		}
+		else {
+			
+		}	
+
+		print_table_row ( 'Party', get_party($this->party ));
         $responded="No";
         if(get_table("survey_data")->check($this->key))
             $responded="<a style='color:green;font-weight:bold;' href='/v2/bio.php?key=$this->key'>Yes</a>";
@@ -226,10 +298,12 @@ class person
 		
 		}	
 		if($this->email)
-		$this->print_table_row ( 'Email', $this->email );
+		$this->print_table_row ( 'Email',"<a  href='mailto:" .$this->email . "'>" . $this->email . "</a>" );
 		if($this->phone)
 		$this->print_table_row ( 'Phone', $this->phone );
-	
+		if($this->office)
+			print_table_row ( 'NCGA website', "<a  target='_blank' href='" . $ncleg_url . "'>Click here for NCGA page</a>" );
+		
 		echo ('</table>');
 			
 		echo ("</div></div><div style='clear:both'></div>");
@@ -242,7 +316,7 @@ class table_person  extends table_base
 {
 	function get_columns()
 	{
-		return ['key','grade','gradecomment','fullname','phone','email','photo','facebook','website'];
+		return ['key','fullname','party','grade','gradecomment','addr','city','state','zip','phone','email','photo','facebook','website'];
 	}	
 	function create_from_spreadsheet()
 	{

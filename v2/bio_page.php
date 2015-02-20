@@ -17,9 +17,10 @@ add_init_js ( "tabinit();" );
 
 		if ($person->office)
 				echo ("<a class='tab'id='tab_votes_top'  onclick=\"tabselect('tab_votes')\">Voting Record</a>"); 		
-				?>
-		 
-		<a class='tab' id='tab_survey_top' onclick="tabselect('tab_survey')">Survey Responses</a>
+				
+	if (get_table ( "survey_data" )->check ( $key ))
+		echo ("<a class='tab'  id='tab_survey_top' onclick=\"tabselect('tab_survey')\">Survey Responses</a>");
+			 ?>
 
 		</span>
 		<?php

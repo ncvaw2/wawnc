@@ -2,7 +2,8 @@
 <html>
 <head>
 
-<meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=yes" />
+<meta name="viewport"
+	content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=yes" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="author" content="www.ncvaw.org" />
 
@@ -34,9 +35,10 @@ else
 ?></title>
 <meta property="og:title" content="<?php echo $page_title ?>" />
     
-<?php 
-	include $root . '/inc/headscripts.p';
-	include $root . '/inc/zs_menu.php';	?>
+<?php
+include $root . '/inc/headscripts.p';
+include $root . '/inc/zs_menu.php';
+?>
 </head>
 
 <body>
@@ -45,16 +47,12 @@ else
 			<a style="margin:5px" href="/home.html">
 			<img style="float: left; max-width: 25%;" src="/img/NCVAW_paw.png"
 				alt="North Carolina Voters for Animal Welfare"></a>
-				<a style="margin: 5px" href="/home.html"> <img
+			<a style="margin: 5px" href="/home.html"> <img
 				style="text-align: center; margin: auto; max-width: 40%"
 				src="/img/title.png"></a> <a href="http://www.facebook.com/NCVAW"
-				target="_new"><img style="float: right; max-width: 25%"
+				target="_new"> <img style="float: right; max-width: 25%"
 				src="/img/facebook.png" alt="Follow us on Facebook"></a>
-				<?php /*
-					  Removed the FB like box because it was too slow to load.
-						<div style="float: right;max-width:30%"><small style="color:#46a;font:">Follow us on Facebook</small>
-						<div style="display:block;padding:0;margin:0;" class="fb-like-box" data-href="http://www.facebook.com/ncvaw" data-width="220" data-height="70" data-colorscheme="light" data-show-faces="false" data-header="false" data-stream="false" data-show-border="false"></div>
-						</div> */ ?>
+
 		</div>
 		<div style='clear: both'></div>
   	
@@ -82,60 +80,49 @@ make_menu ( [
 				z_mi ( "Find your district", "/guide/find.html", "" ),
 				z_mi ( null, "", "", "z_mi_dist_senate" ),
 				z_mi ( null, "", "", "z_mi_dist_house" ),
-				z_mi ( "List of all Districts", "/districts.php", "" )
+				z_mi ( "List of all Districts", "/districts.php", "" ) 
 		] ),
-		z_menu ( "Legislature Guide", [
-			z_mi ( "District Lists", "/districts.php", "" ),
-			z_mi ( "Recent Legislation", "/bills.php", "" ),
-			z_mi ( "Senate List", "/guide/leglist.html?ch=S", "HOME" ),
-			z_mi ( "House List", "/guide/leglist.html?ch=H", "" ),
-			z_mi ( "Complete List", "/guide/leglist.html", "" ),
-			
-			]
-		),
+		z_menu ( "Legislature Guide", [ 
+				z_mi ( "District Lists", "/districts.php", "" ),
+				z_mi ( "Recent Legislation", "/bills.php", "" ),
+				z_mi ( "Senate List", "/guide/leglist.html?ch=S", "HOME" ),
+				z_mi ( "House List", "/guide/leglist.html?ch=H", "" ),
+				z_mi ( "Complete List", "/guide/leglist.html", "" ) 
+		] ),
 		
 		z_menu ( "Voters Guide", [ 
-				//z_mi ( "Candidates List", "/v2/candidates.php", "" ),
-	
+				
 				z_mi ( "Find Who Represents You", "/guide/find.html", "" ),
 				z_mi ( "In The News", "/links.php", "" ),
 				z_mi ( "Recent Legislation", "/bills.php", "" ),
-				z_mi ( "Survey", "/guide/survey.html", "" )
-		]
-		 ),
-		($g_debug ? 
-			z_menu ( "Debug", [ 
+				z_mi ( "Survey", "/guide/survey.html", "" ) 
+		] ),
+		($g_debug ? z_menu ( "Debug", [ 
 				z_mi ( "Debug objs", "/guide/debug.html" ),
-				z_mi_param ( "Admin Off", "admin","off" ),
-				z_mi_param ( "Debug Off", "debug","off" ),
+				z_mi_param ( "Admin Off", "admin", "off" ),
+				z_mi_param ( "Debug Off", "debug", "off" ),
 				
-				z_mi_param ( "Debug ON", "debug","on" ),
+				z_mi_param ( "Debug ON", "debug", "on" ),
 				
-				z_mi_param ( "offline", "offline","on" ),
-				z_mi_param ( "online", "offline","off" ),				
-				z_mi_param ( "Delete Pdata", "delpdata","true" ),
-				z_mi_param ( "Delete all", "deldata","true" ),
-				
-		] ): 0), 
-		($g_admin ? 
-			z_menu ( "Admin", [ 
-				z_mi_param ( "Reload from spreadsheets", "deldata","true" ),
-				z_mi_param ( "Admin Off", "admin","off" ),
-				z_mi_param ( "Debug ON", "debug","on" ),
+				z_mi_param ( "offline", "offline", "on" ),
+				z_mi_param ( "online", "offline", "off" ),
+				z_mi_param ( "Delete Pdata", "delpdata", "true" ),
+				z_mi_param ( "Delete all", "deldata", "true" ) 
+		] ) : 0),
+		($g_admin ? z_menu ( "Admin", [ 
+				z_mi_param ( "Reload from spreadsheets", "deldata", "true" ),
+				z_mi_param ( "Admin Off", "admin", "off" ),
+				z_mi_param ( "Debug ON", "debug", "on" ) 
+		] ) : 0),
+		($g_debug ? 
 
-		] ): 0), 
-		($g_debug ?
-		
-			z_menu ( "Tables", [
-			z_mi ( "Person", "/v2/table.html?table=table_person" ),
-			z_mi ( "Election", "/v2/table.html?table=table_election" ),
-			z_mi ( "Office", "/v2/table.html?table=table_office" ),
-			z_mi ( "People List", "/v2/bio.php", "" )
-				
-		]): 0), 
-				
-]
- );
+		z_menu ( "Tables", [ 
+				z_mi ( "Person", "/v2/table.html?table=table_person" ),
+				z_mi ( "Election", "/v2/table.html?table=table_election" ),
+				z_mi ( "Office", "/v2/table.html?table=table_office" ),
+				z_mi ( "People List", "/v2/bio.php", "" ) 
+		] ) : 0) 
+] );
 
 ?>
 		<div id="main">
