@@ -149,7 +149,9 @@ class person
 			if(!$this->photo)
 					$this->photo="http://www.ncga.state.nc.us/$chamber/pictures/$uid.jpg";
 			
-			
+			$this->phone=$this->office->offphone;
+			$this->website=NULL;
+				
 			$this->email=$this->office->email;
 		}
 		if($this->candidate)
