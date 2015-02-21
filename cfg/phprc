@@ -1,0 +1,5 @@
+auto_prepend_file = /home/karlov3/global.php
+log_errors = 1
+error_log =  /home/karlov3/php.log
+
+
