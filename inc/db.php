@@ -22,7 +22,7 @@ class bill {
 	public $hvid;	
 	public $desc;
 	public $year;
-	public $doc;
+	public $key;
 	public $docname;	
 	public $picture;
 	public function __construct($d,$index)
@@ -46,7 +46,7 @@ class bill {
 		$this->desc =getj($d,'desc');
 		$this->year =getj($d,'year');		
 		$this->link =getj($d,'link');		
-		$this->doc =getj($d,'doc');		
+		$this->key =getj($d,'key');		
 		$this->docname =getj($d,'name');		
 	}
 	public function get_stance()
@@ -64,11 +64,11 @@ class bill {
 	{
         if($this->year == 'Year')
             return;
-		echo ("<div><h3><a href='/guide/billpage.php?doc=$this->doc'>$this->year - $this->docname - $this->nickname <img style='display:inline;width:40px' src='/img/$this->picture' /></a></h3>	
+		echo ("<div><h3><a href='/guide/billpage.php?key=$this->key'>$this->year - $this->docname - $this->nickname <img style='display:inline;width:40px' src='/img/$this->picture' /></a></h3>	
 			
 			<div>$this->official </div>
 		<div>$this->effect </div>
-		<div><a target='_blank' href='http://www.ncga.state.nc.us/gascripts/BillLookUp/BillLookUp.pl?Session=$this->year&BillID=$this->doc&submitButton=Go' >Link to $this->doc on ncga.state.nc.us</a> </div>
+		<div><a target='_blank' href='http://www.ncga.state.nc.us/gascripts/BillLookUp/BillLookUp.pl?Session=$this->year&BillID=$this->docname&submitButton=Go' >Link to $this->docname on ncga.state.nc.us</a> </div>
 		<div>$this->desc </div></div>");
 	}
 	public function print_page()	
@@ -78,7 +78,7 @@ class bill {
 		
 		
 		echo "<p><img style='display:inline;width:60px' src='/img/$this->picture' /> $this->effect </p>";		
-		echo "<p><a target='_blank' href='http://www.ncga.state.nc.us/gascripts/BillLookUp/BillLookUp.pl?Session=$this->year&BillID=$this->doc&submitButton=Go' >Link to $this->doc on ncga.state.nc.us</a> </p>";
+		echo "<p><a target='_blank' href='http://www.ncga.state.nc.us/gascripts/BillLookUp/BillLookUp.pl?Session=$this->year&BillID=$this->docname&submitButton=Go' >Link to $this->docname on ncga.state.nc.us</a> </p>";
 		echo "<p>$this->desc </p>";
 	}	
 }
@@ -88,11 +88,11 @@ class bill_list extends table_base
 	
 	function create_from_spreadsheet()
 	{
-		$this->create1('data_v1',1,'bill','doc');
+		$this->create1('data_v1',1,'bill','key');
 	}	
-	public function get_bill($doc)
+	public function get_bill($key)
 	{
-		return $this->list [$doc];
+		return $this->list [$key];
 	}
 	public function print_bills()
 	{
