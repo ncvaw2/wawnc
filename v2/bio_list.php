@@ -57,7 +57,7 @@ include $header;
 
 ?>
 <h2><?php echo("$title"); ?></h2>
-<p>Legislators are given points for voting for animal welfare bills,
+<p><b>Grades are based on the 2013 session, and have not been updated for 2015 yet.</b> Legislators are given points for voting for animal welfare bills,
 	sponsoring animal welfare bills, completing the NCVAW survey, and
 	responsiveness to animal advocates constituents. There have only been a
 	few animal welfare bills up to this point. As bills are introduced and

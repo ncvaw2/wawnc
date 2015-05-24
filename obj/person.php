@@ -256,7 +256,7 @@ class person
 			$f='normal';
 			$c=get_grade_color($this->grade,$f);
 			$grade_link="<a title='Click for profile'  style='font-weight:$f;color:$c' href='/guide/legpage.php?id=$this->key'>$this->grade</a>";
-			$this->print_table_row ( 'Grade',$grade_link );
+			$this->print_table_row ( 'Grade (2013)',$grade_link );
 			if($this->gradecomment)
 				$this->print_table_row ( 'Reason For Grade', $this->gradecomment );
 			else
