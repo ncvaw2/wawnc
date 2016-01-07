@@ -49,7 +49,7 @@ class districts extends table_base
 
 			echo ("<tr><td style='width:90px; '><a href='/district.php?ch=$d->ch&dist=$d->dist'>$chamber #$d->dist</a></td>");
 			echo ("<td width='20%'><div >$d->counties</div></td>");
-			echo ("<td><a  href='/guide/legpage.php?id=$leg->key'>$leg->name</a></td></tr>");
+			echo ("<td><a  href='/bio/$leg->key'>$leg->name</a></td></tr>");
 		
 		}
 		echo("</table>");

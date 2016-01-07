@@ -23,6 +23,8 @@ class bill {
 	public $desc;
 	public $year;
 	public $key;
+	public $weightvote;
+	public $weightsp;
 	public $docname;	
 	public $picture;
 	public function __construct($d,$index)
@@ -46,8 +48,11 @@ class bill {
 		$this->desc =getj($d,'desc');
 		$this->year =getj($d,'year');		
 		$this->link =getj($d,'link');		
+		$this->weightvote =getj($d,'weightvote');		
+		$this->weightsp =getj($d,'weightsp');		
 		$this->key =getj($d,'key');		
-		$this->docname =getj($d,'name');		
+		$this->docname =getj($d,'name');
+		
 	}
 	public function get_stance()
 	{
@@ -86,13 +91,15 @@ class bill {
 class bill_list extends table_base
 {
 	
-	function create_from_spreadsheet()
+	function create_from_spreadsheet()//on6d8i8
 	{
-		$this->create1('data_v1',1,'bill','key');
+		$this->create1('data_v2','on6d8i8','bill','key');
 	}	
 	public function get_bill($key)
 	{
-		return $this->list [$key];
+		if(array_key_exists ($key,$this->list))
+			return $this->list [$key];
+		return null;
 	}
 	public function print_bills()
 	{
@@ -106,52 +113,77 @@ class bill_list extends table_base
 class vote {
 	public $vid;
 	public $mkey;
+
 	public $doc;
 	public $vote;
 	public $score;
-	public $grade; /* -1 bad vote, 0 neutral, 1 good */
+	public $points;
 	public function __construct($d,$index)
 	{
 		$this->vid=getj($d,'vid');
 		$this->mkey=getj($d,'key');		
 		$this->doc= getj($d,'doc');
 		$this->vote=getj($d,'vote');
-		$this->grade=0;
-	}
-	public function get_score()
-	{
-		$bill=get_table("bill_list")->get_bill($this->doc);
 		
+	}
+	public function get_score(&$points)	
+	{
+		$points=$this->points;
+		return $this->score;
+		
+		
+	}	
+	public function pdata_init()
+	{
+		$score=0;
+		$points=0;
+		$bill=get_table("bill_list")->get_bill($this->doc);
+		if($bill==null)
+			return;
+		$weightvote=$bill->weightvote;
+		if($weightvote==null)
+			$weightvote=1;
 		if($this->vid)
 		{
 			if(!(($this->vid==$bill->svid)||($this->vid==$bill->hvid)))
 				return 0;
 		}
-		if(($this->vote=='Aye') xor($this->vote=='No'))
+		if(($this->vote=='Aye') or ($this->vote=='No'))
 		{
-			if(($this->vote=='Aye') xor ($bill->stance=='pro'))
-				$this->grade=-1;
-			else
-				$this->grade=1;
-			return $this->grade;
+			$points=$bill->weightvote;
+			if(($this->vote=='No') xor ($bill->stance=='pro'))
+				$score=$points;
+				
+		}
+	
+		if(($this->vote=='psp') or($this->vote=='sp'))
+		{
+			$points=$bill->weightsp;
+			if($bill->stance=='pro')
+				$score=$points;
 		}
 
-		if(($this->vote=='psp') xor($this->vote=='sp'))
-		{
-			if($bill->stance=='anti')
-				$this->grade=-1;
-			else
-				$this->grade=1;
-			return $this->grade * 3;
-		}
-		return $this->grade;
-	}
+		$this->points=$points;	
+		$this->score=$score;
+		
+	}	
 
 	public function print_vote_tr()
 	{
+		global $g_flag_showscore;
+		global $g_admin;
 		$vote=$this->vote;
-		$doc=$this->doc;
-		$bill=get_table("bill_list")->get_bill($doc);
+		$dockey=$this->doc;
+		$bill=get_table("bill_list")->get_bill($dockey);
+		if($bill==null)
+		{
+			echo "<tr><td>unknown bill:$dockey</td></tr>";
+			return;
+			
+		
+		}
+		$docname=$bill->docname;
+		$year=$bill->year;
 		if($this->vid)
 		{
 			if(!(($this->vid==$bill->svid)||($this->vid==$bill->hvid)))
@@ -164,7 +196,14 @@ class vote {
 
 		$picture=0;
 		$class="";
-		$title="Voted ".($vote=='Aye'? "for" :"against")." bill that ". $bill->effect;
+		$title="Voted ".($vote=='Aye'? "FOR" :"AGAINST")." bill that ";
+		if($bill->stance=='anti')
+		{
+			$title.=" is harmful to animal welfare";
+				
+		}
+		else
+			$title.=" supports animal welfare";
 		if(($vote=='Aye') xor($vote=='No'))
 		{
 			if(($vote=='Aye') xor ($bill->stance=='pro'))
@@ -199,12 +238,15 @@ class vote {
 			$vote='Sponsor';
 		if($vote=='N/V')
 			$vote='Did Not Vote';
+		
+		if($g_flag_showscore)
+			$vote=$vote. '('. $this->score . '/'. $this->points . ')';
 		echo "<td><div class='$class'>$vote</div>";
 		if($picture)
 			echo "<img style='width:60px' title='$title' src='/img/$picture'/>";
 
 		echo "</td>";
-		echo "<td><div><a href='/guide/billpage.php?doc=$doc'>$doc - $bill->official</a></div>";
+		echo "<td><div><a href='/guide/billpage.php?key=$dockey'>$year $docname- $bill->official</a></div>";
 		echo "<div class='$class'>$title</div>";
 		if($bill->desc)
 			echo "<div>$bill->desc</div>";
@@ -216,11 +258,39 @@ class vote {
 class vote_data extends table_base
 {
 
+	//oh10w89
 	function create_from_spreadsheet()
 	{
-		$this->create1('data_v1',3,'vote');
+		$this->create1('data_v2','oh10w89','vote');
 	}	
+	public function print_leglist($title,$doc,$vote,$vid) {
+	
+		$legs=array(); //local
+		//echo "<table class='votes'>";
+		$comma=0;
+		$uid=$doc.$vote.$vid;
+		$display='block';
+	
+		echo "<div class='tbl_leglist' >";
+		foreach ( $this->list as $v )
+		{
+			if($vid && ($vid!=$v->vid))
+				continue;
+			if(($doc == $v->doc)&&
+					($vote==$v->vote)
+			)
+			{
+				$person=get_table("table_person")->getobj($v->mkey);
+				$person->print_list_row ();
 
+			}
+		}
+
+		
+	
+
+		echo("</div>");
+	}
 	public function print_bill_votes($title,$doc,$vote,$vid) {
 
 		$legs=array(); //local
@@ -256,22 +326,36 @@ class vote_data extends table_base
 
 			if($comma)
 				echo (", ");
-			echo "<a href='/v2/bio.php?key=$leg->key'>$leg->name</a>";
+			echo "<a href='/bio/$leg->key'>$leg->name</a>";
 			$comma=1;
 		}
 		echo("</div>");
 	}
-	public function get_votes($legid,&$count) {
+	public function get_vote($legid,$docid) {
 		$score=0;
-		$count=0;
-        
+		$point_total=0;
+		$points=0;
+		foreach ( $this->list as $v )
+		{
+			if(($legid == $v->mkey)&&($docid == $v->doc))
+			{
+				return $v->vote;
+			}
+		}
+		return $score;
+	}	
+	public function get_votes($legid,&$point_total) {
+		$score=0;
+		$point_total=0;
+        $points=0;
 		foreach ( $this->list as $v )
 		{
 			if($legid == $v->mkey)
 			{
 
-				$score+=$v->get_score();
-				$count++;
+				$score+=$v->get_score($points);
+				$point_total+=$points;
+	
 
 			}
 		}

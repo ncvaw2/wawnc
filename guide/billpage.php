@@ -17,7 +17,9 @@ $key=getParam('key');
 
 
 $bill=$list->get_bill ($key  );
-$bill->print_page ();
+if($bill)
+	$bill->print_page ();
+
 $votes=get_table("vote_data");
 $votes->print_bill_votes("Primary Sponsors", $bill->key,'psp',0); 
 $votes->print_bill_votes( "Sponsors",$bill->key,'sp',0);

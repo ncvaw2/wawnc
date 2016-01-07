@@ -90,11 +90,6 @@ function create_obj_from_json($obj,$data,$vars)
 	{
 		$obj->$var=getj($data,$var);
 	}
-	if(method_exists ($obj,'pdata_init'))
-	{
-		$obj->pdata_init();
-		
-	}
 
 }
 /*
@@ -144,13 +139,16 @@ class table_base
 		$index=2;
 		foreach ($jdata as $row )
 		{
+			$obj=new $objname ( $row,$index );
+			if(method_exists($obj,'pdata_init'))
+				$obj->pdata_init();			
 			if($keyname)
 			{
 				$key =getj($row,$keyname);
-				$this->list [$key] = new $objname ( $row,$index );
+				$this->list [$key] = $obj;
 			}
 			else
-				$this->list [] = new $objname ( $row ,$index);
+				$this->list [] = $obj;
 	
 			$index++;
 		}
@@ -165,6 +163,9 @@ class table_base
 			$obj=new $objname();
 			$columns=$this->get_columns();
 			create_obj_from_json($obj,$row,$columns);
+			
+			if(method_exists($obj,'pdata_init'))
+				$obj->pdata_init();
 			if($keyname)
 			{
 				$key =getj($row,$keyname);
@@ -262,6 +263,34 @@ class table_base
 		}
 		echo "</table>";
 	}
+	
+	function output_csv_file($fileName,$columns)
+	{
+		//$columns=$this->get_columns();
+		// output headers so that the file is downloaded rather than displayed
+
+		header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+		header('Content-Description: File Transfer');
+		header("Content-type: text/csv");
+		header("Content-Disposition: attachment; filename={$fileName}");
+		header("Expires: 0");
+		header("Pragma: public");		
+		// create a file pointer connected to the output stream
+		$output = fopen('php://output', 'w');
+	
+	
+		fputcsv($output, $columns);
+		foreach ($this->list as $row )
+		{
+			$csv_row=[];
+			foreach ($columns as $col )
+			{
+				$val=$row->$col;
+				$csv_row[]=$row->$col;
+			}
+			fputcsv($output, $csv_row);
+		}
+	}	
 }
 
 

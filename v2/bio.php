@@ -2,7 +2,7 @@
 include_once $root . '/obj/person.php';
 
 $key = getParam ( "key" );
-include $header;
+
 
 if ($key) 
 	include $root . '/v2/bio_page.php';

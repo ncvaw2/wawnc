@@ -4,24 +4,13 @@ Options -MultiViews -Indexes
 AddHandler fcgid-script .html
 FCGIWrapper "/dh/cgi-system/php54.cgi" .html
  
+RewriteEngine on
 
-#AddHandler x-httpd-php .html .htm .css
-#AddHandler application/x-httpd-php .php .html .css
+#bills
+RewriteRule ^bills$ bills.php [R=301,L]
 
-#AddHandler headered .html
-#Action headered /global_head.php
-#RewriteEngine on
-#RewriteBase /
+#bios
+RewriteRule ^bio/([^/]+)/?$ /v2/bio.php?key=$1 [L]
 
-#RewriteCond %{REQUEST_FILENAME} !-f
-#RewriteCond %{REQUEST_FILENAME} !-d
-#RewriteCond %{ENV:REDIRECT_STATUS} ^$
-#RewriteRule ^([^/]+)/(.+).html$ index.php?dir=$1&page=$2 [L,QSA]
 
-#RewriteCond %{REQUEST_FILENAME} !-f
-#RewriteCond %{REQUEST_FILENAME} !-d
-#RewriteCond %{ENV:REDIRECT_STATUS} ^$
-#RewriteRule (.+).html$ index.php?page=$1 [L,QSA]
-#RewriteRule ^([a-zA-Z]+)/?$ index.php?area=$1 [NC,L]
-ErrorDocument 404 /ncvaw2/home.html
-
+ErrorDocument 404 /

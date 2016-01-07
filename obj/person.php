@@ -34,18 +34,26 @@ function print_table_row($label, $val,$color=null) {
 			
 	echo "<tr><td class='leg_label'>$label: </td><td class='leg_val' $style>$val</td></tr>";
 }	
+
+function toColor($n)
+{
+	return("#".substr("000000".dechex($n),-6));
+}
 $grade_chart = [
-	 [ -6,"F-","#F00"],
-	 [ -3,"F","#F00"],
-	 [ -2,"D-","#C04"],
-	 [ -1,"D","#808"],
-	 [ 0,"C","#00F"],
-	 [ 1,"C+","#02E"],
-	 [ 2,"B","#088"],
-	 [ 3,"B+","#0c8"],
-	 [ 4,"A-","#0c0"],
-	 [ 5,"A","#0c0"],
-	 [ 9999,"A+","#0c0"],
+	 [ 0.1,"F-",0xff0000],
+	 [ 0.2,"F",0xee0000],
+	 [ 0.25,"D-",0xdd0000],
+	 [ 0.3,"D",0xdd0000],
+	 [ 0.35,"D+",0xaa0044],
+	 [ 0.45,"C-",0x880088],
+	 [ 0.55,"C",0x0000ff],
+	 [ 0.6,"C+",0x0022cc],
+	 [ 0.7,"B-",0x008888],		
+	 [ 0.8,"B",0x008888],
+	 [ 0.85,"B+",0x00cc44],
+	 [ 0.9,"A-",0x00cc00],
+	 [ 0.95,"A",0x00cc00],
+	 [ 999,"A+",0x00cc00],
 ];
 function get_grade_color($grade,&$font)
 {
@@ -59,18 +67,23 @@ function get_grade_color($grade,&$font)
 			return $g[2];
 		}
 	}	
-	return "#000";
+	return 0;
 }
 function get_grade($score)
 {
 	global $grade_chart;
-	$grade="A+";
+
+	$grade="Ungraded";
 	foreach ( $grade_chart as $g )
 	{
 		if($score <= $g[0])
-			return $g[1];
+		{
+			$grade= $g[1];
+			break;
+		}
 	}
-	return "Ungraded";
+
+	return $grade;
 }
 function get_score_from_grade($grade)
 {
@@ -85,19 +98,35 @@ function get_score_from_grade($grade)
 	}	
 	return 0;
 }
-
-
-
+function create_dropshadow(&$im,$x,$y,$size,$offset,$color,$text)
+{
+	global $root;
+	for($i=-1;$i<=1;$i++)
+		for($j=-1;$j<=1;$j++)
+		{
+			imagettftext($im, $size, 0, $x+$offset*$i,$y+$offset*$j, $color, $root ."/img/verdanab.ttf",$text);
+		}
+}
 class person
 {
 	//columns
 	public $key;
 	public $grade;
+	public $gender;
 	public $score;
+	public $points;
+	public $pointstotal;
+	
 	public $gradecomment;
 	public $party;
 	public $fullname;
-	public $photo;
+	public $titlename;	
+	public $photo; //URL REMOTE
+
+	public $photo_url_local;
+	public $photo_url_local_grade;
+
+
 	public $phone;
 	public $email;
 	public $addr;
@@ -111,7 +140,11 @@ class person
 	public $candidate;
 	public $office;
 	public $election;
-
+	public function init()
+	{
+		
+		
+	}
 	public function get_photo_url()
 	{
 		global $root;
@@ -121,23 +154,94 @@ class person
 			mkdir($root .$dir, 0777, true);
 		}
 		$path=$dir.$this->key . '.jpg';
-		$filename=$root . $path;
-		
-		if( file_exists ( $filename ))
+		$local_filepath=$root . $path;
+		$this->photo_url_local=null;
+
+		if( file_exists ( $local_filepath ))
+		{
+			$this->photo_path_local=$local_filepath;
+			$this->photo_url_local=$path;
 			return $path;
+		}
 		if($this->photo)
 		{
-			$result=file_put_contents($filename, file_get_contents($this->photo));
-			
+			$result='FALSE';
+			$contents=null;
+			try {
+				//$file_headers = @get_headers($this->photo);
+				//if(strpos($file_headers[0], '404') ==='FALSE')
+				{
+					$contents=file_get_contents($this->photo);
+				}
+				
+			}
+			catch (Exception $e){}
+			if($contents)
+			{
+				$result=file_put_contents($local_filepath, $contents);
+			}
 			if($result==='FALSE')
 				return null;
+			$this->photo_url_local=$path;
+			
 		}
 		return $path;
+
+	}
+	
+	
+	public function make_grade_photo()
+	{
+		global $root;
+		$dir='/img/peoplegrades/';
+		if (!file_exists($root .$dir)) {
+			mkdir($root .$dir, 0777, true);
+		}
+		if($this->photo_url_local==null)
+			return;
+		if(! file_exists ($root . $this->photo_url_local))
+			return ;
+		$grade_photo_rel=$dir . $this->key . '.grade.jpg';
 		
+		
+		if(! file_exists ($root. $grade_photo_rel))
+		{	
+			$f='normal';
+
+			
+			$c=get_grade_color($this->grade,$f);
+			list($width, $height, $type, $attr) = getimagesize($root .$this->photo_url_local);
+			$size=$width/5;
+			$x=10; //$width-$size*strlen($this->grade)/1.6-20;
+			$y=$height-10;
+	
+			$im = imagecreatefromjpeg($root . $this->photo_url_local);
+			if(!is_resource ($im))
+				return;
+			//imagestring($im, 18,$width- 40, $height-40, $this->grade, 0xFF0000);
+				/*
+			if($this->grade[0]=='F')
+			{
+				$size=100;
+				$x=40;//$width/2;
+				$y=$height-40;
+				
+				
+			}	*/
+			create_dropshadow($im,$x,$y,$size,2,0xdddddd,$this->grade);
+			imagettftext($im, $size, 0, $x,$y, $c, $root ."/img/verdanab.ttf",$this->grade);
+		
+			imagepng($im, $root .$grade_photo_rel);
+						
+		
+			imagedestroy($im);
+			
+		}
+		$this->photo_url_local=$grade_photo_rel;
 	
 	}
 	public function get_local_page_url() {
-		$url="/v2/bio.php?key=$this->key";
+		$url="/bio/$this->key";
 		return $url;
 	}	
 	public function pdata_init()
@@ -180,28 +284,43 @@ class person
 			$this->election="Not running";
 		
 		
-		$this->photo=$this->get_photo_url();
+		$this->get_photo_url();
 		// *** GRADE ****
+
+		$pointstotal=0;
+		$score=0;
+		$points=get_table("vote_data")->get_votes($this->key,$pointstotal);
+		$this->points=$points;
+		$this->pointstotal=$pointstotal;
+		if($pointstotal)
+			$score=$points/$pointstotal;
+		$this->score=$score;
+
+				
 		if($this->grade)
 		{
 			$this->score=get_score_from_grade($this->grade);
-		}
+			$this->points= "forced " .  $this->points;
+		}		
 		else
 		{
-			$count=0;
-			$this->score=get_table("vote_data")->get_votes($this->key,$count);
-			if( $count==0)
+			if( $pointstotal==0)
 			{
 				$this->grade='Not Yet Graded';
 				$this->gradecomment='Has not been in office long enough to assign grade';
 			}
 			else
-				$this->grade=get_grade($this->score);
-		}		
+			{
+				$this->grade=get_grade($score);
+			}
+		}
+		$this->make_grade_photo();
 
 
 		
 	}
+	
+
 	public function print_table_row($label, $val,$color=null) {
 		$style="";
 		if($color)
@@ -210,32 +329,40 @@ class person
 		echo "<tr><td class='leg_label'>$label: </td><td class='leg_val' $style>$val</td></tr>";
 	}	
 	public function printPage() {
-		$this->print_list_row();
+		$this->print_list_row('page');
 	}
 
 	
-	public function print_list_row($class='leg_bio') {
+	public function print_list_row($mode='list') {
 		global $root;
+		global $g_debug;
+		global $g_admin;
+		global $g_flag_showscore;
+		
+		
+		global $fb_domain;
+		
+		$class='leg_bio';
 		
 
-	
+
 		$data_key=$this->key;
 	
 		echo ("<div class='$class' data-name='$data_key'><hr>");
 		//thumbnail
 	
-		if($this->photo)
+		if($this->photo_url_local)
 		{
 	
-			echo ("<div class='leg_thumb' ><a href='/v2/bio.php?key=$this->key'>");
-			echo ("<img src='$this->photo'/></a></div>");
+			echo ("<div class='leg_thumb' ><a href='/bio/$this->key'>");
+			echo ("<img src='$this->photo_url_local'/></a></div>");
 		}
 		else {
 			echo ("<div class='leg_thumb' ><img src='/img/unknown.png'/></div>");
 	
 		}
 	
-		echo ("<div class='leg_info' ><a href='/v2/bio.php?key=$this->key'><h2>$this->fullname</h2></a>");
+		echo ("<div class='leg_info' ><a href='/bio/$this->key'><h2>$this->fullname</h2></a>");
 
 		if($this->candidate)
 		{
@@ -249,14 +376,27 @@ class person
 
 
 		echo("<table><tr><td/><td/></tr>");
+		if($mode=='list')
+		{
+			$this->print_table_row ( 'Profile Page', "<a title='Click here for profile page'   href='/bio/$this->key'>Click here for profile page</a>" );
+			
+			
+		}
 //GRADES
 		
 		if($this->grade)
 		{
 			$f='normal';
 			$c=get_grade_color($this->grade,$f);
-			$grade_link="<a title='Click for profile'  style='font-weight:$f;color:$c' href='/guide/legpage.php?id=$this->key'>$this->grade</a>";
-			$this->print_table_row ( 'Grade (2013)',$grade_link );
+			$gradecolor=toColor($c);
+			$grade_link="<a title='Click for profile'  style='font-weight:$f;color:$gradecolor' href='/bio/$this->key'>$this->grade</a>";
+			if($g_flag_showscore)
+			{
+				$grade_link=$grade_link. '('.$this->points .'/'.$this->pointstotal . ')';
+			
+			}
+			
+			$this->print_table_row ( 'Grade',$grade_link );
 			if($this->gradecomment)
 				$this->print_table_row ( 'Reason For Grade', $this->gradecomment );
 			else
@@ -289,7 +429,7 @@ class person
 		print_table_row ( 'Party', get_party($this->party ));
         $responded="No";
         if(get_table("survey_data")->check($this->key))
-            $responded="<a style='color:green;font-weight:bold;' href='/v2/bio.php?key=$this->key'>Yes</a>";
+            $responded="<a style='color:green;font-weight:bold;' href='/bio/$this->key'>Yes</a>";
         
      
         print_table_row ( 'Responded to survey', $responded );	
@@ -315,6 +455,10 @@ class person
 		if($this->office)
 			print_table_row ( 'NCGA website', "<a  target='_blank' href='" . $ncleg_url . "'>Click here for NCGA page</a>" );
 		
+		$shareurl=urlencode($fb_domain.'/bio/'.$this->key);
+		if($mode=='page')
+		   echo("<tr><td></td><td><a href='https://www.facebook.com/sharer/sharer.php?u=$shareurl' target='_blank'><img style='display:inline;width:80px;' src='/img/fb-share-button.png'/></a></td></tr>");
+		
 		echo ('</table>');
 			
 		echo ("</div></div><div style='clear:both'></div>");
@@ -327,7 +471,7 @@ class table_person  extends table_base
 {
 	function get_columns()
 	{
-		return ['key','fullname','party','grade','gradecomment','addr','city','state','zip','phone','email','photo','facebook','website'];
+		return ['key','fullname','party','gender','grade','gradecomment','addr','city','state','zip','phone','email','photo','facebook','website'];
 	}	
 	function create_from_spreadsheet()
 	{
@@ -405,12 +549,7 @@ class office
 	public function print_survey() {
 		get_table("survey_data")->printresp($this->key);
 	}		
-	function get_photo_url()
-	{
-		
-		
-		
-	}
+
 	public function print_list_row() {
 		$person=get_table("table_person")->getobj($this->key);
 		if($person)

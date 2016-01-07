@@ -1,6 +1,6 @@
 
 <?php 
-
+include $header;
 $url = "/v2/bio.php?";
 ?>
 <h2>List of Canidates</h2>

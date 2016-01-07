@@ -15,6 +15,8 @@
 <meta property="og:type" content="Website" />
 
 <?php
+$fb_description=str_replace ( "\"", "&quot;", $fb_description ) ;
+
 if ($fb_description)
 	echo ("<meta property='og:description' content='$fb_description'/>");
 
@@ -22,6 +24,9 @@ if (! $fb_meta_images)
 	$fb_meta_images = "<meta property='og:image' content='$fb_image'/>";
 echo ("$fb_meta_images");
 
+
+if($fb_title==null)
+	$fb_title=$page_title;
 ?>	
 	
 <link href='/inc/ncvaw.css' rel='stylesheet' type='text/css'>
@@ -33,7 +38,7 @@ if ($page_title)
 else
 	echo ("NC Voters For Animal Welfare");
 ?></title>
-<meta property="og:title" content="<?php echo $page_title ?>" />
+<meta property="og:title" content="<?php echo $fb_title ?>" />
     
 <?php
 include $root . '/inc/headscripts.p';
@@ -76,8 +81,8 @@ make_menu ( [
 		z_mbi ( "Facebook Feed", "/facebook.html", "Support Animal Welfare in NC", 0 ),
 		z_mbi ( "Donate", "http://www.ncvaw.org/donate/", "Support Animal Welfare in NC", 0 ),
 		
-		z_menu ( "Your Districts", [ 
-				z_mi ( "Find your district", "/guide/find.html", "" ),
+		z_menu ( "Your Representatives", [ 
+				z_mi ( "Find your Representatives", "/guide/find.html", "" ),
 				z_mi ( null, "", "", "z_mi_dist_senate" ),
 				z_mi ( null, "", "", "z_mi_dist_house" ),
 				z_mi ( "List of all Districts", "/districts.php", "" ) 

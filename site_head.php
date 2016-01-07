@@ -61,7 +61,7 @@ function setFlag( $name)
 		}	
 		if($flag=='off')
 		{
-			setcookie($name);
+			setcookie($name,'',0,'/');
 			$flag=0;
 		}	
 	}
@@ -76,19 +76,14 @@ $page_title='';
 
 $fb_domain="http://elect.ncvaw.org";
 $fb_link = $fb_domain.$_SERVER['REQUEST_URI'];
-$fb_title = "NCVAW";
+$fb_title = null;
 $fb_image= $fb_domain."/img/coverfb2.jpg";
 $fb_meta_images="";
 $fb_description="Find your districts and representatives, browse the report cards, and make sure your NC legislators are fighting for animal welfare.";
 
 date_default_timezone_set('US/Eastern');
 ini_set('max_execution_time', 300); //300 seconds = 5 minutes
-/*
-include $root.'/inc/Mobile_Detect.php';
-$detect = new Mobile_Detect;
-$isPhone = ($detect->isMobile() && (!$detect->isTablet()));
-$deviceType = ($detect->isMobile() ? ($detect->isTablet() ? 'tablet' : 'phone') : 'computer');
-*/
+
 
 $current_url =$_SERVER['PHP_SELF'];
 
@@ -114,9 +109,12 @@ if(getParam("delpdata"))
 $header=$root.'/inc/head.php';
 $footer=$root.'/inc/foot.php';
 set_include_path(get_include_path() . PATH_SEPARATOR. $root. '/lib');
-
-
+//TODO make this an array
+$g_flag_showscore=setFlag('showscores');
 $g_admin=setFlag('admin');
+if($g_admin)
+	$g_flag_showscore=true;
+	
 $g_debug=setFlag('debug');
 $g_offline=setFlag('offline');
 $g_electionMode=false;
