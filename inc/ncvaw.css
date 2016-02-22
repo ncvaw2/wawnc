@@ -165,6 +165,13 @@ h2 {
 	margin:5px;
    
 }
+h2.bar {
+    background-color: #3366ff;
+    color: white;
+    width:100%;
+    text-align: center;
+
+}
 
 h3 {
 	font-size: 22px;
@@ -375,8 +382,6 @@ table.votes tr:nth-of-type(odd) {
 	
 		max-width:70%;
 	}	
-}
-	
 }
 @media all and (min-height: 600px) and (min-width: 600px) {
 

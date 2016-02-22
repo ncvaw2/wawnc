@@ -1,5 +1,10 @@
 <?php
+include_once  $root.'/obj/election.php';
 include_once  $root.'/obj/person.php';
+
+
+
+
 
 class district {
     public $counties;
@@ -35,22 +40,54 @@ class districts extends table_base
 	public function print_list()
 	{
 		global $g_electionMode;
-		$leglist=get_table("table_office");
-		
+        $leglist=get_table("table_office");
+        $election=get_table("table_election");
+
 		
 		echo("<table class='votes' style='width:100%;text-align:left'><tr><th>District#</th>");
-		echo("<th style=' max-width: 45px;'>Counties</th><th>Current Representative</th></tr>");
+		echo("<th style=' max-width: 45px;'>Counties</th><th>Current Representative</th><th>2016 Primary</th><th>2016 General Election</th></tr>");
 		
 		
 		foreach ( $this->list as $d )
 		{
 			$leg=$leglist->get_leg_by_district($d->ch,$d->dist);
 			$chamber=($d->ch=='H'?'House':'Senate');
-
+            $current = get_name_link($leg->key,true);
+            $markup="";
 			echo ("<tr><td style='width:90px; '><a href='/district.php?ch=$d->ch&dist=$d->dist'>$chamber #$d->dist</a></td>");
 			echo ("<td width='20%'><div >$d->counties</div></td>");
-			echo ("<td><a  href='/bio/$leg->key'>$leg->name</a></td></tr>");
-		
+            echo ("<td>$current</td>");
+            echo ("<td>");
+            $set=$election->getlist($d->ch,$d->dist,"2016","pri","REP");
+            if(count($set))
+            {
+                $markup.="<div>Republican Primary</div>";
+                foreach ( $set as $x )
+                    $markup .= $x->get_name_link(false);
+            }
+
+            $set=$election->getlist($d->ch,$d->dist,"2016","pri","DEM");
+            if(count($set))
+            {
+                $markup.="<div>Democratic Primary</div>";
+                foreach ( $set as $x )
+                    $markup .= $x->get_name_link(false);
+            }
+            echo ($markup . "</td><td>");
+
+
+            $markup="";
+
+            $set=$election->getlist($d->ch,$d->dist,"2016","gen");
+            if(count($set))
+            {
+                $markup.="<div>General Election</div>";
+                foreach ( $set as $x )
+                    $markup .= $x->get_name_link(true);
+            }
+
+
+            echo ( $markup . "</td></tr>");
 		}
 		echo("</table>");
 	}

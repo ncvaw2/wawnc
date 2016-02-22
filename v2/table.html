@@ -1,6 +1,10 @@
 <?php
+
+include_once $root.'/obj/person.php';
+include_once $root.'/obj/survey.php';
+include_once $root.'/obj/election.php';
+
 include $header;
-include $root.'/obj/person.php';
 
 $table=getParam('table');
 get_table($table)->printtable2();

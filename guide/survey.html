@@ -1,12 +1,13 @@
 <?php
+include_once  $root.'/obj/survey.php';
+
 include $header;
-include $root.'/obj/person.php';
 
 ?>
-<p> The following legislators have replied to our survey. Please click on their photo to see their responses. </p>
+<p> The following candidates have replied to our 2016 survey. Please click on their photo to see their responses. </p>
 
 
  
 <?php 
-get_table("survey_data")->printlist();
+get_table("table_survey")->printlist();
 include $footer; ?>

@@ -1,8 +1,16 @@
 <?php
 include_once  $root.'/inc/db.php';
+include_once  $root.'/obj/survey.php';
+include_once  $root.'/obj/election.php';
 
 
 
+function get_district_url($ch,$num)
+{
+    $district_url="'/district.php?dist=". $num . "&ch=" . $ch . "'";
+    return $district_url;
+
+}
 function get_party($id)
 {
 	$parties=array(
@@ -107,6 +115,36 @@ function create_dropshadow(&$im,$x,$y,$size,$offset,$color,$text)
 			imagettftext($im, $size, 0, $x+$offset*$i,$y+$offset*$j, $color, $root ."/img/verdanab.ttf",$text);
 		}
 }
+function get_name_link($key,$show_party)
+{
+    $link_string="";
+    $legs=get_table("table_office");
+    $party="";
+    $person=get_table("table_person")->getobj($key);
+    $leg=$legs->get_leg_by_key($key);
+    if($show_party){
+        $party="<span style='font-size:smaller'>($leg->party)</span>";
+
+
+    }
+    $grade="";
+
+    if($leg)
+    {
+        $f='normal';
+        $c=get_grade_color($person->grade,$f);
+        $grade="<span style='font-weight:$f;color:" .toColor($c) . "'>" . $person->grade . "</span>";
+
+        $link_string.="<div><a href='/bio/$key'>$person->fullname $party $grade </a></div>";
+
+    }
+    else
+        $link_string.="<div><a href='/bio/$key'>$person->fullname $party $grade</a></div>";
+
+    return $link_string;
+
+}
+
 class person
 {
 	//columns
@@ -201,7 +239,9 @@ class person
 			return;
 		if(! file_exists ($root . $this->photo_url_local))
 			return ;
-		$grade_photo_rel=$dir . $this->key . '.grade.jpg';
+        if($this->grade == "Ungraded")
+            return;
+		$grade_photo_rel=$dir . $this->key . '.' . $this->grade . '.jpg';
 		
 		
 		if(! file_exists ($root. $grade_photo_rel))
@@ -249,20 +289,20 @@ class person
 		global $g_debug;
 		$this->office	=get_table("table_office")->getobj($this->key);
 		$this->candidate= null; //get_table("table_election")->getobj($this->key);
-
+        $this->titlename=$this->fullname;
 		if($this->office)
 		{
 			
 			if($this->office->chamber=='H')
 			{
-				$this->fullname="Representative ".$this->fullname;
+				$this->titlename="Representative ".$this->fullname;
 				$chamber='House';
 			}
 			else 
 			{
 				$chamber='Senate';
 				
-				$this->fullname="Senator ".$this->fullname;
+				$this->titlename="Senator ".$this->fullname;
 				
 			}
 			$uid=$this->office->uid;
@@ -275,6 +315,7 @@ class person
 				
 			$this->email=$this->office->email;
 		}
+
 		if($this->candidate)
 		{
 			$this->party=get_party($this->candidate->party);			
@@ -306,8 +347,8 @@ class person
 		{
 			if( $pointstotal==0)
 			{
-				$this->grade='Not Yet Graded';
-				$this->gradecomment='Has not been in office long enough to assign grade';
+				$this->grade='Ungraded';
+				$this->gradecomment='Not enough information yet to assign grade';
 			}
 			else
 			{
@@ -362,7 +403,7 @@ class person
 	
 		}
 	
-		echo ("<div class='leg_info' ><a href='/bio/$this->key'><h2>$this->fullname</h2></a>");
+		echo ("<div class='leg_info' ><a href='/bio/$this->key'><h2>$this->titlename</h2></a>");
 
 		if($this->candidate)
 		{
@@ -382,9 +423,36 @@ class person
 			
 			
 		}
+//2016 Election
+        $races=get_table('table_election')->getlist(false,false,"2016",false,false,$this->key);
+        if(count($races)==0)
+        {
+            $this->print_table_row('2016 Election', "Not running");
+
+        }
+        foreach ( $races as $r ) {
+            $d= ($r->chamber  == 'H'? 'House': 'Senate' ) . " district #" . $r->district;
+
+
+            $district_url=get_district_url($r->chamber,$r->district);
+
+            $link=  "<a href=$district_url>". $d. "</a>" ;
+
+            if($r->type == 'pri')
+            {
+                $this->print_table_row('2016 Primary', $link);
+            }
+            if($r->type == 'gen')
+            {
+                $this->print_table_row('2016 General Election', $link);
+            }
+
+        }
+
 //GRADES
-		
+
 		if($this->grade)
+            if(($this->office) || ($this->grade!='Ungraded'))
 		{
 			$f='normal';
 			$c=get_grade_color($this->grade,$f);
@@ -397,6 +465,8 @@ class person
 			}
 			
 			$this->print_table_row ( 'Grade',$grade_link );
+
+            if($mode=='page')
 			if($this->gradecomment)
 				$this->print_table_row ( 'Reason For Grade', $this->gradecomment );
 			else
@@ -415,7 +485,7 @@ class person
 			$ncleg_url=$this->office->get_ncleg_link();
 			$chamberId=$this->office->chamber;
 			$chamber=get_chamber($chamberId);
-			$district_url="'/district.php?dist=". $dist . "&ch=" . $chamberId . "'";
+			$district_url=get_district_url($chamberId,$dist);
 			print_table_row ( 'District', "<a href=$district_url>$chamber # $dist</a>" );
 			
 			
@@ -428,7 +498,7 @@ class person
 
 		print_table_row ( 'Party', get_party($this->party ));
         $responded="No";
-        if(get_table("survey_data")->check($this->key))
+        if(get_table ( "table_survey" )->check($this->key))
             $responded="<a style='color:green;font-weight:bold;' href='/bio/$this->key'>Yes</a>";
         
      
@@ -447,11 +517,13 @@ class person
 			$link="<a href='".$this->facebook."' target='_blank'>Facebook Page</a>";
 			$this->print_table_row ( 'Facebook', $link );
 		
-		}	
-		if($this->email)
-		$this->print_table_row ( 'Email',"<a  href='mailto:" .$this->email . "'>" . $this->email . "</a>" );
-		if($this->phone)
-		$this->print_table_row ( 'Phone', $this->phone );
+		}
+        if($mode=='page') {
+            if ($this->email)
+                $this->print_table_row('Email', "<a  href='mailto:" . $this->email . "'>" . $this->email . "</a>");
+            if ($this->phone)
+                $this->print_table_row('Phone', $this->phone);
+        }
 		if($this->office)
 			print_table_row ( 'NCGA website', "<a  target='_blank' href='" . $ncleg_url . "'>Click here for NCGA page</a>" );
 		
@@ -462,9 +534,27 @@ class person
 		echo ('</table>');
 			
 		echo ("</div></div><div style='clear:both'></div>");
-	}	
-	
+	}
 
+    public function print_list_votes()
+    {
+        if(get_table("vote_data")->print_list_votes($this->key,0)==0)
+        {
+
+            echo("<div>No votes yet recorded</div>");
+        }
+    }
+    public function print_list_sponsorship()
+    {
+        if(get_table("vote_data")->print_list_votes($this->key,1)==0)
+        {
+
+            echo("<div>No bills sponsored</div>");
+        }
+    }
+    public function print_survey() {
+        get_table("survey_data")->printresp($this->key);
+    }
 }
 
 class table_person  extends table_base
@@ -533,24 +623,13 @@ class office
 	public $offaddr;
 	public $offaddr2;
 	public $offzip;
-	public $name;
-	
+
 	public function get_ncleg_link() {
 		return ("http://www.ncga.state.nc.us/gascripts/members/viewMember.pl?sChamber=$this->chamber&nUserID=$this->uid");
-	}	
-	public function print_list_votes()
-	{
-		get_table("vote_data")->print_list_votes($this->key,0);
 	}
-	public function print_list_sponsorship()
-	{
-		get_table("vote_data")->print_list_votes($this->key,1);
-	}
-	public function print_survey() {
-		get_table("survey_data")->printresp($this->key);
-	}		
 
-	public function print_list_row() {
+
+	public function DELETE_print_list_row() {
 		$person=get_table("table_person")->getobj($this->key);
 		if($person)
 		{
@@ -592,7 +671,7 @@ class table_office  extends table_base
 	public $people;
 	function get_columns()
 	{
-		return ['key','chamber','uid','party','district','email','offphone','offaddr','offaddr2','offzip','name'];
+		return ['key','chamber','uid','party','district','email','offphone','offaddr','offaddr2','offzip'];
 	}	
 	function create_from_spreadsheet()
 	{

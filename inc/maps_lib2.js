@@ -60,7 +60,7 @@ function map_init_find_address() {
 function get_legislator(chamber,dist) {
 $.ajax({
 	  type: 'GET',
-	  url: '/guide/getleg.php',
+	  url: '/v2/ajax_dist.php',
 	  data: { ch: chamber, dist: dist },
 	  beforeSend:function(){
 			
@@ -69,8 +69,7 @@ $.ajax({
 	  },
 	  success:function(data){
 	    // successful request; do something with the data
-		  var text="<h3 style='margin:0;padding:0;'><a href='/district.php?ch="+chamber+"&dist="+dist +"'>Your " + (chamber=='H'? 'House' : 'Senate')+" district: "+ dist+"</a></h3>";
-		  $('#legislators').append(text);
+
 		  $('#legislators').append(data);
 	    
 	  },

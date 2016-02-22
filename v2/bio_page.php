@@ -1,15 +1,20 @@
 <?php
-$person = get_table ( "table_person" )->getobj ( $key );
-$has_links = get_table ( "exlinks" )->has_links ( $key, null );
 
-$vote=get_table("vote_data")->get_vote($key,'15HB405');
 
-$page_title=$person->fullname;
-$fb_image=$fb_domain. $person->photo_url_local;
-$gender_him='him';
-$gender_his='his';
-$votecolor="#c00000";
-$call_to_action="";
+$person = get_table("table_person")->getobj($key);
+
+$has_links = get_table("exlinks")->has_links($key, null);
+$has_votes = get_table("vote_data")->check_for_voting_record($key);
+$has_survey_2014 = get_table("survey_data")->check($key);
+$has_survey_2016 = get_table("table_survey")->check($key);
+
+
+$page_title = $person->fullname;
+$fb_image = $fb_domain . $person->photo_url_local;
+$gender_him = 'him';
+$gender_his = 'his';
+$votecolor = "#c00000";
+$call_to_action = "";
 /*
 if($person->gender=='f')
 {
@@ -30,56 +35,50 @@ if($vote == 'No')
 	$person->email . " to thank ".$gender_him .", and to tell " . $gender_him . " to keep fighting to prevent an override of the Governers veto.";
 }<a href='https://www.facebook.com/sharer/sharer.php?u=<?php echo($shareurl);?>' target='_blank'><img style='display:inline;width:80px;' src='/img/fb-share-button.png'/></a>
 */
-$fb_description="Receives a grade of \"" . $person->grade ."\"  on animal welfare issues. ";
+$fb_description = "Receives a grade of \"" . $person->grade . "\"  on animal welfare issues. ";
 
-if( $person->gradecomment)
-{
-	$fb_description .= $person->gradecomment;
+if ($person->gradecomment) {
+    $fb_description .= $person->gradecomment;
+} else {
+    $fb_description .= "Grade based on voting record, responsiveness to inquiries, and feedback from constituents";
 }
-else
-{
-	$fb_description .="Grade based on voting record, responsiveness to inquiries, and feedback from constituents";
-}
-	
-include $header;    
-//add_init_js ( "tabinit();" );
-add_init_js ( "tabselect('tab_votes');" );
-	
+
+include $header;
+add_init_js ( "tabinit();" );
+//add_init_js("tabselect('tab_survey16');");
+
 ?>
 
-<div class="text_wrap" ><?php $person->printPage();?></div>
-<h2 style="color:<?php  echo($votecolor);?>"><?php echo($call_to_action);
-$shareurl=urlencode($fb_domain.'/bio/'.$key);
-
-?>  
+<div class="text_wrap"><?php $person->printPage(); ?></div>
+<h2 style="color:<?php echo($votecolor); ?>"><?php echo($call_to_action);
+    $shareurl = urlencode($fb_domain . '/bio/' . $key);    ?>
 
 </h2>
 
 
-	<div id='tablist'>
+<div id='tablist'>
 		<span>
-		<?php 
-		if ($has_links)
-				echo ("<a class='tab' id='tab_news_top' onclick=\"tabselect('tab_news')\">In the News</a>"); 		
-
-		if ($person->office)
-				echo ("<a class='tab'id='tab_votes_top'  onclick=\"tabselect('tab_votes')\">Voting Record</a>"); 		
-				
-	if (get_table ( "survey_data" )->check ( $key ))
-		echo ("<a class='tab'  id='tab_survey_top' onclick=\"tabselect('tab_survey')\">Survey Responses</a>");
-			 ?>
-
-		</span>
 		<?php
-		if ($person->office)
-		{
-			echo("
+        if ($has_links)
+            echo("<a class='tab' id='tab_news_top' onclick=\"tabclick('tab_news')\">In the News</a>");
+
+        if ($has_votes)
+            echo("<a class='tab'id='tab_votes_top'  onclick=\"tabclick('tab_votes')\">Voting Record</a>");
+        if ($has_survey_2014)
+            echo("<a class='tab'  id='tab_survey14_top' onclick=\"tabclick('tab_survey14')\">Survey 2014</a>");
+        if ($has_survey_2016)
+            echo("<a class='tab'  id='tab_survey16_top' onclick=\"tabclick('tab_survey16')\">Survey 2016</a>");
+        ?>
+        </span>
+    <?php
+    if ($has_votes) {
+        echo("
 			<div class='tabbody' id='tab_votes'>
 				<H3>Bills Sponsored</H3>
 				<table class='votes'>");
-				
-					$person->office->print_list_sponsorship();
-				echo("	
+
+        $person->print_list_sponsorship();
+        echo("
 				</table>
 
 				<H3>Voting Record</H3>
@@ -90,25 +89,27 @@ $shareurl=urlencode($fb_domain.'/bio/'.$key);
 							<th>Bill</th>
 						</tr>
 					</thead>");
-						$person->office->print_list_votes();
-				echo("
-				</table>
-			</div>");
-			}?>
-		<div class='tabbody' style="display: none" id='tab_survey'>
-			<?php 
-				get_table("survey_data")->printresp($key);
-				?>
-		</div>
-		<?php
-		if ($has_links)
-		{
-		echo("<div class='tabbody' style=\"display: none\" id='tab_news'>");
-				get_table ( "exlinks" )->print_list ( $key, null ); 	
-		echo("</div>");
-		}
+        $person->print_list_votes();
+        echo("</table></div>");
+    }
 
-		?>
-	</div>
+    if ($has_survey_2014) {
+        echo("<div class='tabbody' style='display: none' id='tab_survey14'>");
+        get_table("survey_data")->printresp($key);
+        echo("</div>");
+    }
+    if ($has_survey_2016) {
+        echo("<div class='tabbody' style='display: none' id='tab_survey16'>");
+        get_table("table_survey")->printresp($key);
+        echo("</div>");
+    }
+    if ($has_links) {
+        echo("<div class='tabbody' style=\"display: none\" id='tab_news'>");
+        get_table("exlinks")->print_list($key, null);
+        echo("</div>");
+    }
+
+    ?>
+</div>
 
 

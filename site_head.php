@@ -95,15 +95,19 @@ if(getParam("refresh_elect"))
 
 if(getParam("deldata"))
 {
+    $url=$_SERVER["SCRIPT_NAME"];
 	array_map('unlink', glob("$root/data/*.json"));
 	array_map('unlink', glob("$root/data/*.pdata"));
 	array_map('unlink', glob("$root/data2/*.json"));
-	array_map('unlink', glob("$root/data2/*.pdata"));	
+	array_map('unlink', glob("$root/data2/*.pdata"));
+    $meta_extra="<meta http-equiv='refresh' content='0; url=$url'>";
 }
 if(getParam("delpdata"))
 {
+    $url=$_SERVER["SCRIPT_NAME"];
 	array_map('unlink', glob("$root/data/*.pdata"));
 	array_map('unlink', glob("$root/data2/*.pdata"));
+    $meta_extra="<meta http-equiv='refresh' content='0; url=$url'>";
 }
 
 $header=$root.'/inc/head.php';

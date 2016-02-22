@@ -93,7 +93,10 @@ function call_zipo(request) {
 	$.get(url);
 	return;
 }
+function tabclick(tabselected) {
 
+    tabselect(tabselected);
+}
 function tabselect(tabselected) {
 
 	$('.tab').removeClass('tab_slected');
@@ -109,18 +112,24 @@ function togglehide(id) {
 		e.css('display','none');
 }
 function tabinit() {
-    var hash = location.hash;
-    if (hash)
-        tabselect(hash);
+    var tab=QueryString["tab"];
+
+    //var hash = location.hash;
+    if (tab) {
+        //hash = hash.substr(1);
+            tabselect(tab);
+
+    }
+
+    else {
 
     if ($('#tab_news_top').length)
         tabselect('tab_news');
-    else
-        if ($('#tab_survey_top').length)
-            tabselect('tab_survey');
-        else
-            if ($('#tab_votes_top').length)
-                tabselect('tab_votes');
+    else if ($('#tab_survey16_top').length)
+        tabselect('tab_survey16');
+    else if ($('#tab_votes_top').length)
+        tabselect('tab_votes');
+    }
 }
 /*
 var drag_startX = 0;
@@ -148,3 +157,26 @@ function dragend(ev) {
 
 
 */
+var QueryString = function() {
+    // This function is anonymous, is executed immediately and
+    // the return value is assigned to QueryString!
+    var query_string = {};
+    var query = window.location.search.substring(1);
+    var vars = query.split("&");
+    for (var i = 0; i < vars.length; i++) {
+        var pair = vars[i].split("=");
+        // If first entry with this name
+        if (typeof query_string[pair[0]] === "undefined") {
+            query_string[pair[0]] = pair[1];
+            // If second entry with this name
+        } else if (typeof query_string[pair[0]] === "string") {
+            var arr = [ query_string[pair[0]], pair[1] ];
+            query_string[pair[0]] = arr;
+            // If third or later entry with this name
+        } else {
+            query_string[pair[0]].push(pair[1]);
+        }
+    }
+
+    return query_string;
+}();

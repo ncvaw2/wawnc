@@ -23,7 +23,7 @@ if ($fb_description)
 if (! $fb_meta_images)
 	$fb_meta_images = "<meta property='og:image' content='$fb_image'/>";
 echo ("$fb_meta_images");
-
+echo ("$meta_extra");
 
 if($fb_title==null)
 	$fb_title=$page_title;
@@ -121,8 +121,9 @@ make_menu ( [
 		] ) : 0),
 		($g_debug ? 
 
-		z_menu ( "Tables", [ 
-				z_mi ( "Person", "/v2/table.html?table=table_person" ),
+		z_menu ( "Tables", [
+            z_mi ( "Person", "/v2/table.html?table=table_person" ),
+            z_mi ( "Survey", "/v2/table.html?table=table_survey" ),
 				z_mi ( "Election", "/v2/table.html?table=table_election" ),
 				z_mi ( "Office", "/v2/table.html?table=table_office" ),
 				z_mi ( "People List", "/v2/bio.php", "" ) 

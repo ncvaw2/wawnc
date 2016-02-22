@@ -22,7 +22,8 @@
 		'survey_questions',
 		'table_election',
 		'table_office',
-		'table_person',
+        'table_person',
+        'table_survey',
 		'vote_data',
 );
 

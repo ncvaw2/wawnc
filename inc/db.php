@@ -361,15 +361,27 @@ class vote_data extends table_base
 		}
 		return $score;
 	}
+    public function check_for_voting_record($legid) {
+        $count=0;
+        foreach ( $this->list as $v )
+        {
+                if($legid == $v->mkey)
+                    return true;
+        }
+        return false;
+    }
 	public function print_list_votes($legid,$sponsors) {
+        $count=0;
 		foreach ( $this->list as $v )
 		{
 			if($v->vid xor $sponsors)
 				if($legid == $v->mkey)
 				{
 					$v->print_vote_tr();
+                    $count++;
 				}
 		}
+        return $count;
 	}
 }
 
@@ -603,7 +615,7 @@ class survey_questions extends table_base
 		return  $this->list[$num]->q;
 	}
 }
-class survey_resp 
+class survey_resp
 {
 	public $fistname;
 	public $lastname;
@@ -621,7 +633,7 @@ class survey_resp
             $this->answers[2]=getj($d,'a3');
             $this->answers[3]=getj($d,'a4');
             $this->answers[4]=getj($d,'a5');
-        
+
             }
 	public function printresp()
 	{
