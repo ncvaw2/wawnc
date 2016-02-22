@@ -48,13 +48,13 @@ else
 {
     $fb_share=true;
     $fb_description = "Receives a grade of \"" . $person->grade . "\"  on animal welfare issues. ";
+    if ($person->gradecomment) {
+        $fb_description .= $person->gradecomment;
+    } else {
+        $fb_description .= "Grade based on voting record, responsiveness to inquiries, and feedback from constituents";
+    }
+}
 
-}
-if ($person->gradecomment) {
-    $fb_description .= $person->gradecomment;
-} else {
-    $fb_description .= "Grade based on voting record, responsiveness to inquiries, and feedback from constituents";
-}
 
 include $header;
 add_init_js ( "tabinit();" );
