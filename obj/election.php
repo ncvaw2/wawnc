@@ -38,14 +38,15 @@ class election
         $legs=get_table("table_office");
         $party="";
         $survey="";
+        $endorse="";
+        if($this->endorsements=='Y')
+        {
+            $endorse="<img title='Endorsed by NCVAW' class='endorsesmall' src='img/endorse_small.png'>";
 
+        }
         if(get_table ( "table_survey" )->check($key))
         {
-
             $survey="<span style='font-size:small'>(survey)</span>";
-
-
-
         }
 
 
@@ -64,11 +65,11 @@ class election
             $c=get_grade_color($leg->grade,$f);
             $grade="<span style='font-weight:$f;color:" .toColor($c) . "'>" . $leg->grade . "</span>";
 
-            $link_string.="<div><a href='/bio/$key'>$this->nameonballot $party $grade $survey</a></div>";
+            $link_string.="<div><a href='/bio/$key'>$this->nameonballot $party $grade $survey $endorse</a></div>";
 
         }
         else
-            $link_string.="<div><a href='/bio/$key'>$this->nameonballot $party $grade $survey</a></div>";
+            $link_string.="<div><a href='/bio/$key'>$this->nameonballot $party $grade $survey $endorse</a></div>";
 
         return $link_string;
 
@@ -137,6 +138,17 @@ class table_election  extends table_base
             else
                 ksort ( $this->list );
 
+    }
+    public function is_running($year,$type,$key)
+    {
+        foreach ( $this->list as $c ) {
+            if($type && ($c->type!=$type))
+                continue;
+            if(($year == $c->year)&&($key == $c->key))
+                return true;
+
+        }
+        return false;
     }
     public function getlist($ch,$district,$year,$type,$party=false,$key=false)
     {

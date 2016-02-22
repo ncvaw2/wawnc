@@ -120,6 +120,7 @@ function get_name_link($key,$show_party)
     $link_string="";
     $legs=get_table("table_office");
     $party="";
+    $survey="";
     $person=get_table("table_person")->getobj($key);
     $leg=$legs->get_leg_by_key($key);
     if($show_party){
@@ -128,18 +129,21 @@ function get_name_link($key,$show_party)
 
     }
     $grade="";
-
+    if(get_table ( "table_survey" )->check($key))
+    {
+        $survey="<span style='font-size:small'>(survey)</span>";
+    }
     if($leg)
     {
         $f='normal';
         $c=get_grade_color($person->grade,$f);
         $grade="<span style='font-weight:$f;color:" .toColor($c) . "'>" . $person->grade . "</span>";
 
-        $link_string.="<div><a href='/bio/$key'>$person->fullname $party $grade </a></div>";
+        $link_string.="<div><a href='/bio/$key'>$person->fullname $party $grade $survey </a></div>";
 
     }
     else
-        $link_string.="<div><a href='/bio/$key'>$person->fullname $party $grade</a></div>";
+        $link_string.="<div><a href='/bio/$key'>$person->fullname $party $grade $survey</a></div>";
 
     return $link_string;
 
@@ -315,16 +319,15 @@ class person
 				
 			$this->email=$this->office->email;
 		}
+        else
+        {
+            if(get_table("table_election")->is_running("2016",false,$this->key))
+                $this->titlename="Candidate " . $this->fullname;
 
-		if($this->candidate)
-		{
-			$this->party=get_party($this->candidate->party);			
-			$this->district=$this->candidate->district;			
-		}
-		else
-			$this->election="Not running";
-		
-		
+
+        }
+
+
 		$this->get_photo_url();
 		// *** GRADE ****
 
@@ -399,7 +402,7 @@ class person
 			echo ("<img src='$this->photo_url_local'/></a></div>");
 		}
 		else {
-			//echo ("<div class='leg_thumb' ><img src='/img/unknown.png'/></div>");
+			echo ("<div class='leg_thumb' ><img src='/img/unknown.png'/></div>");
 	
 		}
 	
@@ -427,7 +430,7 @@ class person
         $races=get_table('table_election')->getlist(false,false,"2016",false,false,$this->key);
         if(count($races)==0)
         {
-            $this->print_table_row('2016 Election', "Not running");
+            $this->print_table_row('2016 Election', "Not running, or not yet filed ");
 
         }
         foreach ( $races as $r ) {
