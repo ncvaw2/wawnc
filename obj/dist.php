@@ -69,7 +69,7 @@ class districts extends table_base
             $set=$election->getlist($d->ch,$d->dist,"2016","pri","DEM");
             if(count($set))
             {
-                $markup.="<div>Democratic Primary</div>";
+                $markup.="<div style='margin-top: 10px;'>Democratic Primary</div>";
                 foreach ( $set as $x )
                     $markup .= $x->get_name_link(false);
             }
