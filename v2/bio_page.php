@@ -9,12 +9,14 @@ $has_survey_2014 = get_table("survey_data")->check($key);
 $has_survey_2016 = get_table("table_survey")->check($key);
 
 
-$page_title = $person->fullname;
-$fb_image = $fb_domain . $person->photo_url_local;
+$page_title = $person->titlename;
+if($person->photo_url_local)
+    $fb_image = $fb_domain . $person->photo_url_local;
 $gender_him = 'him';
 $gender_his = 'his';
 $votecolor = "#c00000";
 $call_to_action = "";
+$fb_share=false;
 /*
 if($person->gender=='f')
 {
@@ -35,8 +37,19 @@ if($vote == 'No')
 	$person->email . " to thank ".$gender_him .", and to tell " . $gender_him . " to keep fighting to prevent an override of the Governers veto.";
 }<a href='https://www.facebook.com/sharer/sharer.php?u=<?php echo($shareurl);?>' target='_blank'><img style='display:inline;width:80px;' src='/img/fb-share-button.png'/></a>
 */
-$fb_description = "Receives a grade of \"" . $person->grade . "\"  on animal welfare issues. ";
 
+if($has_survey_2016)
+{
+    $fb_share=true;
+    $fb_description = "Response to Animal Welfare Survey ";
+
+}
+else
+{
+    $fb_share=true;
+    $fb_description = "Receives a grade of \"" . $person->grade . "\"  on animal welfare issues. ";
+
+}
 if ($person->gradecomment) {
     $fb_description .= $person->gradecomment;
 } else {
