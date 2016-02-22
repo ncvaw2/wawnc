@@ -399,7 +399,7 @@ class person
 			echo ("<img src='$this->photo_url_local'/></a></div>");
 		}
 		else {
-			echo ("<div class='leg_thumb' ><img src='/img/unknown.png'/></div>");
+			//echo ("<div class='leg_thumb' ><img src='/img/unknown.png'/></div>");
 	
 		}
 	
