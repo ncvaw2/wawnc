@@ -58,18 +58,13 @@ class election
         $grade="";
 
         $leg=$legs->get_leg_by_key($key);
-        if($leg)
-        {
-            $leg=get_table("table_person")->getobj($key);
-            $f='normal';
-            $c=get_grade_color($leg->grade,$f);
-            $grade="<span style='font-weight:$f;color:" .toColor($c) . "'>" . $leg->grade . "</span>";
-
-            $link_string.="<div><a href='/bio/$key'>$this->nameonballot $party $grade $survey $endorse</a></div>";
-
+        if($leg) {
+            $leg = get_table("table_person")->getobj($key);
+            $f = 'normal';
+            $c = get_grade_color($leg->grade, $f);
+            $grade = "<span style='font-weight:$f;color:" . toColor($c) . "'>" . $leg->grade . "</span>";
         }
-        else
-            $link_string.="<div><a href='/bio/$key'>$this->nameonballot $party $grade $survey $endorse</a></div>";
+        $link_string.="<div><a href='/bio/$key'>$this->nameonballot $party $grade $survey $endorse</a></div>";
 
         return $link_string;
 

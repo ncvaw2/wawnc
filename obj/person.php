@@ -385,10 +385,10 @@ class person
 		
 		
 		global $fb_domain;
-		
+		$endorsed=false;
 		$class='leg_bio';
-		
 
+        $races=get_table('table_election')->getlist(false,false,"2016",false,false,$this->key);
 
 		$data_key=$this->key;
 	
@@ -407,14 +407,16 @@ class person
 		}
 	
 		echo ("<div class='leg_info' ><a href='/bio/$this->key'><h2>$this->titlename</h2></a>");
-
-		if($this->candidate)
+        foreach ( $races as $r ) {
+            if($r->endorsements=='Y')
+            {
+                $endorsed=true;
+                break;
+            }
+        }
+		if($endorsed)
 		{
-			if($this->candidate->endorsements=='Y')
-			{
 				echo("<img class='endorse' style='width:40px' src='/img/endorse_small.png'><span style='color:blue'>NCVAW Endorsed</h4>");
-
-			}
 		}
 
 
@@ -427,7 +429,7 @@ class person
 			
 		}
 //2016 Election
-        $races=get_table('table_election')->getlist(false,false,"2016",false,false,$this->key);
+
         if(count($races)==0)
         {
             $this->print_table_row('2016 Election', "Not running, or not yet filed ");

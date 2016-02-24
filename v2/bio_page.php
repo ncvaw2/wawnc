@@ -7,7 +7,30 @@ $has_links = get_table("exlinks")->has_links($key, null);
 $has_votes = get_table("vote_data")->check_for_voting_record($key);
 $has_survey_2014 = get_table("survey_data")->check($key);
 $has_survey_2016 = get_table("table_survey")->check($key);
+$races=get_table('table_election')->getlist(false,false,"2016",false,false,$key);
+$race="";
+$endorsed="";
+$fb_description="";
+foreach ( $races as $r ) {
+    $fb_description.="Running for ". get_chamber($r->chamber ) . " district #" . $r->district;
 
+
+
+    if($r->type == 'pri')
+    {
+        $fb_description.= " in the 2016 " . get_party($r->party) . " Primary. ";
+    }
+    if($r->type == 'gen')
+    {
+        $fb_description.= " in the 2016 General Election as the " . get_party($r->party) . " candidate. ";
+
+    }
+    if($r->endorsements=='Y')
+    {
+        $fb_description.="Endorsed by NCVAW. ";
+    }
+    break;
+}
 
 $page_title = $person->titlename;
 if($person->photo_url_local)
@@ -38,23 +61,21 @@ if($vote == 'No')
 }<a href='https://www.facebook.com/sharer/sharer.php?u=<?php echo($shareurl);?>' target='_blank'><img style='display:inline;width:80px;' src='/img/fb-share-button.png'/></a>
 */
 
-if($has_survey_2016)
-{
-    $fb_share=true;
-    $fb_description = "Responses to Animal Welfare Survey ";
 
-}
-else
+
+if($person->grade != "Ungraded")
 {
     $fb_share=true;
-    $fb_description = "Receives a grade of \"" . $person->grade . "\"  on animal welfare issues. ";
+    $fb_description .= "Receives a grade of \"" . $person->grade . "\"  on animal welfare issues. ";
     if ($person->gradecomment) {
         $fb_description .= $person->gradecomment;
-    } else {
-        $fb_description .= "Grade based on voting record.";
     }
 }
+if($has_survey_2016)
+{
+    $fb_description .= "Click for responses to Animal Welfare Survey. ";
 
+}
 
 include $header;
 add_init_js ( "tabinit();" );
