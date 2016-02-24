@@ -261,6 +261,7 @@ class vote_data extends table_base
 	//oh10w89
 	function create_from_spreadsheet()
 	{
+
 		$this->create1('data_v2','oh10w89','vote');
 	}	
 	public function print_leglist($title,$doc,$vote,$vid) {

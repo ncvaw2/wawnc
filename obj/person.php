@@ -449,7 +449,7 @@ class person
             {
                 $this->print_table_row('2016 General Election', $link);
             }
-
+            break;
         }
 
 //GRADES

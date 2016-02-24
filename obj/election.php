@@ -83,7 +83,7 @@ class table_election  extends table_base
     }
     function create_from_spreadsheet()
     {
-        $this->create('data_v2','oi0q51k','election','key');
+        $this->create('data_v2','oi0q51k','election');
     }
 
     public function print_list($year,$type) {

@@ -41,7 +41,7 @@ if($vote == 'No')
 if($has_survey_2016)
 {
     $fb_share=true;
-    $fb_description = "Response to Animal Welfare Survey ";
+    $fb_description = "Responses to Animal Welfare Survey ";
 
 }
 else
@@ -51,7 +51,7 @@ else
     if ($person->gradecomment) {
         $fb_description .= $person->gradecomment;
     } else {
-        $fb_description .= "Grade based on voting record, responsiveness to inquiries, and feedback from constituents";
+        $fb_description .= "Grade based on voting record.";
     }
 }
 
