@@ -81,8 +81,8 @@ make_menu ( [
 		z_mbi ( "Facebook Feed", "/facebook.html", "Support Animal Welfare in NC", 0 ),
 		z_mbi ( "Donate", "http://www.ncvaw.org/donate/", "Support Animal Welfare in NC", 0 ),
 		
-		z_menu ( "Your Representatives", [ 
-				z_mi ( "Find your Representatives", "/guide/find.html", "" ),
+		z_menu ( "Your Voting Districts", [
+				z_mi ( "Find your Districts", "/guide/find.html", "" ),
 				z_mi ( null, "", "", "z_mi_dist_senate" ),
 				z_mi ( null, "", "", "z_mi_dist_house" ),
 				z_mi ( "List of all Districts", "/districts.php", "" ) 
@@ -97,7 +97,7 @@ make_menu ( [
 		
 		z_menu ( "Voters Guide", [ 
 				
-				z_mi ( "Find Who Represents You", "/guide/find.html", "" ),
+				z_mi ( "Find your Voting Districts", "/guide/find.html", "" ),
 				z_mi ( "In The News", "/links.php", "" ),
 				z_mi ( "Recent Legislation", "/bills.php", "" ),
 				z_mi ( "Survey", "/guide/survey.html", "" ) 
