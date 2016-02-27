@@ -79,7 +79,7 @@ $fb_link = $fb_domain.$_SERVER['REQUEST_URI'];
 $fb_title = null;
 $fb_image= $fb_domain."/img/NCVAW_logo_fb.jpg";
 $fb_meta_images="";
-$fb_description="Find your districts and representatives, browse the report cards, and make sure your NC legislators are fighting for animal welfare.";
+$fb_description="Find your 2016 Voting district and make sure your NC legislators are fighting for animal welfare.";
 
 date_default_timezone_set('US/Eastern');
 ini_set('max_execution_time', 300); //300 seconds = 5 minutes
