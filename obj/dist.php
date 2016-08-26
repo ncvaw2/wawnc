@@ -45,8 +45,10 @@ class districts extends table_base
 
 		
 		echo("<table class='votes' style='width:100%;text-align:left'><tr><th>District#</th>");
-		echo("<th style=' max-width: 45px;'>Counties</th><th>Current Representative</th><th>2016 Primary</th><th>2016 General Election</th></tr>");
-		
+		echo("<th style=' max-width: 45px;'>Counties</th><th>Current Representative</th>");
+		//echo("<th>2016 Primary</th>");
+		echo("<th>2016 General Election</th>");
+		echo("</tr>");
 		
 		foreach ( $this->list as $d )
 		{
@@ -57,6 +59,10 @@ class districts extends table_base
 			echo ("<tr><td style='width:90px; '><a href='/district.php?ch=$d->ch&dist=$d->dist'>$chamber #$d->dist</a></td>");
 			echo ("<td width='20%'><div >$d->counties</div></td>");
             echo ("<td>$current</td>");
+
+            // PRIMARY
+
+            /*
             echo ("<td>");
             $set=$election->getlist($d->ch,$d->dist,"2016","pri","REP");
             if(count($set))
@@ -73,8 +79,9 @@ class districts extends table_base
                 foreach ( $set as $x )
                     $markup .= $x->get_name_link(false);
             }
-            echo ($markup . "</td><td>");
-
+            echo ($markup . "</td>");
+            */
+            echo ($markup . "<td>");
 
             $markup="";
 
