@@ -387,8 +387,10 @@ class person
 		global $fb_domain;
 		$endorsed=false;
 		$class='leg_bio';
+		$races=get_table('table_election')->getlist(false,false,"2016",false,false,$this->key);
 
-        $races=get_table('table_election')->getlist(false,false,"2016",false,false,$this->key);
+     	$race_pri=get_table('table_election')->getlist(false,false,"2016","pri",false,$this->key);
+		$race_gen=get_table('table_election')->getlist(false,false,"2016","gen",false,$this->key);
 
 		$data_key=$this->key;
 	
@@ -435,24 +437,26 @@ class person
             $this->print_table_row('2016 Election', "Not running, or not yet filed ");
 
         }
-        foreach ( $races as $r ) {
-            $d= ($r->chamber  == 'H'? 'House': 'Senate' ) . " district #" . $r->district;
+        else
+		{
+			$d= ($r->chamber  == 'H'? 'House': 'Senate' ) . " district #" . $r->district;
 
 
-            $district_url=get_district_url($r->chamber,$r->district);
+			$district_url=get_district_url($r->chamber,$r->district);
 
-            $link=  "<a href=$district_url>". $d. "</a>" ;
+			$link=  "<a href=$district_url>". $d. "</a>" ;
+			if($race_gen)
+			{
+				$this->print_table_row('2016 General Election', $link);
+			}
+			else
+				if($race_pri)
+				{
+					$this->print_table_row('2016 Primary', $link);
+				}
+		}
 
-            if($r->type == 'pri')
-            {
-                $this->print_table_row('2016 Primary', $link);
-            }
-            if($r->type == 'gen')
-            {
-                $this->print_table_row('2016 General Election', $link);
-            }
-            break;
-        }
+
 
 //GRADES
 
